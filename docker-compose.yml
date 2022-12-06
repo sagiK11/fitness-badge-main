@@ -1,0 +1,14 @@
+services:
+  # db:
+  #   build:
+  #     context: ./db
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.local
+    ports:
+      - 5173:5173
+    volumes:
+      - ./app/:/usr/src/app/
+      - /usr/src/app/node_modules

@@ -1,0 +1,10 @@
+node_modules
+.next
+build
+.dockerignore
+Dockerfile
+Dockerfile.*
+.env
+.env.dev
+.env.example
+.env.local

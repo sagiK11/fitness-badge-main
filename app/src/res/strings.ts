@@ -1,0 +1,35 @@
+export const strings = {
+  forms: {
+    required: "שדה זה הינו חובה",
+  },
+  labels: {
+    firstName: "שם פרטי",
+    lastName: "שם משפחה",
+    studentClass: "כיתה",
+    phone: "טלפון",
+    aerobic: "אירובי",
+    handsTime: "כוח ידיים",
+    cubes: "זריזות (קוביות)",
+    abs: "כפיפות בטן",
+    seconds: "שניות",
+    minutes: "דקות",
+    units: "יחידות",
+    gender: "מגדר",
+    male: "בן",
+    female: "בת",
+    result: "תוצאה",
+    grade: "ציון",
+  },
+  headlines: {
+    addNewStudent: "הוספת תלמיד חדש",
+    editNewStudent: "ערוך תלמיד ",
+    studentDetails: "פרטי התלמיד",
+    results: "תוצאות",
+  },
+  buttons: {
+    save: "שמור",
+    edit: "ערוך",
+    delete: "מחק",
+    sendGrades: "שלח ציונים לתלמיד",
+  },
+};
