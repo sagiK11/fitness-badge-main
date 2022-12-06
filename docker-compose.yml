@@ -3,6 +3,16 @@ services:
   #   build:
   #     context: ./db
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.local
+    ports:
+      - 3000:3000
+    volumes:
+      - ./api/:/usr/src/app/
+      - /usr/src/app/node_modules
+
   app:
     build:
       context: ./app
