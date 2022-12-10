@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MeaasureUnitENum {
+  MINUTES
+  SECONDS
+  AMOUNT
+  CENTIMETERS
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model School {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  teachers  Teacher[]
+  students  Student[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Teacher {
+  id           String                  @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String                  @unique
+  classRooms   ClassRoom[]
+  yearsOfStudy TeachersOnYearOfStudy[]
+  school       School                  @relation(fields: [schoolId], references: [id])
+  schoolId     String
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+}
+
+model Student {
+  id           String                  @id @default(uuid())
+  firstName    String
+  lastName     String
+  phone        String?
+  tests        Test[]
+  school       School                  @relation(fields: [schoolId], references: [id])
+  schoolId     String
+  yearsOfStudy StudentsOnYearOfStudy[]
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+}
+
+model ClassRoom {
+  id           String                    @id @default(uuid())
+  name         String                    @unique
+  gender       Gender                    @default(FEMALE)
+  teacher      Teacher                   @relation(fields: [teacherId], references: [id])
+  teacherId    String
+  tests        Test[]
+  yearsOfStudy ClassRoomsOnYearOfStudy[]
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+}
+
+model Test {
+  id          String       @id @default(uuid())
+  grade       Float        @db.DoublePrecision
+  score       String
+  student     Student      @relation(fields: [studentId], references: [id])
+  studentId   String
+  category    TestCategory @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  classRoom   ClassRoom    @relation(fields: [classRoomId], references: [id])
+  classRoomId String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model TestCategory {
+  id          String           @id @default(uuid())
+  name        String
+  tests       Test[]
+  measureUnit MeaasureUnitENum @default(AMOUNT)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model YearOfStudy {
+  id         String                    @id @default(uuid())
+  yearName   String                    @unique
+  startDate  DateTime
+  endDate    DateTime
+  teachers   TeachersOnYearOfStudy[]
+  students   StudentsOnYearOfStudy[]
+  classRooms ClassRoomsOnYearOfStudy[]
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+}
+
+model TeachersOnYearOfStudy {
+  id             String      @id @default(uuid())
+  teacher        Teacher     @relation(fields: [teacherId], references: [id])
+  teacherId      String
+  yearsOfStudy   YearOfStudy @relation(fields: [yearsOfStudyId], references: [id])
+  yearsOfStudyId String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model StudentsOnYearOfStudy {
+  id             String      @id @default(uuid())
+  student        Student     @relation(fields: [studentId], references: [id])
+  studentId      String
+  yearsOfStudy   YearOfStudy @relation(fields: [yearsOfStudyId], references: [id])
+  yearsOfStudyId String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model ClassRoomsOnYearOfStudy {
+  id             String      @id @default(uuid())
+  classRoom      ClassRoom   @relation(fields: [classRoomId], references: [id])
+  classRoomId    String
+  yearsOfStudy   YearOfStudy @relation(fields: [yearsOfStudyId], references: [id])
+  yearsOfStudyId String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}

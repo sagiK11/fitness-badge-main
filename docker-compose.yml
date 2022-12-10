@@ -1,14 +1,29 @@
 services:
-  # db:
-  #   build:
-  #     context: ./db
+  db:
+    image: postgres:13.5
+    restart: always
+    env_file:
+      - ./db/env.local
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
 
   api:
     build:
       context: ./api
       dockerfile: Dockerfile.local
+      target: development
+    depends_on:
+      - db
+    env_file: # used in the host machine
+      - ./api/.env
+    environment: # used inside the container
+      DATABASE_URL: postgresql://postgres:boot@db:5432/fb_main_local?schema=public
+    command: npm run start:dev
     ports:
       - 3000:3000
+      - 5556:5555 # prisma studio
     volumes:
       - ./api/:/usr/src/app/
       - /usr/src/app/node_modules
@@ -22,3 +37,7 @@ services:
     volumes:
       - ./app/:/usr/src/app/
       - /usr/src/app/node_modules
+
+volumes:
+  postgres:
+  pgadmin-data:
