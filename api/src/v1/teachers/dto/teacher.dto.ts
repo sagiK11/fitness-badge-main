@@ -1,4 +1,5 @@
-import { IsEmail, IsString } from 'class-validator';
+import { ClassRoom } from '@prisma/client';
+import { IsArray, IsEmail, IsString } from 'class-validator';
 
 export class TeacherDto {
   @IsString()

@@ -4,7 +4,9 @@ import { PrismaService } from '@src/prisma/prisma.service';
 import { FindOptions } from '@src/utils';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
+import { UpdateOptions } from '@src/utils/update-options';
 import { YearsOfStudyService } from '../years-of-study/years-of-study.service';
+import { TeacherDto } from './dto/teacher.dto';
 
 @Injectable()
 export class TeachersService {
@@ -23,6 +25,22 @@ export class TeachersService {
       });
     } catch (e) {
       return this.resultService.handleException<Teacher[]>(e);
+    }
+  }
+
+  async findUnique(teacherId: string): Promise<Result<Teacher>> {
+    try {
+      const resultData = await this.prisma.teacher.findUnique({
+        where: {
+          id: teacherId,
+        },
+      });
+      return this.resultService.handle({
+        data: resultData,
+        success: true,
+      });
+    } catch (e) {
+      return this.resultService.handleException(e);
     }
   }
 
@@ -45,51 +63,31 @@ export class TeachersService {
           yearsOfStudy: true,
         },
       });
-      return this.resultService.handle<Teacher>({
+      return this.resultService.handle({
         data: resultData,
         success: true,
       });
     } catch (e) {
-      return this.resultService.handleException<Teacher>(e);
+      return this.resultService.handleException(e);
     }
   }
 
-  async findTeacherClassRooms(
-    tid: string,
-    options?: FindOptions,
-  ): Promise<Result<Teacher>> {
-    let yearOfStudyId = options?.yearOfStudyId;
-    if (!yearOfStudyId) {
-      const yearOfStudy = await this.yearOfStudyService.getCurrentYearOfStudy();
-      yearOfStudyId = yearOfStudy.id;
-    }
-
+  async updateTeacher(options: UpdateOptions): Promise<Result<Teacher>> {
+    const { id, data } = options;
     try {
-      const resultData = await this.prisma.teacher.findUniqueOrThrow({
+      const resultData = await this.prisma.teacher.update({
         where: {
-          id: tid,
+          id,
         },
-        include: {
-          classRooms: {
-            include: {
-              students: true,
-            },
-            where: {
-              yearsOfStudy: {
-                every: {
-                  id: yearOfStudyId,
-                },
-              },
-            },
-          },
-        },
+        data,
       });
-      return this.resultService.handle<Teacher>({
+
+      return this.resultService.handle({
         data: resultData,
         success: true,
       });
     } catch (e) {
-      return this.resultService.handleException<Teacher>(e);
+      return this.resultService.handleException(e);
     }
   }
 }
