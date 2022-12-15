@@ -76,27 +76,15 @@ async function main() {
         connect: { id: school.id },
       },
       yearsOfStudy: {
-        create: [
+        connect: [
           {
-            yearsOfStudy: {
-              connect: {
-                id: _2022_2023.id,
-              },
-            },
+            id: _2022_2023.id,
           },
           {
-            yearsOfStudy: {
-              connect: {
-                id: _2023_2024.id,
-              },
-            },
+            id: _2023_2024.id,
           },
           {
-            yearsOfStudy: {
-              connect: {
-                id: _2024_2025.id,
-              },
-            },
+            id: _2024_2025.id,
           },
         ],
       },
@@ -112,27 +100,15 @@ async function main() {
         connect: { id: school.id },
       },
       yearsOfStudy: {
-        create: [
+        connect: [
           {
-            yearsOfStudy: {
-              connect: {
-                id: _2022_2023.id,
-              },
-            },
+            id: _2022_2023.id,
           },
           {
-            yearsOfStudy: {
-              connect: {
-                id: _2023_2024.id,
-              },
-            },
+            id: _2023_2024.id,
           },
           {
-            yearsOfStudy: {
-              connect: {
-                id: _2024_2025.id,
-              },
-            },
+            id: _2024_2025.id,
           },
         ],
       },
@@ -148,6 +124,28 @@ async function main() {
           id: alice.id,
         },
       },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
+    },
+  });
+
+  const a2 = await prisma.classRoom.create({
+    data: {
+      name: 'ט-2',
+      gender: 'MALE',
+      teacher: {
+        connect: {
+          id: alice.id,
+        },
+      },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
     },
   });
 
@@ -160,17 +158,22 @@ async function main() {
           id: school.id,
         },
       },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
+      classRooms: {
+        connect: {
+          id: a2.id,
+        },
+      },
       tests: {
         create: [
           {
             category: {
               connect: {
                 id: aerobic.id,
-              },
-            },
-            classRoom: {
-              connect: {
-                id: a1.id,
               },
             },
             score: '8.4',
@@ -190,6 +193,16 @@ async function main() {
           id: school.id,
         },
       },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
+      classRooms: {
+        connect: {
+          id: a1.id,
+        },
+      },
       tests: {
         create: [
           {
@@ -198,11 +211,7 @@ async function main() {
                 id: aerobic.id,
               },
             },
-            classRoom: {
-              connect: {
-                id: a1.id,
-              },
-            },
+
             score: '8.4',
             grade: 89,
           },
@@ -210,11 +219,6 @@ async function main() {
             category: {
               connect: {
                 id: cubes.id,
-              },
-            },
-            classRoom: {
-              connect: {
-                id: a1.id,
               },
             },
             score: '8.8',

@@ -12,4 +12,7 @@ export class TeacherDto {
 
   @IsEmail()
   email: string;
+
+  @IsString()
+  yearOfStudyId?: string;
 }

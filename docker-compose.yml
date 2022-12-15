@@ -1,13 +1,31 @@
+version: "3"
+
 services:
   db:
     image: postgres:13.5
     restart: always
-    env_file:
-      - ./db/env.local
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 5050:80
+    command: ["executable", "arg"]
+    volumes:
+      - ./db/servers.json:/pgadmin4/servers.json
+    depends_on:
+      - db
 
   api:
     build:
@@ -19,11 +37,11 @@ services:
     env_file: # used in the host machine
       - ./api/.env
     environment: # used inside the container
-      DATABASE_URL: postgresql://postgres:boot@db:5432/fb_main_local?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public
     command: npm run start:dev
     ports:
       - 3000:3000
-      - 5556:5555 # prisma studio
+      - 5555:5555 # prisma studio
     volumes:
       - ./api/:/usr/src/app/
       - /usr/src/app/node_modules
