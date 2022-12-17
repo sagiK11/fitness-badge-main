@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Teacher } from '@prisma/client';
+import { Classroom, Prisma, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
 import { UpdateOptions } from '@src/utils/update-options';
 import { YearsOfStudyService } from '../years-of-study/years-of-study.service';
-import { AddTeacherClassRooms } from '../classrooms/dto/classroom.dto';
+import { AddTeacherClassrooms } from '../classrooms/dto/classroom.dto';
 import { FindOptions } from '@src/utils';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class TeachersService {
           email,
         },
         include: {
-          classRooms: true,
+          classrooms: true,
         },
       });
       return this.resultService.handleSuccess(resultData);
@@ -82,7 +82,9 @@ export class TeachersService {
     }
   }
 
-  async findTeacherClassRooms(options: FindOptions): Promise<Result<Teacher>> {
+  async findTeacherClassrooms(
+    options: FindOptions,
+  ): Promise<Result<Classroom[]>> {
     let { yearOfStudyId, id } = options;
 
     if (!yearOfStudyId) {
@@ -96,7 +98,7 @@ export class TeachersService {
           id,
         },
         include: {
-          classRooms: {
+          classrooms: {
             include: {
               students: true,
             },
@@ -110,21 +112,21 @@ export class TeachersService {
           },
         },
       });
-      return this.resultService.handleSuccess(resultData);
+      return this.resultService.handleSuccess(resultData.classrooms);
     } catch (e) {
       return this.resultService.handleError(e);
     }
   }
 
-  async addTeacherClassrooms(teacherId: string, data: AddTeacherClassRooms) {
+  async addTeacherClassrooms(teacherId: string, data: AddTeacherClassrooms) {
     try {
       const resultData = await this.prisma.teacher.update({
         where: {
           id: teacherId,
         },
         data: {
-          classRooms: {
-            connect: data.classRooms,
+          classrooms: {
+            connect: data.classrooms,
           },
         },
       });

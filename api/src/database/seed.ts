@@ -115,7 +115,7 @@ async function main() {
     },
   });
 
-  const a1 = await prisma.classRoom.create({
+  const a1 = await prisma.classroom.create({
     data: {
       name: 'ט-1',
       gender: 'MALE',
@@ -132,7 +132,7 @@ async function main() {
     },
   });
 
-  const a2 = await prisma.classRoom.create({
+  const a2 = await prisma.classroom.create({
     data: {
       name: 'ט-2',
       gender: 'MALE',
@@ -163,7 +163,7 @@ async function main() {
           id: _2022_2023.id,
         },
       },
-      classRooms: {
+      classrooms: {
         connect: {
           id: a2.id,
         },
@@ -198,7 +198,7 @@ async function main() {
           id: _2022_2023.id,
         },
       },
-      classRooms: {
+      classrooms: {
         connect: {
           id: a1.id,
         },

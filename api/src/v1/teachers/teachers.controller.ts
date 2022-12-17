@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { Prisma, Teacher } from '@prisma/client';
+import { Classroom, Prisma, Teacher } from '@prisma/client';
 import { UpdateOptions } from '@src/utils/update-options';
 import { TeacherDto } from './dto/teacher.dto';
 import { TeachersService } from './teachers.service';
@@ -9,7 +9,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { AddTeacherClassRoomsDto } from '../classrooms/dto/classroom.dto';
+import { AddTeacherClassroomsDto } from '../classrooms/dto/classroom.dto';
 import { FindOptions } from '@src/utils';
 
 @ApiTags('teachers')
@@ -61,12 +61,12 @@ export class TeachersController {
     @Param('teacherId') teacherId: string,
     @Query('yosId')
     yosId?: string,
-  ): Promise<Teacher> {
+  ): Promise<Classroom[]> {
     const findOptions: FindOptions = {
       id: teacherId,
       yearOfStudyId: yosId,
     };
-    const result = await this.teacherService.findTeacherClassRooms(findOptions);
+    const result = await this.teacherService.findTeacherClassrooms(findOptions);
     if (!result.success) throw result.httpException;
     return result.data;
   }
@@ -74,7 +74,7 @@ export class TeachersController {
   @Put('/:teacherId/classrooms')
   async addTeacherClassrooms(
     @Param('teacherId') teacherId: string,
-    @Body() data: AddTeacherClassRoomsDto,
+    @Body() data: AddTeacherClassroomsDto,
   ) {
     const result = await this.teacherService.addTeacherClassrooms(
       teacherId,
