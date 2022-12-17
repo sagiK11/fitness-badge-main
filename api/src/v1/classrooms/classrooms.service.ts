@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { Teacher } from '@prisma/client';
+import { Injectable, Post } from '@nestjs/common';
+import { ClassRoom, Prisma } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
-import { FindOptions } from '@src/utils';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
 import { YearsOfStudyService } from '../years-of-study/years-of-study.service';
@@ -10,44 +9,18 @@ import { YearsOfStudyService } from '../years-of-study/years-of-study.service';
 export class ClassroomsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly yearOfStudyService: YearsOfStudyService,
-    private readonly resultService: ResultService<Teacher>,
+    private readonly resultService: ResultService<ClassRoom>,
   ) {}
 
-  async findTeacherClassRooms(options: FindOptions): Promise<Result<Teacher>> {
-    let { yearOfStudyId, id } = options;
-
-    if (!yearOfStudyId) {
-      const yearOfStudy = await this.yearOfStudyService.getCurrentYearOfStudy();
-      yearOfStudyId = yearOfStudy.id;
-    }
-
+  @Post()
+  async createClass(data: Prisma.ClassRoomCreateManyInput[]) {
     try {
-      const resultData = await this.prisma.teacher.findUniqueOrThrow({
-        where: {
-          id,
-        },
-        include: {
-          classRooms: {
-            include: {
-              students: true,
-            },
-            where: {
-              yearsOfStudy: {
-                every: {
-                  id: yearOfStudyId,
-                },
-              },
-            },
-          },
-        },
+      const resultData = await this.prisma.classRoom.createMany({
+        data,
       });
-      return this.resultService.handle({
-        data: resultData,
-        success: true,
-      });
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
-      return this.resultService.handleException(e);
+      return this.resultService.handleError(e);
     }
   }
 }

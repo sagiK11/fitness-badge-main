@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
-import { FindOptions } from '@src/utils';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
 import { UpdateOptions } from '@src/utils/update-options';
 import { YearsOfStudyService } from '../years-of-study/years-of-study.service';
-import { TeacherDto } from './dto/teacher.dto';
+import { AddTeacherClassRooms } from '../classrooms/dto/classroom.dto';
+import { FindOptions } from '@src/utils';
 
 @Injectable()
 export class TeachersService {
@@ -19,28 +19,25 @@ export class TeachersService {
   async findMany(): Promise<Result<Teacher[]>> {
     try {
       const resultData = await this.prisma.teacher.findMany();
-      return this.resultService.handle<Teacher[]>({
-        data: resultData,
-        success: true,
-      });
+      return this.resultService.handleSuccess<Teacher[]>(resultData);
     } catch (e) {
-      return this.resultService.handleException<Teacher[]>(e);
+      return this.resultService.handleError<Teacher[]>(e);
     }
   }
 
-  async findUnique(teacherId: string): Promise<Result<Teacher>> {
+  async findUnique(email: string): Promise<Result<Teacher>> {
     try {
-      const resultData = await this.prisma.teacher.findUnique({
+      const resultData = await this.prisma.teacher.findUniqueOrThrow({
         where: {
-          id: teacherId,
+          email,
+        },
+        include: {
+          classRooms: true,
         },
       });
-      return this.resultService.handle({
-        data: resultData,
-        success: true,
-      });
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
-      return this.resultService.handleException(e);
+      return this.resultService.handleError(e);
     }
   }
 
@@ -63,12 +60,9 @@ export class TeachersService {
           yearsOfStudy: true,
         },
       });
-      return this.resultService.handle({
-        data: resultData,
-        success: true,
-      });
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
-      return this.resultService.handleException(e);
+      return this.resultService.handleError(e);
     }
   }
 
@@ -82,12 +76,61 @@ export class TeachersService {
         data,
       });
 
-      return this.resultService.handle({
-        data: resultData,
-        success: true,
-      });
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
-      return this.resultService.handleException(e);
+      return this.resultService.handleError(e);
+    }
+  }
+
+  async findTeacherClassRooms(options: FindOptions): Promise<Result<Teacher>> {
+    let { yearOfStudyId, id } = options;
+
+    if (!yearOfStudyId) {
+      const yearOfStudy = await this.yearOfStudyService.getCurrentYearOfStudy();
+      yearOfStudyId = yearOfStudy.id;
+    }
+
+    try {
+      const resultData = await this.prisma.teacher.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        include: {
+          classRooms: {
+            include: {
+              students: true,
+            },
+            where: {
+              yearsOfStudy: {
+                every: {
+                  id: yearOfStudyId,
+                },
+              },
+            },
+          },
+        },
+      });
+      return this.resultService.handleSuccess(resultData);
+    } catch (e) {
+      return this.resultService.handleError(e);
+    }
+  }
+
+  async addTeacherClassrooms(teacherId: string, data: AddTeacherClassRooms) {
+    try {
+      const resultData = await this.prisma.teacher.update({
+        where: {
+          id: teacherId,
+        },
+        data: {
+          classRooms: {
+            connect: data.classRooms,
+          },
+        },
+      });
+      return this.resultService.handleSuccess(resultData);
+    } catch (e) {
+      return this.resultService.handleError(e);
     }
   }
 }

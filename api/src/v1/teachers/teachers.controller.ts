@@ -1,32 +1,32 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { Prisma, Teacher } from '@prisma/client';
-import { FindOptions } from '@src/utils';
 import { UpdateOptions } from '@src/utils/update-options';
 import { TeacherDto } from './dto/teacher.dto';
 import { TeachersService } from './teachers.service';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { AddTeacherClassRoomsDto } from '../classrooms/dto/classroom.dto';
+import { FindOptions } from '@src/utils';
 
+@ApiTags('teachers')
 @Controller({ path: 'teachers', version: '1' })
 export class TeachersController {
   constructor(private readonly teacherService: TeachersService) {}
 
-  @Get('/:teacherId')
-  async findUnique(@Param('teacherId') teacherId: string): Promise<Teacher> {
-    const result = await this.teacherService.findUnique(teacherId);
+  @Get('/:email')
+  async findUnique(@Param('email') email: string): Promise<Teacher> {
+    const result = await this.teacherService.findUnique(email);
     if (!result.success) throw result.httpException;
+    console.log(result.data);
     return result.data;
   }
 
   @Get()
+  @ApiOkResponse({ type: TeacherDto, isArray: true })
   async findMany(): Promise<Teacher[]> {
     const result = await this.teacherService.findMany();
     if (!result.success) throw result.httpException;
@@ -34,6 +34,7 @@ export class TeachersController {
   }
 
   @Post()
+  @ApiCreatedResponse({ type: TeacherDto })
   async createTeacher(@Body() data: TeacherDto): Promise<Teacher> {
     const result = await this.teacherService.createTeacher(data);
     if (!result.success) throw result.httpException;
@@ -50,6 +51,35 @@ export class TeachersController {
       data,
     };
     const result = await this.teacherService.updateTeacher(updateOptions);
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
+
+  @Get('/:teacherId/classrooms')
+  @ApiQuery({ name: 'yosId', required: false })
+  async findTeacherClassRooms(
+    @Param('teacherId') teacherId: string,
+    @Query('yosId')
+    yosId?: string,
+  ): Promise<Teacher> {
+    const findOptions: FindOptions = {
+      id: teacherId,
+      yearOfStudyId: yosId,
+    };
+    const result = await this.teacherService.findTeacherClassRooms(findOptions);
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
+
+  @Put('/:teacherId/classrooms')
+  async addTeacherClassrooms(
+    @Param('teacherId') teacherId: string,
+    @Body() data: AddTeacherClassRoomsDto,
+  ) {
+    const result = await this.teacherService.addTeacherClassrooms(
+      teacherId,
+      data,
+    );
     if (!result.success) throw result.httpException;
     return result.data;
   }

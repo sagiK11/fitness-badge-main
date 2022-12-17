@@ -59,8 +59,7 @@ model ClassRoom {
   id           String        @id @default(uuid())
   name         String        @unique
   gender       Gender        @default(FEMALE)
-  teacher      Teacher       @relation(fields: [teacherId], references: [id])
-  teacherId    String
+  teacher      Teacher[]      
   students     Student[]
   yearsOfStudy YearOfStudy[]
   createdAt    DateTime      @default(now())
