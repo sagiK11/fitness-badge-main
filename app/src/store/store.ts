@@ -1,12 +1,16 @@
-import { configureStore, combineReducers, Reducer } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  combineReducers,
+  ReducersMapObject,
+} from "@reduxjs/toolkit";
 import { slices } from "./slices";
-
-type ReducersDictionary = {
-  [key: string]: Reducer;
-};
+import { mainAPI } from "./slices/api.slice";
 
 // Add 3rd party reducers into this object
-const reducers: ReducersDictionary = {};
+const reducers: ReducersMapObject = {
+  [mainAPI.reducerPath]: mainAPI.reducer,
+};
+
 // Our reducers will be appended here
 Object.keys(slices).forEach(
   (key) => (reducers[slices[key].name] = slices[key].reducer)
@@ -15,6 +19,8 @@ Object.keys(slices).forEach(
 const rootReducer = combineReducers(reducers);
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(mainAPI.middleware),
   devTools: true,
 });
 
