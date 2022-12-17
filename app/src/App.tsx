@@ -1,6 +1,3 @@
-import { useState } from "react";
-import * as React from "react";
-import Button from "@mui/material/Button";
 import RootLayout from "./components/layouts/root-layout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AddStudentPage, EditStudentPage, HomePage } from "@pages";
