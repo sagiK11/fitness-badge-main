@@ -54,7 +54,7 @@ const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
       >
         <Button
           component={Link}
-          to={routesTree.student.add}
+          to={routesTree.createStudent}
           variant="contained"
           sx={{
             width: "100%",

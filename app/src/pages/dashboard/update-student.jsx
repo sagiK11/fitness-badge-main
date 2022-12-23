@@ -2,8 +2,9 @@ import { AddOrEditModelLayout, FormInput, Divider } from "@components";
 import * as React from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useForm } from "react-hook-form";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 import { R } from "@resources";
+import { useParams } from "react-router-dom";
 
 const studentDetails = [
   {
@@ -64,8 +65,14 @@ const studentScores = [
   },
 ];
 
-const AddStudentPage = (props) => {
-  const { handleSubmit, control } = useForm();
+const UpdateStudentPage = (props) => {
+  const { sid } = useParams();
+
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      firstName: "Foo",
+    },
+  });
 
   const onSubmit = (data) => {
     console.log(data);
@@ -73,9 +80,13 @@ const AddStudentPage = (props) => {
 
   return (
     <AddOrEditModelLayout>
-      <Typography variant="h1">{R.strings.headlines.addNewStudent}</Typography>
+      <Typography variant="h1">{R.strings.headlines.editNewStudent}</Typography>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        component="form"
+        sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Grid sx={{ width: "100%" }}>
           <Divider> {R.strings.headlines.studentDetails}</Divider>
         </Grid>
@@ -97,6 +108,7 @@ const AddStudentPage = (props) => {
             return (
               <Grid key={field.id} xs={12} sm={6}>
                 <FormInput
+                  id={field.id}
                   name={`tests.${field.name}`}
                   measureUnit={field.measureUnit}
                   control={control}
@@ -119,9 +131,9 @@ const AddStudentPage = (props) => {
             </Button>
           </Grid>
         </Grid>
-      </form>
+      </Box>
     </AddOrEditModelLayout>
   );
 };
 
-export default AddStudentPage;
+export default UpdateStudentPage;

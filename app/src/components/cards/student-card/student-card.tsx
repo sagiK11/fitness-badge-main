@@ -174,7 +174,7 @@ const EditButton = (props: any) => {
   return (
     <Button
       component={Link}
-      to={resolveRoute(routesTree.student.edit, id)}
+      to={resolveRoute(routesTree.updateStudent, id)}
       color="secondary"
       variant="contained"
       fullWidth

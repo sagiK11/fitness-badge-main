@@ -25,6 +25,7 @@ export const strings = {
     editNewStudent: "ערוך תלמיד ",
     studentDetails: "פרטי התלמיד",
     results: "תוצאות",
+    yearOfStudy: "שנת לימוד",
   },
   buttons: {
     save: "שמור",
