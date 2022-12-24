@@ -15,6 +15,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { useAuth } from "@hooks";
 
 type HeaderProps = {};
 
@@ -59,6 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 const DefaultHeader = (props: HeaderProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { logout } = useAuth();
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
@@ -76,6 +78,11 @@ const DefaultHeader = (props: HeaderProps): JSX.Element => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleLogout = () => {
+    handleMenuClose();
+    logout();
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -100,7 +107,7 @@ const DefaultHeader = (props: HeaderProps): JSX.Element => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
 

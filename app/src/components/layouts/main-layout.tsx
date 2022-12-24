@@ -29,8 +29,8 @@ const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
             display: "flex",
             gap: "1rem",
             flexDirection: "column",
-            "&:first-child": {
-              "margin-top": "1rem",
+            "&:first-of-type": {
+              marginTop: "1rem",
             },
           }}
         >

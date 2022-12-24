@@ -1,5 +1,6 @@
 export const routesTree = {
   home: "/",
+  auth: "/auth",
   dashboard: "/dashboard",
   classes: "/dashboard/classes",
   updateClass: "/dashboard/classes/:classId",

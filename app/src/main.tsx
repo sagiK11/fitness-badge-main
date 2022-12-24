@@ -5,7 +5,8 @@ import "./index.css";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { store } from "@store";
 import { Provider as ReduxProvider } from "react-redux";
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleConfig } from "@config";
 const theme = createTheme({
   direction: "rtl",
   palette: {
@@ -56,10 +57,12 @@ const theme = createTheme({
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ReduxProvider store={store}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </ReduxProvider>
+    <GoogleOAuthProvider clientId={GoogleConfig.clientId}>
+      <ReduxProvider store={store}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </ReduxProvider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );

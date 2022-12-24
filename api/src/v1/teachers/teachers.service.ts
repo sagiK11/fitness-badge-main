@@ -31,9 +31,6 @@ export class TeachersService {
         where: {
           email,
         },
-        include: {
-          classrooms: true,
-        },
       });
       return this.resultService.handleSuccess(resultData);
     } catch (e) {

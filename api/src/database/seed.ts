@@ -115,6 +115,30 @@ async function main() {
     },
   });
 
+  const sagi = await prisma.teacher.create({
+    data: {
+      email: 'sagi@collectiveliquidity.com',
+      firstName: 'שגיא',
+      lastName: 'קל',
+      school: {
+        connect: { id: school.id },
+      },
+      yearsOfStudy: {
+        connect: [
+          {
+            id: _2022_2023.id,
+          },
+          {
+            id: _2023_2024.id,
+          },
+          {
+            id: _2024_2025.id,
+          },
+        ],
+      },
+    },
+  });
+
   const a1 = await prisma.classroom.create({
     data: {
       name: 'ט-1',

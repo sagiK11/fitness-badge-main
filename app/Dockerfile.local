@@ -1,0 +1,25 @@
+FROM node:18-alpine3.15
+
+# set working directory
+WORKDIR /usr/src/app
+
+# add `/usr/src/app/node_modules/.bin` to $PATH
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+COPY package.json .
+COPY package-lock.json .
+
+# make node modules directory using root
+RUN mkdir  /usr/src/app/node_modules/
+RUN chown -R node /usr/src/app/node_modules/
+
+# install app dependencies
+RUN npm install --silent
+
+# copy project
+COPY . .
+
+# change to node user instead of root
+USER node
+
+CMD ["npm","run","dev"]
