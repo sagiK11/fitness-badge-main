@@ -32,7 +32,9 @@
       "@store": ["store"],
       "@store/*": ["store/*"],
       "@config": ["config"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@utils": ["utils"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["src", "**/*.ts", "**/*.tsx", "src/**/*"],
