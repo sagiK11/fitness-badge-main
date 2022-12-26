@@ -5,7 +5,7 @@ export const strings = {
   labels: {
     firstName: "שם פרטי",
     lastName: "שם משפחה",
-    studentClass: "כיתה",
+    classroom: "כיתה",
     phone: "טלפון",
     aerobic: "אירובי",
     handsTime: "כוח ידיים",
@@ -19,6 +19,7 @@ export const strings = {
     female: "בת",
     result: "תוצאה",
     grade: "ציון",
+    studentsNumber: "מספר התלמידים",
   },
   headlines: {
     addNewStudent: "הוספת תלמיד חדש",
@@ -32,5 +33,6 @@ export const strings = {
     edit: "ערוך",
     delete: "מחק",
     sendGrades: "שלח ציונים לתלמיד",
+    addNewStudent: "הוסף תלמיד חדש",
   },
 };

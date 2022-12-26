@@ -1,1 +1,1 @@
-export { default as Card } from "./auth-card";
+export { default as AuthCard } from "./auth-card";

@@ -21,7 +21,6 @@ export class TeachersController {
   async findUnique(@Param('email') email: string): Promise<Teacher> {
     const result = await this.teacherService.findUnique(email);
     if (!result.success) throw result.httpException;
-    console.log(result.data);
     return result.data;
   }
 

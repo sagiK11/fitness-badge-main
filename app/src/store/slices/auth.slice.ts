@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import jwtDecode from "jwt-decode";
 const name = "auth";
 
-interface GoogleResult {
+interface AuthUser {
   iss: string;
   nbf: string;
   email: string;
@@ -22,20 +22,20 @@ interface GoogleResult {
 }
 
 interface AuthState {
-  result: GoogleResult;
+  user: AuthUser;
   loading: false;
   jwtToken: string;
 }
 const jwtToken = localStorage.getItem("auth");
 const initialState = {
   jwtToken,
-  result: jwtToken ? jwtDecode(jwtToken) : null,
+  user: jwtToken ? jwtDecode(jwtToken) : null,
 } as AuthState;
 
 export const selectAuthUser = createSelector(
   [(state) => state[name]],
-  (slice): GoogleResult => {
-    return slice.result;
+  (slice): AuthUser => {
+    return slice.user;
   }
 );
 
@@ -50,9 +50,9 @@ const authSlice = createSlice({
   name,
   initialState,
   reducers: {
-    login(state, action: PayloadAction<GoogleResult>) {
+    login(state, action: PayloadAction<AuthUser>) {
       const { payload } = action;
-      state.result = payload;
+      state.user = payload;
     },
     logout(state) {
       localStorage.removeItem("auth");

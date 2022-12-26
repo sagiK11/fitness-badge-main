@@ -4,7 +4,7 @@ interface CardProps {
   children: React.ReactNode;
   center?: boolean;
 }
-const Card = ({ children, center }: CardProps) => {
+const AuthCard = ({ children, center }: CardProps) => {
   return (
     <Box
       sx={(theme) => ({
@@ -26,4 +26,4 @@ const Card = ({ children, center }: CardProps) => {
   );
 };
 
-export default Card;
+export default AuthCard;

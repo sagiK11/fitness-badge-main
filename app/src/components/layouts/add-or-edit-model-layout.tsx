@@ -2,6 +2,7 @@ import * as React from "react";
 import Container from "@mui/material/Container";
 import { Box } from "@mui/material";
 import { SimpleHeader } from "./common";
+import RootLayout from "./root-layout";
 
 type AddModelLayoutProps = {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ const AddOrEditModelLayout = ({
   children,
 }: AddModelLayoutProps): JSX.Element => {
   return (
-    <>
+    <RootLayout>
       <SimpleHeader />
 
       <Box
@@ -32,12 +33,11 @@ const AddOrEditModelLayout = ({
               marginTop: "1rem",
             },
           })}
-          className="holder-01"
         >
           {children}
         </Container>
       </Box>
-    </>
+    </RootLayout>
   );
 };
 

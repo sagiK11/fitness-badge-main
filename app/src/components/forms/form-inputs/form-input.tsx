@@ -13,7 +13,7 @@ type FormInputProps = {
   id: string;
   name: string;
   label: string;
-  measureUnit: string;
+  measureUnit?: string;
   options: any;
   required?: string;
 };

@@ -144,9 +144,14 @@ async function main() {
       name: 'ט-1',
       gender: 'MALE',
       teacher: {
-        connect: {
-          id: alice.id,
-        },
+        connect: [
+          {
+            id: alice.id,
+          },
+          {
+            id: sagi.id,
+          },
+        ],
       },
       yearsOfStudy: {
         connect: {
@@ -161,10 +166,27 @@ async function main() {
       name: 'ט-2',
       gender: 'MALE',
       teacher: {
+        connect: [
+          {
+            id: alice.id,
+          },
+          {
+            id: sagi.id,
+          },
+        ],
+      },
+      yearsOfStudy: {
         connect: {
-          id: alice.id,
+          id: _2022_2023.id,
         },
       },
+    },
+  });
+
+  const a3 = await prisma.classroom.create({
+    data: {
+      name: 'ט-3',
+      gender: 'FEMALE',
       yearsOfStudy: {
         connect: {
           id: _2022_2023.id,

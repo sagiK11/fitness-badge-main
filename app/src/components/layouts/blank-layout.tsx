@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Box } from "@mui/material";
-import { Card } from "../cards";
+import { AuthCard } from "../cards";
+import RootLayout from "./root-layout";
 
 interface BlankLayoutProps {
   children: React.ReactNode;
@@ -8,16 +9,18 @@ interface BlankLayoutProps {
 
 const BlankLayout = ({ children }: BlankLayoutProps): JSX.Element => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <Card center>{children}</Card>
-    </Box>
+    <RootLayout>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <AuthCard center>{children}</AuthCard>
+      </Box>
+    </RootLayout>
   );
 };
 

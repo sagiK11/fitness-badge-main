@@ -18,28 +18,23 @@ import { AuthGuard } from "@components";
 export default function App() {
   return (
     <Router>
-      <RootLayout>
-        <Routes>
-          <Route path={routesTree.auth} element={<AuthPage />} />
-          <Route element={<AuthGuard />}>
-            <Route path={routesTree.home} element={<HomePage />} />
-            <Route path={routesTree.classes} element={<ClassesPage />} />
+      <Routes>
+        <Route path={routesTree.auth} element={<AuthPage />} />
+        <Route element={<AuthGuard />}>
+          <Route path={routesTree.home} element={<HomePage />} />
+          <Route path={routesTree.classes} element={<ClassesPage />} />
 
-            <Route
-              path={routesTree.createStudent}
-              element={<CreateStudentPage />}
-            />
-            <Route
-              path={routesTree.updateStudent}
-              element={<UpdateStudentPage />}
-            />
-            <Route
-              path="*"
-              element={<Navigate to={routesTree.home} replace />}
-            />
-          </Route>
-        </Routes>
-      </RootLayout>
+          <Route
+            path={routesTree.createStudent}
+            element={<CreateStudentPage />}
+          />
+          <Route
+            path={routesTree.updateStudent}
+            element={<UpdateStudentPage />}
+          />
+          <Route path="*" element={<Navigate to={routesTree.home} replace />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

@@ -4,3 +4,4 @@ export * from "./dividers";
 export * from "./forms";
 export * from "./guards";
 export * from "./inputs";
+export * from "./year-of-study";

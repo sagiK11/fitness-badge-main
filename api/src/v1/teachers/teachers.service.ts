@@ -31,6 +31,9 @@ export class TeachersService {
         where: {
           email,
         },
+        include: {
+          yearsOfStudy: true,
+        },
       });
       return this.resultService.handleSuccess(resultData);
     } catch (e) {

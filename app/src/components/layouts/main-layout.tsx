@@ -1,19 +1,25 @@
 import * as React from "react";
 import Container from "@mui/material/Container";
-import { Box, Button, styled } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DefaultFooter, DefaultHeader } from "./common";
 import { AddCircle } from "@mui/icons-material";
 
 import { Link } from "react-router-dom";
-import { routesTree } from "@routes";
+import RootLayout from "./root-layout";
+interface Fab {
+  id: string | number;
+  text: string;
+  to: string;
+}
 
 type MainLayoutProps = {
   children: React.ReactNode;
+  fabs?: Fab[];
 };
 
-const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
+const MainLayout = ({ children, fabs }: MainLayoutProps): JSX.Element => {
   return (
-    <>
+    <RootLayout>
       <DefaultHeader />
 
       <Box
@@ -52,22 +58,25 @@ const MainLayout = ({ children }: MainLayoutProps): JSX.Element => {
           },
         })}
       >
-        <Button
-          component={Link}
-          to={routesTree.createStudent}
-          variant="contained"
-          sx={{
-            width: "100%",
-            "& .MuiButton-startIcon": { marginLeft: "10px" },
-          }}
-          startIcon={<AddCircle />}
-        >
-          הוסף תלמיד חדש
-        </Button>
+        {fabs?.map((fab) => (
+          <Button
+            key={fab.id}
+            component={Link}
+            to={fab.to}
+            variant="contained"
+            sx={{
+              width: "100%",
+              "& .MuiButton-startIcon": { marginLeft: "10px" },
+            }}
+            startIcon={<AddCircle />}
+          >
+            {fab.text}
+          </Button>
+        ))}
       </Box>
 
       <DefaultFooter />
-    </>
+    </RootLayout>
   );
 };
 
