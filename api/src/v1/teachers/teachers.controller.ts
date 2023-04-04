@@ -41,7 +41,7 @@ export class TeachersController {
   }
 
   @Put('/:teacherId')
-  async addTeacherClassRoom(
+  async updateTeacher(
     @Param('teacherId') teacherId: string,
     @Body() data: TeacherDto,
   ): Promise<Teacher> {

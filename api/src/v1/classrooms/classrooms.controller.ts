@@ -17,4 +17,14 @@ export class ClassroomsController {
     if (!result.success) throw result.httpException;
     return result.data;
   }
+
+  @Get('/:schoolId')
+  @ApiOkResponse({ type: CreateClassRoomDto, isArray: true })
+  async findManyBySchool(
+    @Param('schoolId') schoolId: string,
+  ): Promise<Classroom[]> {
+    const result = await this.classRoomsService.findManyBySchool({ schoolId });
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
 }

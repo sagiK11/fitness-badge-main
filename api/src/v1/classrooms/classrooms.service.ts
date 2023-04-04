@@ -20,6 +20,26 @@ export class ClassroomsService {
     }
   }
 
+  async findManyBySchool({
+    schoolId,
+  }: {
+    schoolId: string;
+  }): Promise<Result<Classroom[]>> {
+    try {
+      const resultData = await this.prisma.school.findUnique({
+        where: {
+          id: schoolId,
+        },
+        include: {
+          classrooms: true,
+        },
+      });
+      return this.resultService.handleSuccess(resultData.classrooms);
+    } catch (e) {
+      return this.resultService.handleError(e);
+    }
+  }
+
   async createClass(data: Prisma.ClassroomCreateManyInput[]) {
     try {
       const resultData = await this.prisma.classroom.createMany({

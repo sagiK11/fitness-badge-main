@@ -143,6 +143,9 @@ async function main() {
     data: {
       name: 'ט-1',
       gender: 'MALE',
+      school: {
+        connect: { id: school.id },
+      },
       teacher: {
         connect: [
           {
@@ -165,6 +168,9 @@ async function main() {
     data: {
       name: 'ט-2',
       gender: 'MALE',
+      school: {
+        connect: { id: school.id },
+      },
       teacher: {
         connect: [
           {
@@ -187,6 +193,9 @@ async function main() {
     data: {
       name: 'ט-3',
       gender: 'FEMALE',
+      school: {
+        connect: { id: school.id },
+      },
       yearsOfStudy: {
         connect: {
           id: _2022_2023.id,
