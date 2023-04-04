@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Classroom, Prisma, Teacher } from '@prisma/client';
+import { Classroom, Prisma, Student, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
@@ -99,9 +99,6 @@ export class TeachersService {
         },
         include: {
           classrooms: {
-            include: {
-              students: true,
-            },
             where: {
               yearsOfStudy: {
                 every: {
@@ -113,6 +110,76 @@ export class TeachersService {
         },
       });
       return this.resultService.handleSuccess(resultData.classrooms);
+    } catch (e) {
+      return this.resultService.handleError(e);
+    }
+  }
+
+  async findTeacherClassroomStudents(options: any): Promise<Result<Student[]>> {
+    let { yearOfStudyId, teacherId, classroomId } = options;
+
+    if (!yearOfStudyId) {
+      const yearOfStudy = await this.yearOfStudyService.getCurrentYearOfStudy();
+      yearOfStudyId = yearOfStudy.id;
+    }
+
+    try {
+      const resultData = await this.prisma.classroom.findUniqueOrThrow({
+        where: {
+          id: classroomId,
+        },
+        include: {
+          students: true,
+          teacher: {
+            where: {
+              id: teacherId,
+              yearsOfStudy: {
+                every: {
+                  id: yearOfStudyId,
+                },
+              },
+            },
+          },
+        },
+      });
+      return this.resultService.handleSuccess(resultData.students);
+    } catch (e) {
+      return this.resultService.handleError(e);
+    }
+  }
+
+  async findTeacherClassroomStudent(options: any): Promise<Result<Student>> {
+    let { yearOfStudyId, classroomId, studentId } = options;
+
+    if (!yearOfStudyId) {
+      const yearOfStudy = await this.yearOfStudyService.getCurrentYearOfStudy();
+      yearOfStudyId = yearOfStudy.id;
+    }
+
+    try {
+      const resultData = await this.prisma.student.findUnique({
+        where: {
+          id: studentId,
+        },
+        include: {
+          tests: {
+            include: {
+              category: true,
+            },
+          },
+          classrooms: {
+            where: {
+              id: classroomId,
+              yearsOfStudy: {
+                every: {
+                  id: yearOfStudyId,
+                },
+              },
+            },
+          },
+        },
+      });
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
     }

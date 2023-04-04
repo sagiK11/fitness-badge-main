@@ -1,28 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
+import { routesTree } from "@/routesTree";
 import {
-  logout as logoutAction,
-  login as loginAction,
-  selectAuthUser,
-} from "@store/slices/auth.slice";
-import { useNavigate } from "react-router-dom";
-import { routesTree } from "@routes";
-import jwtDecode from "jwt-decode";
+  useSession,
+  signIn as baseSignIn,
+  signOut as baseSignOut,
+} from "next-auth/react";
 
-export const useAuth = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const authUser = useSelector(selectAuthUser);
+export function useAuth() {
+  const { status, data } = useSession();
 
-  const logout = (): void => {
-    dispatch(logoutAction());
-    navigate(routesTree.auth);
+  const signOut = async () => {
+    await baseSignOut({ redirect: true, callbackUrl: routesTree().auth });
   };
 
-  const login = (token: string): void => {
-    dispatch(loginAction(jwtDecode(token)));
-    navigate(routesTree.home);
-    localStorage.setItem("auth", token);
+  const signIn = (...args: Parameters<typeof baseSignIn>) => {
+    return baseSignIn("google", {
+      callbackUrl: routesTree().home,
+      redirect: true,
+    });
   };
 
-  return { logout, login, isAuthenticated: !!authUser, authUser };
-};
+  return {
+    signIn,
+    signOut,
+    status,
+    user: data?.user,
+  };
+}

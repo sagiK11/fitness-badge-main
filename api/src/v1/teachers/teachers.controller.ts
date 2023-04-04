@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { Classroom, Prisma, Teacher } from '@prisma/client';
+import { Classroom, Prisma, Student, Teacher } from '@prisma/client';
 import { UpdateOptions } from '@src/utils/update-options';
 import { TeacherDto } from './dto/teacher.dto';
 import { TeachersService } from './teachers.service';
@@ -55,15 +55,15 @@ export class TeachersController {
   }
 
   @Get('/:teacherId/classrooms')
-  @ApiQuery({ name: 'yosId', required: false })
+  @ApiQuery({ name: 'yearOfStudyId', required: false })
   async findTeacherClassRooms(
     @Param('teacherId') teacherId: string,
-    @Query('yosId')
-    yosId?: string,
+    @Query('yearOfStudyId')
+    yearOfStudyId?: string,
   ): Promise<Classroom[]> {
     const findOptions: FindOptions = {
       id: teacherId,
-      yearOfStudyId: yosId,
+      yearOfStudyId,
     };
     const result = await this.teacherService.findTeacherClassrooms(findOptions);
     if (!result.success) throw result.httpException;
@@ -78,6 +78,50 @@ export class TeachersController {
     const result = await this.teacherService.addTeacherClassrooms(
       teacherId,
       data,
+    );
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
+
+  @Get('/:teacherId/classrooms/:classroomId')
+  @ApiQuery({ name: 'yearOfStudyId', required: false })
+  @ApiQuery({ name: 'teacherId', required: true })
+  @ApiQuery({ name: 'classroomId', required: true })
+  async findTeacherClassRoomStudents(
+    @Param('teacherId') teacherId: string,
+    @Param('classroomId') classroomId: string,
+    @Query('yearOfStudyId') yearOfStudyId?: string,
+  ): Promise<Student[]> {
+    const findOptions = {
+      teacherId,
+      classroomId,
+      yearOfStudyId,
+    };
+    const result = await this.teacherService.findTeacherClassroomStudents(
+      findOptions,
+    );
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
+
+  @Get('/:teacherId/classrooms/:classroomId/students/:studentId')
+  @ApiQuery({ name: 'yearOfStudyId', required: false })
+  @ApiQuery({ name: 'teacherId', required: true })
+  @ApiQuery({ name: 'classroomId', required: true })
+  @ApiQuery({ name: 'studentId', required: true })
+  async findTeacherClassRoomStudent(
+    @Param('classroomId') classroomId: string,
+    @Param('studentId') studentId: string,
+    @Query('yearOfStudyId') yearOfStudyId: string,
+  ): Promise<Student> {
+    const findOptions = {
+      studentId,
+      classroomId,
+      yearOfStudyId,
+    };
+
+    const result = await this.teacherService.findTeacherClassroomStudent(
+      findOptions,
     );
     if (!result.success) throw result.httpException;
     return result.data;

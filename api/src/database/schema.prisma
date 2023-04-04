@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum MeaasureUnitENum {
+enum MeasureUnitEnum {
   MINUTES
   SECONDS
   AMOUNT
@@ -82,7 +82,7 @@ model TestCategory {
   id          String           @id @default(uuid())
   name        String
   tests       Test[]
-  measureUnit MeaasureUnitENum @default(AMOUNT)
+  measureUnit MeasureUnitEnum @default(AMOUNT)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 }

@@ -1,3 +1,4 @@
-export const APIConfig = {
-  endpoint: import.meta.env.VITE_API_ENDPOINT,
+export const apiConfig = {
+  baseUrl: process.env.API_ENDPOINT,
+  publicBaseUrl: process.env.NEXT_PUBLIC_API_ENDPOINT,
 };

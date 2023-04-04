@@ -1,8 +1,8 @@
-import { useGetTeacher } from "./use-get-teacher";
+import { useUser } from "./use-user";
 
 export const useYearOfStudy = () => {
-  const { data: teacher } = useGetTeacher();
-  const yearsOfStudy = teacher.yearsOfStudy;
+  const user = useUser();
+  const yearsOfStudy = user.yearsOfStudy;
 
   const getCurrentYearOfStudy = () => {
     const now = new Date();
@@ -11,6 +11,7 @@ export const useYearOfStudy = () => {
         return year;
       }
     }
+    throw new Error("year not found");
   };
 
   return {
