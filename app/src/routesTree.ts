@@ -10,9 +10,10 @@ export function routesTree({
   studentId,
 }: DynamicValues = {}) {
   const tree = {
-    home: "/",
     auth: "/auth",
     registration: "/registration",
+    home: `/`,
+    yearOfStudy: `/years-of-study/${yearOfStudyId}`,
     classroomDetails: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}`,
     studentDetails: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}}/students/${studentId}`,
   };

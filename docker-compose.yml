@@ -42,6 +42,7 @@ services:
     ports:
       - 3000:3000
       - 5555:5555 # prisma studio
+      - 9230:9230 # debug port server
     volumes:
       - ./api/:/usr/src/app/
       - /usr/src/app/node_modules

@@ -4,8 +4,8 @@ import { api } from "./api";
 
 interface AddTeacherClassroomPayload {
   teacherId: string;
-  //todo
-  data: any;
+  classroomId: string;
+  yearOfStudyId: string;
 }
 interface GetTeacherClassroomQuery {
   teacherId: string;
@@ -18,16 +18,18 @@ export const classroomEndpoints = api.injectEndpoints({
         url: `/teachers/${params.teacherId}/classrooms`,
         params,
       }),
+      providesTags: ["teacher-classroom"],
     }),
-    getClassrooms: builder.query<Classroom[], void>({
-      query: () => `/classrooms`,
+    getAllClassrooms: builder.query<Classroom[], string>({
+      query: (schoolId) => `/classrooms/${schoolId}`,
     }),
     addTeacherClassroom: builder.mutation<Teacher, AddTeacherClassroomPayload>({
-      query: ({ teacherId, data }) => ({
-        url: `/teachers/${teacherId}/classrooms`,
+      query: (body) => ({
+        url: `/teachers/classrooms/add`,
         method: "PUT",
-        body: data,
+        body,
       }),
+      invalidatesTags: ["teacher-classroom"],
     }),
   }),
 });
