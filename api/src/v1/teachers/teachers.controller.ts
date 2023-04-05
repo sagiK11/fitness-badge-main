@@ -70,15 +70,9 @@ export class TeachersController {
     return result.data;
   }
 
-  @Put('/:teacherId/classrooms')
-  async addTeacherClassrooms(
-    @Param('teacherId') teacherId: string,
-    @Body() data: AddTeacherClassroomsDto,
-  ) {
-    const result = await this.teacherService.addTeacherClassrooms(
-      teacherId,
-      data,
-    );
+  @Put('/classrooms/add')
+  async addTeacherClassrooms(@Body() data: AddTeacherClassroomsDto) {
+    const result = await this.teacherService.addTeacherClassrooms(data);
     if (!result.success) throw result.httpException;
     return result.data;
   }
@@ -97,6 +91,7 @@ export class TeachersController {
       classroomId,
       yearOfStudyId,
     };
+    console.log('options', findOptions);
     const result = await this.teacherService.findTeacherClassroomStudents(
       findOptions,
     );

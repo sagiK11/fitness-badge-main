@@ -1,10 +1,12 @@
 import { studentEndpoints } from "@/store";
 import { useRouter } from "next/router";
 import { useUser } from "./use-user";
+import { useYearOfStudy } from "./use-year-of-study";
 
 export function useStudents() {
   const user = useUser();
   const router = useRouter();
+  const { currentYearOfStudy } = useYearOfStudy();
   const classroomId = router.query.classroomId as string;
 
   const {
@@ -15,8 +17,9 @@ export function useStudents() {
     {
       teacherId: user.id,
       classroomId,
+      yearOfStudyId: currentYearOfStudy.id,
     },
-    { skip: !user.id || !classroomId }
+    { skip: !user.id || !classroomId || !currentYearOfStudy.id }
   );
 
   return {

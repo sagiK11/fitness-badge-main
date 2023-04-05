@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-interface SeoMetadata {
+export interface SeoMetadataProps {
   title?: string;
   description?: string;
 }
@@ -8,7 +8,7 @@ interface SeoMetadata {
 export function SeoMetadata({
   title = "Fitness Badge",
   description = "",
-}: SeoMetadata) {
+}: SeoMetadataProps) {
   return (
     <Head>
       <title>{title}</title>

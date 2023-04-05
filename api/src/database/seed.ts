@@ -204,6 +204,36 @@ async function main() {
     },
   });
 
+  const a4 = await prisma.classroom.create({
+    data: {
+      name: 'ט-4',
+      gender: 'FEMALE',
+      school: {
+        connect: { id: school.id },
+      },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
+    },
+  });
+
+  const a5 = await prisma.classroom.create({
+    data: {
+      name: '5-ט',
+      gender: 'FEMALE',
+      school: {
+        connect: { id: school.id },
+      },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
+    },
+  });
+
   const ben = await prisma.student.create({
     data: {
       firstName: 'Ben',

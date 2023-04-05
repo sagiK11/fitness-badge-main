@@ -1,25 +1,21 @@
-import { HomeView } from "@/features";
+import { ViewWrapper } from "@/components";
+import { routesTree } from "@/routesTree";
 import { getServerSidePropsWrapper } from "@/server";
-import { classroomEndpoints } from "@/store/api/classroom.endpoint";
+import { getYearOfStudyByCurrentDate } from "@/utils";
 
-export default HomeView;
+export default function View() {
+  return <ViewWrapper title="Redirecting...">Redirecting...</ViewWrapper>;
+}
 
 export const getServerSideProps = getServerSidePropsWrapper(
   async ({ store, context, user, session }) => {
-    // Get classrooms
-    store.dispatch(
-      classroomEndpoints.endpoints.getTeacherClassrooms.initiate({
-        teacherId: user?.id as string,
-      })
-    );
-
-    //Wait for queries to finish
-    await Promise.all(
-      store.dispatch(classroomEndpoints.util.getRunningQueriesThunk())
-    );
+    const yearOfStudy = getYearOfStudyByCurrentDate(user.yearsOfStudy);
 
     return {
-      props: { session },
+      redirect: {
+        destination: routesTree({ yearOfStudyId: yearOfStudy.id }).yearOfStudy,
+        permanent: true,
+      },
     };
   }
 );

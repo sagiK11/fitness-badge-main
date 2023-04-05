@@ -16,7 +16,10 @@ export const Select = React.forwardRef(
     return (
       <select
         {...rest}
-        className={classNames("select select-bordered w-full ", className)}
+        className={classNames(
+          "select select-bordered w-full bg-none",
+          className
+        )}
         ref={ref}
       >
         {options.map(({ label, value, ...rest }) => {

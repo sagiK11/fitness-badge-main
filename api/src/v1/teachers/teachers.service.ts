@@ -93,23 +93,21 @@ export class TeachersService {
     }
 
     try {
-      const resultData = await this.prisma.teacher.findUniqueOrThrow({
+      const resultData = await this.prisma.classroom.findMany({
         where: {
-          id,
-        },
-        include: {
-          classrooms: {
-            where: {
-              yearsOfStudy: {
-                every: {
-                  id: yearOfStudyId,
-                },
-              },
+          teacher: {
+            some: {
+              id,
+            },
+          },
+          yearsOfStudy: {
+            some: {
+              id: yearOfStudyId,
             },
           },
         },
       });
-      return this.resultService.handleSuccess(resultData.classrooms);
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
     }
@@ -124,25 +122,28 @@ export class TeachersService {
     }
 
     try {
-      const resultData = await this.prisma.classroom.findUniqueOrThrow({
+      const resultData = await this.prisma.student.findMany({
         where: {
-          id: classroomId,
-        },
-        include: {
-          students: true,
-          teacher: {
-            where: {
-              id: teacherId,
-              yearsOfStudy: {
-                every: {
-                  id: yearOfStudyId,
+          classrooms: {
+            some: {
+              id: classroomId,
+              AND: {
+                teacher: {
+                  some: {
+                    id: teacherId,
+                  },
                 },
               },
             },
           },
+          yearsOfStudy: {
+            some: {
+              id: yearOfStudyId,
+            },
+          },
         },
       });
-      return this.resultService.handleSuccess(resultData.students);
+      return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
     }
@@ -185,15 +186,22 @@ export class TeachersService {
     }
   }
 
-  async addTeacherClassrooms(teacherId: string, data: AddTeacherClassrooms) {
+  async addTeacherClassrooms(data: AddTeacherClassrooms) {
     try {
-      const resultData = await this.prisma.teacher.update({
+      const resultData = await this.prisma.classroom.update({
         where: {
-          id: teacherId,
+          id: data.classroomId,
         },
         data: {
-          classrooms: {
-            connect: data.classrooms,
+          teacher: {
+            connect: {
+              id: data.teacherId,
+            },
+          },
+          yearsOfStudy: {
+            connect: {
+              id: data.yearOfStudyId,
+            },
           },
         },
       });

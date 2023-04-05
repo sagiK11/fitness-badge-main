@@ -8,13 +8,19 @@ import {
   Typography,
   ViewWrapper,
   Card,
+  Button,
 } from "@/components";
-import { useStudent } from "@/hooks";
+import { useStudent, useYearOfStudy } from "@/hooks";
+import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
+import { useRouter } from "next/router";
 import React from "react";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 export function StudentDetailsViewView() {
   const { student, isLoading } = useStudent();
+  const { currentYearOfStudy } = useYearOfStudy();
+  const router = useRouter();
 
   if (!student) return null;
 
@@ -25,7 +31,7 @@ export function StudentDetailsViewView() {
           <Card section>
             <CardTitle>פרטי התלמיד</CardTitle>
             <CardBody>
-              <Grid className="grid-cols-1 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
+              <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
                 <FlexBox className="flex-col md:gap-1">
                   <Typography className="text-secondary">שם</Typography>
                   <Typography bold>{formatName(student)}</Typography>
@@ -77,6 +83,21 @@ export function StudentDetailsViewView() {
               </div>
             </CardBody>
           </Card>
+
+          <FlexBox className="px-3 lg:px-0">
+            <Button
+              className="btn-outline btn-primary btn-sm lg:btn-md"
+              iconStart={<AiOutlineArrowRight />}
+              href={
+                routesTree({
+                  yearOfStudyId: currentYearOfStudy.id,
+                  classroomId: router.query.classroomId as string,
+                }).yearOfStudy
+              }
+            >
+              חזרה
+            </Button>
+          </FlexBox>
         </Container>
       </RootLayout>
     </ViewWrapper>

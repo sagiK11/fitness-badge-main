@@ -11,73 +11,53 @@ import {
   Card,
   Select,
 } from "@/components";
-import { useClassrooms, useUser, useYearOfStudy } from "@/hooks";
-import { GenderEnum } from "@/models/enums";
+import { useClassrooms, useYearOfStudy } from "@/hooks";
+import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
-import { formatDate } from "@/utils/format-date";
+import { formatDate } from "@/utils";
 import React from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 export function HomeView() {
-  const user = useUser();
-  const { current } = useYearOfStudy();
-  const {
-    classrooms,
-    getClassrooms,
-    getClassroomsResult: { isSuccess, data },
-  } = useClassrooms();
+  const { currentYearOfStudy } = useYearOfStudy();
+  const { classrooms, addTeacherClassroom, allSchoolClassesOptions } =
+    useClassrooms();
 
-  const list = isSuccess ? data : classrooms;
+  const [classroomId, setClassroomId] = React.useState<string>();
 
-  const onClassroomChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) =>
-      getClassrooms({
-        teacherId: user.id,
-        yearOfStudyId: e.target.value,
-      }),
-    [user.id, getClassrooms]
-  );
-
-  const yearOfStudyOptions = React.useMemo(
-    () =>
-      user.yearsOfStudy.map((year) => ({
-        label: year.yearName,
-        value: year.id,
-        selected: year.id === current.id,
-      })),
-    [user, current]
-  );
+  React.useEffect(() => {
+    if (!allSchoolClassesOptions?.[0]?.value) return;
+    setClassroomId(allSchoolClassesOptions?.[0]?.value);
+  }, [allSchoolClassesOptions]);
 
   return (
     <ViewWrapper>
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
           <Card section>
-            <CardTitle>שנת לימוד</CardTitle>
-            <CardBody>
-              <Select
-                onChange={onClassroomChange}
-                options={yearOfStudyOptions}
-              />
-            </CardBody>
-          </Card>
-          <Card section>
             <CardTitle>כיתות</CardTitle>
 
-            {list?.map((classroom) => (
+            {classrooms?.map((classroom) => (
               <CardBody key={classroom.id} hover>
-                <Grid className="grid-cols-1 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
+                <Grid className="grid-cols-1 md:grid-cols-6  gap-2 lg:gap-3 md:items-center">
                   <FlexBox className="flex-col md:gap-1">
-                    <Typography className="text-secondary">שם הכתה</Typography>
+                    <Typography className="text-secondary">שם</Typography>
                     <Typography bold>{classroom.name}</Typography>
                   </FlexBox>
 
                   <FlexBox className="flex-col md:gap-1">
                     <Typography className="text-secondary">מגדר</Typography>
                     <Typography bold>
-                      {classroom.gender.toLocaleLowerCase() === GenderEnum.male
-                        ? "בן"
-                        : "בת"}
+                      {classroom.gender === GenderEnum.male ? "בנים" : "בנות"}
+                    </Typography>
+                  </FlexBox>
+
+                  <FlexBox className="flex-col md:gap-1">
+                    <Typography className="text-secondary">
+                      תאריך יצירה
+                    </Typography>
+                    <Typography bold>
+                      {formatDate(classroom.createdAt)}
                     </Typography>
                   </FlexBox>
 
@@ -96,7 +76,7 @@ export function HomeView() {
                       iconEnd={<AiOutlineArrowLeft />}
                       href={
                         routesTree({
-                          yearOfStudyId: current.id,
+                          yearOfStudyId: currentYearOfStudy?.id,
                           classroomId: classroom.id,
                         }).classroomDetails
                       }
@@ -108,6 +88,33 @@ export function HomeView() {
               </CardBody>
             ))}
           </Card>
+
+          {allSchoolClassesOptions?.length > 0 && (
+            <Card section>
+              <CardTitle>הוסף כיתה</CardTitle>
+              <CardBody>
+                <Grid className="grid-cols-2 md:grid-cols-5 gap-1 md:gap-3 items-center">
+                  <Select
+                    onChange={(e) => setClassroomId(e.target.value)}
+                    options={allSchoolClassesOptions}
+                    className="select-sm md:select-md"
+                  />
+                  <FlexBox>
+                    <Button
+                      className="btn-primary btn-outline btn-sm md:btn-md"
+                      onClick={() => {
+                        if (!classroomId) return;
+                        addTeacherClassroom(classroomId);
+                      }}
+                      disabled={!classroomId}
+                    >
+                      הוסף
+                    </Button>
+                  </FlexBox>
+                </Grid>
+              </CardBody>
+            </Card>
+          )}
         </Container>
       </RootLayout>
     </ViewWrapper>

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Classroom, Gender } from '@prisma/client';
+import { Classroom, Gender, Teacher, YearOfStudy } from '@prisma/client';
 import { IsArray, IsString, ValidateNested } from 'class-validator';
 
 export class CreateClassRoomDto implements Partial<Classroom> {
@@ -21,12 +21,21 @@ export class CreateClassRoomDto implements Partial<Classroom> {
 }
 
 export interface AddTeacherClassrooms {
-  classrooms: Pick<Classroom, 'id'>[];
+  teacherId: Teacher['id'];
+  classroomId: Classroom['id'];
+  yearOfStudyId: YearOfStudy['id'];
 }
 
 export class AddTeacherClassroomsDto implements AddTeacherClassrooms {
-  @IsArray()
+  @IsString()
   @ApiProperty()
-  @ValidateNested({ each: true })
-  classrooms: Pick<Classroom, 'id'>[];
+  teacherId: Teacher['id'];
+
+  @IsString()
+  @ApiProperty()
+  classroomId: Classroom['id'];
+
+  @IsString()
+  @ApiProperty()
+  yearOfStudyId: YearOfStudy['id'];
 }

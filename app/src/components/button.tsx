@@ -6,6 +6,7 @@ interface ButtonProps
   extends WrapperProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
   href?: string;
+  iconStart?: React.ReactNode;
   iconEnd?: React.ReactNode;
 }
 
@@ -13,6 +14,7 @@ export function Button({
   children,
   as = "button",
   className,
+  iconStart,
   iconEnd,
   ...props
 }: ButtonProps) {
@@ -23,6 +25,7 @@ export function Button({
 
   return (
     <Component className={classNames(className, "btn gap-1")} {...props}>
+      {iconStart}
       {children}
       {iconEnd}
     </Component>

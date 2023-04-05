@@ -1,13 +1,13 @@
 import React from "react";
-import { SeoMetadata } from "./seo-metadata";
+import { SeoMetadata, SeoMetadataProps } from "./seo-metadata";
 
-interface ViewWrapper {
+interface ViewWrapper extends SeoMetadataProps {
   children: React.ReactNode;
 }
-export function ViewWrapper({ children }: ViewWrapper) {
+export function ViewWrapper({ children, ...seo }: ViewWrapper) {
   return (
     <>
-      <SeoMetadata />
+      <SeoMetadata {...seo} />
       {children}
     </>
   );
