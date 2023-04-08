@@ -29,6 +29,7 @@ export class TeachersService {
         },
         include: {
           yearsOfStudy: true,
+          school: true,
         },
       });
       return this.resultService.handleSuccess(resultData);

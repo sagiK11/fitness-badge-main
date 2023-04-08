@@ -1,14 +1,15 @@
 import { HomeView } from "@/features";
 import { getServerSidePropsWrapper } from "@/server";
+import { yearOfStudyEndpoints } from "@/store";
 import { classroomEndpoints } from "@/store/api/classroom.endpoint";
 
 export default HomeView;
 
 export const getServerSideProps = getServerSidePropsWrapper(
   async ({ store, context, user, session }) => {
-    // Get classrooms
+    // Get teacher's classrooms
     store.dispatch(
-      classroomEndpoints.endpoints.getTeacherClassrooms.initiate({
+      yearOfStudyEndpoints.endpoints.findTeacherClassrooms.initiate({
         teacherId: user?.id as string,
         yearOfStudyId: context.query.yearOfStudyId as string,
       })

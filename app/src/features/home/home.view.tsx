@@ -11,7 +11,7 @@ import {
   Card,
   Select,
 } from "@/components";
-import { useClassrooms, useYearOfStudy } from "@/hooks";
+import { useClassrooms, useUser, useYearOfStudy } from "@/hooks";
 import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatDate } from "@/utils";
@@ -19,21 +19,51 @@ import React from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 export function HomeView() {
+  const user = useUser();
   const { currentYearOfStudy } = useYearOfStudy();
-  const { classrooms, addTeacherClassroom, allSchoolClassesOptions } =
+  const { classrooms, addTeacherClassroom, schoolAvailableClassOptions } =
     useClassrooms();
 
   const [classroomId, setClassroomId] = React.useState<string>();
 
   React.useEffect(() => {
-    if (!allSchoolClassesOptions?.[0]?.value) return;
-    setClassroomId(allSchoolClassesOptions?.[0]?.value);
-  }, [allSchoolClassesOptions]);
+    if (!schoolAvailableClassOptions?.[0]?.value) return;
+    setClassroomId(schoolAvailableClassOptions?.[0]?.value);
+  }, [schoolAvailableClassOptions]);
 
   return (
     <ViewWrapper>
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
+          <Card section>
+            <CardTitle>פרטי בית ספר</CardTitle>
+            <CardBody>
+              <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">שם</Typography>
+                  <Typography bold>{user.school?.name}</Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">
+                    תאריך יצירה
+                  </Typography>
+                  <Typography bold>
+                    {formatDate(user.school?.createdAt)}
+                  </Typography>
+                </FlexBox>
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">
+                    תאריך עדכון אחרון
+                  </Typography>
+                  <Typography bold>
+                    {formatDate(user.school?.updatedAt)}
+                  </Typography>
+                </FlexBox>
+              </Grid>
+            </CardBody>
+          </Card>
+
           <Card section>
             <CardTitle>כיתות</CardTitle>
 
@@ -89,23 +119,20 @@ export function HomeView() {
             ))}
           </Card>
 
-          {allSchoolClassesOptions?.length > 0 && (
+          {schoolAvailableClassOptions?.length > 0 && (
             <Card section>
               <CardTitle>הוסף כיתה</CardTitle>
               <CardBody>
                 <Grid className="grid-cols-2 md:grid-cols-5 gap-1 md:gap-3 items-center">
                   <Select
                     onChange={(e) => setClassroomId(e.target.value)}
-                    options={allSchoolClassesOptions}
+                    options={schoolAvailableClassOptions}
                     className="select-sm md:select-md"
                   />
                   <FlexBox>
                     <Button
                       className="btn-primary btn-outline btn-sm md:btn-md"
-                      onClick={() => {
-                        if (!classroomId) return;
-                        addTeacherClassroom(classroomId);
-                      }}
+                      onClick={() => addTeacherClassroom(classroomId)}
                       disabled={!classroomId}
                     >
                       הוסף

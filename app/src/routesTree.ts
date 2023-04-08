@@ -15,7 +15,7 @@ export function routesTree({
     home: `/`,
     yearOfStudy: `/years-of-study/${yearOfStudyId}`,
     classroomDetails: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}`,
-    studentDetails: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}}/students/${studentId}`,
+    studentDetails: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}/students/${studentId}`,
   };
   return tree;
 }

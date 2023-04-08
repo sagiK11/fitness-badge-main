@@ -9,8 +9,9 @@ import {
   Typography,
   ViewWrapper,
   Card,
+  Select,
 } from "@/components";
-import { useStudents } from "@/hooks";
+import { useClassroom, useStudents } from "@/hooks";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
 import { useRouter } from "next/router";
@@ -20,22 +21,64 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 export function ClassroomDetailsView() {
   const router = useRouter();
   const { classroomId, yearOfStudyId } = router.query;
-  const { students } = useStudents();
+  const { addClassroomStudent, classroom } = useClassroom();
+  const { classAvailableStudentOptions } = useStudents();
 
+  const [studentId, setStudentId] = React.useState<string>();
+
+  React.useEffect(() => {
+    if (!classAvailableStudentOptions?.[0]?.value) return;
+    setStudentId(classAvailableStudentOptions?.[0]?.value);
+  }, [classAvailableStudentOptions]);
+  console.log(classroom);
   return (
-    <ViewWrapper>
+    <ViewWrapper title="Classroom Details">
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
-          <Card className="bg-white" section>
+          <Card section>
+            <CardTitle>פרטי הכיתה</CardTitle>
+            <CardBody>
+              <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">שם</Typography>
+                  <Typography bold>{classroom?.name}</Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">מגדר</Typography>
+                  <Typography bold>{classroom?.gender}</Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">
+                    תאריך יצירה
+                  </Typography>
+                  <Typography bold>
+                    {formatDate(classroom?.createdAt)}
+                  </Typography>
+                </FlexBox>
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">
+                    תאריך עדכון אחרון
+                  </Typography>
+                  <Typography bold>
+                    {formatDate(classroom?.updatedAt)}
+                  </Typography>
+                </FlexBox>
+              </Grid>
+            </CardBody>
+          </Card>
+
+          <Card section>
             <CardTitle>תלמידים</CardTitle>
 
-            {students?.length === 0 && (
+            {classroom?.students?.length === 0 && (
               <CardBody>
                 <Typography>לכיתה זו אין תלמידים</Typography>
               </CardBody>
             )}
 
-            {students?.map((student) => (
+            {classroom?.students?.map((student) => (
               <CardBody key={student.id} hover>
                 <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
                   <FlexBox className="flex-col md:gap-1">
@@ -76,6 +119,35 @@ export function ClassroomDetailsView() {
               </CardBody>
             ))}
           </Card>
+
+          {classAvailableStudentOptions.length > 0 && (
+            <Card section>
+              <CardTitle>הוסף תלמיד</CardTitle>
+              <CardBody>
+                <Grid className="grid-cols-2 md:grid-cols-5 gap-1 md:gap-3 items-center">
+                  <Select
+                    onChange={(e) => setStudentId(e.target.value)}
+                    options={classAvailableStudentOptions}
+                    className="select-sm md:select-md"
+                  />
+                  <FlexBox>
+                    <Button
+                      className="btn-primary btn-outline btn-sm md:btn-md"
+                      onClick={() =>
+                        addClassroomStudent({
+                          classroomId: classroomId as string,
+                          studentId,
+                        })
+                      }
+                      disabled={!classroomId}
+                    >
+                      הוסף
+                    </Button>
+                  </FlexBox>
+                </Grid>
+              </CardBody>
+            </Card>
+          )}
 
           <FlexBox className="px-3 lg:px-0">
             <Button

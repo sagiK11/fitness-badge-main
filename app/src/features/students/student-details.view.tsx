@@ -18,14 +18,14 @@ import React from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 
 export function StudentDetailsViewView() {
-  const { student, isLoading } = useStudent();
+  const { student } = useStudent();
   const { currentYearOfStudy } = useYearOfStudy();
   const router = useRouter();
 
   if (!student) return null;
 
   return (
-    <ViewWrapper>
+    <ViewWrapper title="Student Details">
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
           <Card section>
@@ -57,6 +57,7 @@ export function StudentDetailsViewView() {
               </Grid>
             </CardBody>
           </Card>
+
           <Card section>
             <CardBody>
               <div className="overflow-x-auto">
@@ -92,7 +93,7 @@ export function StudentDetailsViewView() {
                 routesTree({
                   yearOfStudyId: currentYearOfStudy.id,
                   classroomId: router.query.classroomId as string,
-                }).yearOfStudy
+                }).classroomDetails
               }
             >
               חזרה
