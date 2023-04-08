@@ -7,8 +7,9 @@ import { YearsOfStudyModule } from '../years-of-study/years-of-study.module';
 import { ResultModule } from '@src/utils/result/result.module';
 
 @Module({
-  imports: [PrismaModule, TeachersModule, YearsOfStudyModule, ResultModule],
+  imports: [PrismaModule, TeachersModule, ResultModule],
   providers: [ClassroomsService],
   controllers: [ClassroomsController],
+  exports: [ClassroomsService],
 })
 export class ClassroomsModule {}

@@ -236,8 +236,8 @@ async function main() {
 
   const ben = await prisma.student.create({
     data: {
-      firstName: 'Ben',
-      lastName: 'Fol',
+      firstName: 'בן',
+      lastName: 'אורן',
       school: {
         connect: {
           id: school.id,
@@ -256,6 +256,11 @@ async function main() {
       tests: {
         create: [
           {
+            yearsOfStudy: {
+              connect: {
+                id: _2022_2023.id,
+              },
+            },
             category: {
               connect: {
                 id: aerobic.id,
@@ -269,10 +274,50 @@ async function main() {
     },
   });
 
+  const galia = await prisma.student.create({
+    data: {
+      firstName: 'גליה',
+      lastName: 'מרון',
+      school: {
+        connect: {
+          id: school.id,
+        },
+      },
+      yearsOfStudy: {
+        connect: {
+          id: _2022_2023.id,
+        },
+      },
+      classrooms: {
+        connect: {
+          id: a2.id,
+        },
+      },
+      tests: {
+        create: [
+          {
+            yearsOfStudy: {
+              connect: {
+                id: _2022_2023.id,
+              },
+            },
+            category: {
+              connect: {
+                id: aerobic.id,
+              },
+            },
+            score: '8.2',
+            grade: 87,
+          },
+        ],
+      },
+    },
+  });
+
   const idan = await prisma.student.create({
     data: {
-      firstName: 'Idan',
-      lastName: 'Oke',
+      firstName: 'עידן',
+      lastName: 'יובל',
       school: {
         connect: {
           id: school.id,
@@ -291,6 +336,11 @@ async function main() {
       tests: {
         create: [
           {
+            yearsOfStudy: {
+              connect: {
+                id: _2022_2023.id,
+              },
+            },
             category: {
               connect: {
                 id: aerobic.id,
@@ -301,6 +351,11 @@ async function main() {
             grade: 89,
           },
           {
+            yearsOfStudy: {
+              connect: {
+                id: _2022_2023.id,
+              },
+            },
             category: {
               connect: {
                 id: cubes.id,

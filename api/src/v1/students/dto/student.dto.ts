@@ -1,14 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Teacher } from '@prisma/client';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { Student } from '@prisma/client';
+import { IsString } from 'class-validator';
 
-export class TeacherDto implements Partial<Teacher> {
-  @ApiProperty()
-  id: string;
-
+export class StudentDto implements Partial<Student> {
   @IsString()
   @ApiProperty()
-  schoolId: string;
+  id: string;
 
   @IsString()
   @ApiProperty()
@@ -18,14 +15,13 @@ export class TeacherDto implements Partial<Teacher> {
   @ApiProperty()
   lastName: string;
 
-  @IsEmail()
+  @IsString()
   @ApiProperty()
-  email: string;
+  phone: string;
 
   @IsString()
   @ApiProperty()
-  @IsOptional()
-  yearOfStudyId?: string;
+  schoolId: string;
 
   @ApiProperty()
   createdAt: Date;

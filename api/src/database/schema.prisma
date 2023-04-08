@@ -70,15 +70,18 @@ model Classroom {
 }
 
 model Test {
-  id         String       @id @default(uuid())
-  grade      Float        @db.DoublePrecision
-  score      String
-  student    Student      @relation(fields: [studentId], references: [id])
-  studentId  String
-  category   TestCategory @relation(fields: [categoryId], references: [id])
-  categoryId String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id            String       @id @default(uuid())
+  grade         Float        @db.DoublePrecision
+  score         String
+  student       Student      @relation(fields: [studentId], references: [id])
+  studentId     String
+  category      TestCategory @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  yearsOfStudy  YearOfStudy  @relation(fields: [yearOfStudyId], references: [id])
+  yearOfStudyId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TestCategory {
@@ -98,6 +101,7 @@ model YearOfStudy {
   teachers   Teacher[]
   students   Student[]
   classrooms Classroom[]
+  tests      Test[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }

@@ -6,8 +6,9 @@ import { TeachersController } from './teachers.controller';
 import { ResultModule } from '@src/utils/result/result.module';
 
 @Module({
-  imports: [PrismaModule, YearsOfStudyModule, ResultModule],
+  imports: [PrismaModule, ResultModule],
   controllers: [TeachersController],
   providers: [TeachersService],
+  exports: [TeachersService],
 })
 export class TeachersModule {}

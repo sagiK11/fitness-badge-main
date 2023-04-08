@@ -59,6 +59,7 @@ CREATE TABLE "Test" (
     "score" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
+    "yearOfStudyId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -174,6 +175,9 @@ ALTER TABLE "Test" ADD CONSTRAINT "Test_studentId_fkey" FOREIGN KEY ("studentId"
 
 -- AddForeignKey
 ALTER TABLE "Test" ADD CONSTRAINT "Test_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "TestCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Test" ADD CONSTRAINT "Test_yearOfStudyId_fkey" FOREIGN KEY ("yearOfStudyId") REFERENCES "YearOfStudy"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_TeacherToYearOfStudy" ADD CONSTRAINT "_TeacherToYearOfStudy_A_fkey" FOREIGN KEY ("A") REFERENCES "Teacher"("id") ON DELETE CASCADE ON UPDATE CASCADE;
