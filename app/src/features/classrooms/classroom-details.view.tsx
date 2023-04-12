@@ -12,6 +12,7 @@ import {
   Select,
 } from "@/components";
 import { useClassroom, useStudents } from "@/hooks";
+import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
 import { useRouter } from "next/router";
@@ -46,7 +47,9 @@ export function ClassroomDetailsView() {
 
                 <FlexBox className="flex-col md:gap-1">
                   <Typography className="text-secondary">מגדר</Typography>
-                  <Typography bold>{classroom?.gender}</Typography>
+                  <Typography bold>
+                    {classroom?.gender === GenderEnum.male ? "בנים" : "בנות"}
+                  </Typography>
                 </FlexBox>
 
                 <FlexBox className="flex-col md:gap-1">

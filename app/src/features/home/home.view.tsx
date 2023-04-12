@@ -35,6 +35,7 @@ export function HomeView() {
     <ViewWrapper>
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
+          <Typography className="text-3xl">שלום {user.firstName} </Typography>
           <Card section>
             <CardTitle>פרטי בית ספר</CardTitle>
             <CardBody>
@@ -65,7 +66,7 @@ export function HomeView() {
           </Card>
 
           <Card section>
-            <CardTitle>כיתות</CardTitle>
+            <CardTitle>הכיתות שלי</CardTitle>
 
             {classrooms?.map((classroom) => (
               <CardBody key={classroom.id} hover>

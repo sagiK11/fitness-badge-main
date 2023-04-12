@@ -10,5 +10,13 @@ export const studentEndpoints = api.injectEndpoints({
       }),
       providesTags: ["all-students"],
     }),
+    updateStudent: builder.mutation<Student, Student>({
+      query: (body) => ({
+        url: `/students/${body.id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["classroom-student"],
+    }),
   }),
 });

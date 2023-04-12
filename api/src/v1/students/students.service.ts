@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Student } from '@prisma/client';
+import { Prisma, Student } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
@@ -24,6 +24,23 @@ export class StudentsService {
       return this.resultService.handleSuccess<Student[]>(resultData);
     } catch (e) {
       return this.resultService.handleError<Student[]>(e);
+    }
+  }
+
+  async update(
+    studentId: string,
+    data: Prisma.StudentUpdateInput,
+  ): Promise<Result<Student>> {
+    try {
+      const resultData = await this.prisma.student.update({
+        where: {
+          id: studentId,
+        },
+        data,
+      });
+      return this.resultService.handleSuccess<Student>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<Student>(e);
     }
   }
 

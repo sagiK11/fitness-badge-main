@@ -9,18 +9,42 @@ import {
   ViewWrapper,
   Card,
   Button,
+  Form,
+  FormNumberFormatInput,
 } from "@/components";
-import { useStudent, useYearOfStudy } from "@/hooks";
+import { useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
 import { useRouter } from "next/router";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { AiOutlineArrowRight } from "react-icons/ai";
 
 export function StudentDetailsViewView() {
   const { student } = useStudent();
+  const { updateTests } = useTests();
   const { currentYearOfStudy } = useYearOfStudy();
   const router = useRouter();
+
+  const defaultValues = student?.tests.reduce(
+    (prev, test) => ({ ...prev, [test.id]: test.score }),
+    {}
+  );
+  const methods = useForm({
+    defaultValues,
+    mode: "onChange",
+  });
+
+  const submit = React.useCallback(
+    (data: { [id: string]: string }) => {
+      const tests = Object.entries(data).map(([id, score]) => ({
+        id,
+        score,
+      }));
+      updateTests(tests);
+    },
+    [updateTests]
+  );
 
   if (!student) return null;
 
@@ -58,30 +82,52 @@ export function StudentDetailsViewView() {
             </CardBody>
           </Card>
 
-          <Card section>
+          <Card
+            section
+            as={Form}
+            methods={methods}
+            onSubmit={methods.handleSubmit(submit)}
+          >
+            <CardTitle>ציונים</CardTitle>
             <CardBody>
               <div className="overflow-x-auto">
                 <table className="table w-full">
                   <thead>
                     <tr>
                       <th>קטגוריה</th>
-                      <th>ציון</th>
                       <th>תוצאה</th>
+                      <th>ציון</th>
                     </tr>
                   </thead>
                   <tbody>
                     {student.tests.map((test) => {
                       return (
-                        <tr className="hover" key={test.id}>
+                        <tr className="hover" key={test.categoryId}>
                           <th>{test.category.name}</th>
+                          <td>
+                            <FormNumberFormatInput
+                              name={test.id}
+                              className="input-sm lg:input-lg input-bordered  "
+                            />
+                          </td>
                           <td>{test.grade}</td>
-                          <td>{test.score}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
               </div>
+              <FlexBox className="justify-between lg:justify-center gap-2 ">
+                <Button
+                  className="btn-outline btn-accent min-w-[150px]"
+                  type="reset"
+                >
+                  אפס
+                </Button>
+                <Button className="btn-accent min-w-[150px]" type="submit">
+                  שמור
+                </Button>
+              </FlexBox>
             </CardBody>
           </Card>
 

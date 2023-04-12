@@ -1,23 +1,7 @@
 import { Student } from "@/models";
 import { Classroom } from "@/models/classroom";
 import { api } from "./api";
-
-interface TeacherParams {
-  yearOfStudyId: string;
-  teacherId: string;
-}
-
-interface ClassroomParams {
-  yearOfStudyId: string;
-  teacherId: string;
-  classroomId: string;
-}
-
-interface StudentParams {
-  yearOfStudyId: string;
-  classroomId: string;
-  studentId: string;
-}
+import { ClassroomParams, StudentParams, TeacherParams } from "../shared";
 
 export const yearOfStudyEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
