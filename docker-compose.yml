@@ -59,5 +59,17 @@ services:
       - ./app/:/usr/src/app/
       - /usr/src/app/node_modules
 
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile.local
+    env_file:
+      - ./admin/.env.local
+    ports:
+      - 6173:6173
+    volumes:
+      - ./admin/:/usr/src/app/
+      - /usr/src/app/node_modules
+
 volumes:
   postgres:
