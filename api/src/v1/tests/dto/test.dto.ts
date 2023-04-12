@@ -12,7 +12,7 @@ export class TestDto implements Partial<Test> {
 
   @IsString()
   @ApiProperty()
-  score: string;
+  score: number;
 
   @IsString()
   @ApiProperty()

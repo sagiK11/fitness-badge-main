@@ -36,10 +36,10 @@ export function StudentDetailsViewView() {
   });
 
   const submit = React.useCallback(
-    (data: { [id: string]: string }) => {
+    (data: { [id: string]: number }) => {
       const tests = Object.entries(data).map(([id, score]) => ({
         id,
-        score,
+        score: Number(score),
       }));
       updateTests(tests);
     },
