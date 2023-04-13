@@ -6,8 +6,10 @@ import { ClassroomsModule } from './classrooms/classrooms.module';
 import { StudentsModule } from './students/students.module';
 import { TestsModule } from './tests/tests.module';
 import { SchoolsModule } from './schools/schools.module';
+import { SystemConfigModule } from './system-config/system-config.module';
+import { TestCategoriesModule } from './test-categories/test-categories.module';
 
 @Module({
-  imports: [TeachersModule, YearsOfStudyModule, ResultModule, ClassroomsModule, StudentsModule, TestsModule, SchoolsModule],
+  imports: [TeachersModule, YearsOfStudyModule, ResultModule, ClassroomsModule, StudentsModule, TestsModule, SchoolsModule, SystemConfigModule, TestCategoriesModule],
 })
 export class V1Module {}
