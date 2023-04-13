@@ -9,3 +9,8 @@ export interface TestCategory {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UploadGradesPayload {
+  testCategoryId: string;
+  data: FormData;
+}

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-
+import { parse } from 'csv-parse/sync';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -34,38 +34,109 @@ async function main() {
 
   const aerobic = await prisma.testCategory.create({
     data: {
-      name: 'ריצה אירובית',
+      name: 'aerobic',
       measureUnit: 'MINUTES',
     },
   });
 
   const cubes = await prisma.testCategory.create({
     data: {
-      name: 'כוביות',
+      name: 'cubes',
       measureUnit: 'SECONDS',
     },
   });
 
-  const categories = await prisma.testCategory.createMany({
-    data: [
-      {
-        name: 'תליית און',
-        measureUnit: 'MINUTES',
-      },
-      {
-        name: 'כפיפות בטן',
-        measureUnit: 'MINUTES',
-      },
-      {
-        name: 'עליות מתח',
-        measureUnit: 'AMOUNT',
-      },
-      {
-        name: 'קפיצה לרוחק',
-        measureUnit: 'CENTIMETERS',
-      },
-    ],
+  const pull_up = await prisma.testCategory.create({
+    data: {
+      name: 'pull up',
+      measureUnit: 'AMOUNT',
+    },
   });
+
+  const pull_up_hanging = await prisma.testCategory.create({
+    data: {
+      name: 'pull up hanging',
+      measureUnit: 'MINUTES',
+    },
+  });
+
+  const distance_jumping_grades = await prisma.testCategory.create({
+    data: {
+      name: 'distance jumping',
+      measureUnit: 'CENTIMETERS',
+    },
+  });
+
+  const abs_push_up_full = await prisma.testCategory.create({
+    data: {
+      name: 'abs push up full',
+      measureUnit: 'AMOUNT',
+    },
+  });
+
+  const push_up_full = await prisma.testCategory.create({
+    data: {
+      name: 'push up full',
+      measureUnit: 'AMOUNT',
+    },
+  });
+
+  const push_up_half = await prisma.testCategory.create({
+    data: {
+      name: 'push up half',
+      measureUnit: 'AMOUNT',
+    },
+  });
+
+  const plank = await prisma.testCategory.create({
+    data: {
+      name: 'push up half',
+      measureUnit: 'MINUTES',
+    },
+  });
+
+  const aerobic_walking = await prisma.testCategory.create({
+    data: {
+      name: 'aerobic walking',
+      measureUnit: 'MINUTES',
+    },
+  });
+
+  const gradesData = [
+    { fileName: 'abs_push_up_full_grades', id: abs_push_up_full.id },
+    { fileName: 'aerobic_grades', id: aerobic.id },
+    { fileName: 'aerobic_walking_grades', id: aerobic_walking.id },
+    { fileName: 'cubes_grades', id: cubes.id },
+    { fileName: 'distance_jumping_grades', id: distance_jumping_grades.id },
+    { fileName: 'plank_grades', id: plank.id },
+    { fileName: 'pull_up_grades', id: pull_up.id },
+    { fileName: 'pull_up_hanging_grades', id: pull_up_hanging.id },
+    { fileName: 'push_up_full_grades', id: push_up_full.id },
+    { fileName: 'push_up_half_grades', id: push_up_half.id },
+  ];
+
+  const fs = await import('fs');
+  for (const fileData of gradesData) {
+    const file = await fs.promises.readFile(
+      `/usr/src/app/src/database/grades/${fileData.fileName}.csv`,
+    );
+    const records = parse(file, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+    const cleaned = records?.map((entry) => {
+      return {
+        testCategoryId: fileData.id,
+        maleScore: Number(entry.maleScore),
+        maleGrade: Number(entry.maleScore),
+        femaleScore: Number(entry.femaleScore),
+        femaleGrade: Number(entry.femaleGrade),
+      };
+    });
+    await prisma.categoryScoreResult.createMany({
+      data: cleaned,
+    });
+  }
 
   const alice = await prisma.teacher.create({
     data: {
