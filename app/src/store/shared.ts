@@ -1,3 +1,5 @@
+import { GenderEnum } from "@/models";
+
 export interface TeacherParams {
   yearOfStudyId: string;
   teacherId: string;
@@ -13,4 +15,16 @@ export interface StudentParams {
   yearOfStudyId: string;
   classroomId: string;
   studentId: string;
+}
+export interface TestCategoryParams {
+  yearOfStudyId: string;
+  testCategoryId: string;
+  studentId: string;
+}
+
+export interface UpdateTestParams {
+  id: string;
+  score: number;
+  gender: GenderEnum;
+  categoryId: string;
 }

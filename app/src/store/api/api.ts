@@ -15,12 +15,13 @@ export const api = createApi({
     }
   },
   tagTypes: [
-    "teacher",
-    "teacher-classrooms",
-    "teacher-classroom",
     "all-classrooms",
-    "classroom-student",
     "all-students",
+    "classroom-student",
+    "student-available-tests",
+    "teacher-classroom",
+    "teacher-classrooms",
+    "teacher",
   ],
   endpoints: (builder) => ({}),
 });

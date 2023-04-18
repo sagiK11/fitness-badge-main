@@ -1,13 +1,16 @@
 import React from "react";
 
 import { testEndpoints } from "@/store/api/test.endpoint";
-import { Test } from "@/models";
+
+import { UpdateTestParams } from "@/store";
 
 export function useTests() {
-  const [_updateTests] = testEndpoints.useUpdateTestsMutation();
+  const [_updateTests, updateTestsResult] =
+    testEndpoints.useUpdateTestsMutation();
+  const [_updateTest, updateTestResult] = testEndpoints.useUpdateTestMutation();
 
   const updateTests = React.useCallback(
-    async (tests: Partial<Test>[]) => {
+    async (tests: UpdateTestParams[]) => {
       try {
         await _updateTests(tests).unwrap();
       } catch (error) {
@@ -17,7 +20,22 @@ export function useTests() {
     [_updateTests]
   );
 
+  const updateTest = React.useCallback(
+    async (test: UpdateTestParams) => {
+      try {
+        await _updateTest(test).unwrap();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [_updateTest]
+  );
+  console.log(updateTestResult);
+
   return {
     updateTests,
+    updateTest,
+    updateTestsResult,
+    updateTestResult,
   };
 }

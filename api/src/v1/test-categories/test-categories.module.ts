@@ -8,5 +8,6 @@ import { ResultModule } from '@src/utils/result/result.module';
   imports: [PrismaModule, ResultModule],
   controllers: [TestCategoriesController],
   providers: [TestCategoriesService],
+  exports: [TestCategoriesService],
 })
 export class TestCategoriesModule {}

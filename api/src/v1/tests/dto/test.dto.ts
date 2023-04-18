@@ -1,6 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Test } from '@prisma/client';
-import { IsString } from 'class-validator';
+import { Gender, Student, Test } from '@prisma/client';
+import { IsNumber, IsString } from 'class-validator';
 
 export class TestDto implements Partial<Test> {
   @ApiProperty()
@@ -10,13 +10,17 @@ export class TestDto implements Partial<Test> {
   @ApiProperty()
   grade: number;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty()
   score: number;
 
   @IsString()
   @ApiProperty()
   categoryId: string;
+
+  @IsString()
+  @ApiProperty()
+  studentId: string;
 
   @IsString()
   @ApiProperty()
@@ -28,7 +32,19 @@ export class TestDto implements Partial<Test> {
   @ApiProperty()
   updatedAt: Date;
 }
-export class UpdateTestDto extends PickType(TestDto, [
-  'score',
-  'id',
-] as const) {}
+
+export interface UpdateTestInput {
+  id: Test['id'];
+  score: Test['score'];
+  categoryId: Test['categoryId'];
+  gender: Student['gender'];
+}
+
+export class UpdateTestDto
+  extends PickType(TestDto, ['score', 'categoryId', 'id'] as const)
+  implements UpdateTestInput
+{
+  @IsString()
+  @ApiProperty()
+  gender: Gender;
+}
