@@ -3,13 +3,28 @@ import {
   NumberFormatInput,
   NumberFormatInputProps,
 } from "./number-format-input";
+import debounce from "debounce";
+import { NumberFormatValues, SourceInfo } from "react-number-format";
 
 interface FormInputProps extends NumberFormatInputProps {
   name: string;
+  debounceTime?: number;
 }
 
-export function FormNumberFormatInput({ name, ...props }: FormInputProps) {
-  const { control } = useFormContext();
+type onChange = (...event: any[]) => void;
+
+export function FormNumberFormatInput({
+  name,
+  debounceTime,
+  ...props
+}: FormInputProps) {
+  const { control, trigger } = useFormContext();
+
+  const debounced = (onChange: onChange) =>
+    debounce((values: NumberFormatValues, source: SourceInfo) => {
+      trigger(name);
+      onChange(source.event);
+    }, debounceTime || 1000);
 
   return (
     <Controller
@@ -19,7 +34,9 @@ export function FormNumberFormatInput({ name, ...props }: FormInputProps) {
         <NumberFormatInput
           {...props}
           {...field}
-          onValueChange={field.onChange}
+          onValueChange={
+            debounceTime ? debounced(field.onChange) : field.onChange
+          }
         />
       )}
     />

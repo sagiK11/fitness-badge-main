@@ -1,13 +1,16 @@
 import { WrapperProps } from "@/types";
 import classNames from "classnames";
 import Link from "next/link";
+import { Loader } from "./loader";
 
 interface ButtonProps
   extends WrapperProps,
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
   href?: string;
-  iconStart?: React.ReactNode;
-  iconEnd?: React.ReactNode;
+  iconStart?: any;
+  iconEnd?: any;
+  loadingStart?: boolean;
+  loadingEnd?: boolean;
 }
 
 export function Button({
@@ -16,18 +19,31 @@ export function Button({
   className,
   iconStart,
   iconEnd,
+  loadingStart,
+  loadingEnd,
   ...props
 }: ButtonProps) {
   let Component = as;
   if (props.href) {
     Component = Link;
   }
+  const disabled = loadingEnd || loadingStart || props.disabled;
 
   return (
-    <Component className={classNames(className, "btn gap-1")} {...props}>
-      {iconStart}
+    <Component
+      className={classNames(className, "btn gap-1")}
+      {...props}
+      disabled={disabled}
+    >
+      <LoaderOrIcon icon={iconStart} isLoading={loadingStart} />
       {children}
-      {iconEnd}
+      <LoaderOrIcon icon={iconEnd} isLoading={loadingEnd} />
     </Component>
   );
 }
+
+const LoaderOrIcon = ({ icon: Icon, isLoading }: any) => {
+  if (isLoading) return <Loader />;
+  if (Icon) return <Icon />;
+  return null;
+};

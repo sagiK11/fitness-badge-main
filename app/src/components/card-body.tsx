@@ -1,13 +1,14 @@
 import { WrapperProps } from "@/types";
 import classNames from "classnames";
 
-type Size = "md" | "lg";
+type Size = "none" | "md" | "lg";
 
 interface CardBodyProps extends WrapperProps {
   size?: Size;
   hover?: boolean;
 }
 const SIZE_MAP: Record<Size, string> = {
+  none: "p-0",
   md: "p-3",
   lg: "p-6",
 };

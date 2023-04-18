@@ -9,6 +9,7 @@ export * from "./form";
 export * from "./grid";
 export * from "./input";
 export * from "./layout";
+export * from "./loader";
 export * from "./number-format-input";
 export * from "./select";
 export * from "./seo-metadata";
