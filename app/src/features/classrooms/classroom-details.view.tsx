@@ -31,7 +31,7 @@ export function ClassroomDetailsView() {
     if (!classAvailableStudentOptions?.[0]?.value) return;
     setStudentId(classAvailableStudentOptions?.[0]?.value);
   }, [classAvailableStudentOptions]);
-  console.log(classroom);
+
   return (
     <ViewWrapper title="Classroom Details">
       <RootLayout>
@@ -106,7 +106,7 @@ export function ClassroomDetailsView() {
                   <FlexBox className="flex-col md:gap-1">
                     <Button
                       className="btn-secondary btn-sm self-start"
-                      iconEnd={<AiOutlineArrowLeft />}
+                      iconEnd={AiOutlineArrowLeft}
                       href={
                         routesTree({
                           yearOfStudyId: yearOfStudyId as string,
@@ -155,7 +155,7 @@ export function ClassroomDetailsView() {
           <FlexBox className="px-3 lg:px-0">
             <Button
               className="btn-outline btn-primary btn-sm lg:btn-md"
-              iconStart={<AiOutlineArrowRight />}
+              iconStart={AiOutlineArrowRight}
               href={
                 routesTree({ yearOfStudyId: yearOfStudyId as string })
                   .yearOfStudy

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Student } from '@prisma/client';
+import { Prisma, Student, TestCategory } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
@@ -83,12 +83,86 @@ export class StudentsService {
             include: {
               category: true,
             },
+            orderBy: {
+              category: {
+                name: 'asc',
+              },
+            },
           },
         },
       });
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
+    }
+  }
+
+  async findStudentAvailableTests(data: {
+    yearOfStudyId: string;
+    studentId: string;
+  }): Promise<Result<TestCategory[]>> {
+    const { studentId, yearOfStudyId } = data;
+    try {
+      const tests = await this.prisma.test.findMany({
+        where: {
+          studentId: {
+            equals: studentId,
+          },
+          yearOfStudyId: {
+            equals: yearOfStudyId,
+          },
+        },
+      });
+
+      const resultData = await this.prisma.testCategory.findMany({
+        where: {
+          id: {
+            notIn: tests.map((t) => t.categoryId),
+          },
+        },
+      });
+      return this.resultService.handleSuccess<TestCategory[]>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<TestCategory[]>(e);
+    }
+  }
+
+  async addStudentTest(data: {
+    yearOfStudyId: string;
+    studentId: string;
+    testCategoryId: string;
+  }): Promise<Result<Student>> {
+    const { studentId, yearOfStudyId, testCategoryId } = data;
+    console.log('here', data);
+    try {
+      const resultData = await this.prisma.student.update({
+        where: {
+          id: studentId,
+        },
+        data: {
+          tests: {
+            create: [
+              {
+                yearsOfStudy: {
+                  connect: {
+                    id: yearOfStudyId,
+                  },
+                },
+                category: {
+                  connect: {
+                    id: testCategoryId,
+                  },
+                },
+                score: 0,
+                grade: 0,
+              },
+            ],
+          },
+        },
+      });
+      return this.resultService.handleSuccess<Student>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<Student>(e);
     }
   }
 }

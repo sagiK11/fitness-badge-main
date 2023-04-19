@@ -9,42 +9,29 @@ import {
   ViewWrapper,
   Card,
   Button,
-  Form,
-  FormNumberFormatInput,
+  NumberFormatInput,
+  Select,
 } from "@/components";
 import { useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
+import classNames from "classnames";
 import { useRouter } from "next/router";
 import React from "react";
-import { useForm } from "react-hook-form";
 import { AiOutlineArrowRight } from "react-icons/ai";
 
 export function StudentDetailsViewView() {
-  const { student } = useStudent();
-  const { updateTests } = useTests();
+  const { student, availableTestsOptions, addStudentTest } = useStudent();
+  const { updateTest, updateTestResult } = useTests();
   const { currentYearOfStudy } = useYearOfStudy();
   const router = useRouter();
 
-  const defaultValues = student?.tests.reduce(
-    (prev, test) => ({ ...prev, [test.id]: test.score }),
-    {}
-  );
-  const methods = useForm({
-    defaultValues,
-    mode: "onChange",
-  });
+  const [testCategoryId, setTestCategoryId] = React.useState<string>();
 
-  const submit = React.useCallback(
-    (data: { [id: string]: number }) => {
-      const tests = Object.entries(data).map(([id, score]) => ({
-        id,
-        score: Number(score),
-      }));
-      updateTests(tests);
-    },
-    [updateTests]
-  );
+  React.useEffect(() => {
+    if (!availableTestsOptions?.[0]?.value) return;
+    setTestCategoryId(availableTestsOptions?.[0]?.value);
+  }, [availableTestsOptions]);
 
   if (!student) return null;
 
@@ -82,59 +69,107 @@ export function StudentDetailsViewView() {
             </CardBody>
           </Card>
 
-          <Card
-            section
-            as={Form}
-            methods={methods}
-            onSubmit={methods.handleSubmit(submit)}
-          >
-            <CardTitle>ציונים</CardTitle>
-            <CardBody>
-              <div className="overflow-x-auto">
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th>קטגוריה</th>
-                      <th>תוצאה</th>
-                      <th>ציון</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {student.tests.map((test) => {
-                      return (
-                        <tr className="hover" key={test.categoryId}>
-                          <th>{test.category.name}</th>
-                          <td>
-                            <FormNumberFormatInput
-                              name={test.id}
-                              className="input-sm lg:input-lg input-bordered  "
-                            />
-                          </td>
-                          <td>{test.grade}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              <FlexBox className="justify-between lg:justify-center gap-2 ">
-                <Button
-                  className="btn-outline btn-accent min-w-[150px]"
-                  type="reset"
-                >
-                  אפס
-                </Button>
-                <Button className="btn-accent min-w-[150px]" type="submit">
-                  שמור
-                </Button>
+          <Card section>
+            <CardTitle>מבחנים וציונים</CardTitle>
+            <CardBody size="none">
+              <Grid className="grid-cols-3 md:grid-cols-5  gap-2 lg:gap-3 md:items-center bg-gray-200 p-4">
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography bold className="text-base-content">
+                    קטגוריה
+                  </Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography bold className="text-base-content">
+                    תוצאה
+                  </Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography bold className="text-base-content">
+                    ציון
+                  </Typography>
+                </FlexBox>
+              </Grid>
+
+              <FlexBox className="overflow-x-auto  flex-col">
+                {student.tests.map((test) => {
+                  const { originalArgs, isLoading } = updateTestResult;
+                  const isUpdating = originalArgs?.id === test.id && isLoading;
+                  return (
+                    <CardBody
+                      key={test.id}
+                      className="hover:bg-gray-100 transition-all duration-200"
+                    >
+                      <Grid className="grid-cols-3 md:grid-cols-5  gap-4 lg:gap-8 md:items-center ">
+                        <FlexBox className="flex-col md:gap-1">
+                          <Typography className="text-secondary">
+                            {test.category.name}
+                          </Typography>
+                        </FlexBox>
+
+                        <FlexBox className="flex-col md:gap-1">
+                          <NumberFormatInput
+                            debounceTime={1000}
+                            defaultValue={test.score}
+                            className="input-bordered input-sm md:input-md"
+                            onChange={(e) =>
+                              updateTest({
+                                id: test.id,
+                                score: parseFloat(e.target.value),
+                                gender: student.gender,
+                                categoryId: test.categoryId,
+                              })
+                            }
+                            disabled={isUpdating}
+                          />
+                        </FlexBox>
+
+                        <FlexBox className="flex-col md:gap-1">
+                          <Typography
+                            className={classNames("text-info-content", {
+                              "opacity-60": isUpdating,
+                            })}
+                          >
+                            {test.grade}
+                          </Typography>
+                        </FlexBox>
+                      </Grid>
+                    </CardBody>
+                  );
+                })}
               </FlexBox>
             </CardBody>
           </Card>
 
+          {availableTestsOptions.length > 0 && (
+            <Card section>
+              <CardTitle>הוסף מבחן</CardTitle>
+              <CardBody>
+                <Grid className="grid-cols-2 md:grid-cols-5 gap-1 md:gap-3 items-center">
+                  <Select
+                    onChange={(e) => setTestCategoryId(e.target.value)}
+                    options={availableTestsOptions}
+                    className="select-sm md:select-md"
+                  />
+                  <FlexBox>
+                    <Button
+                      className="btn-primary btn-outline btn-sm md:btn-md"
+                      onClick={() => addStudentTest(testCategoryId as string)}
+                      disabled={!testCategoryId}
+                    >
+                      הוסף
+                    </Button>
+                  </FlexBox>
+                </Grid>
+              </CardBody>
+            </Card>
+          )}
+
           <FlexBox className="px-3 lg:px-0">
             <Button
               className="btn-outline btn-primary btn-sm lg:btn-md"
-              iconStart={<AiOutlineArrowRight />}
+              iconStart={AiOutlineArrowRight}
               href={
                 routesTree({
                   yearOfStudyId: currentYearOfStudy.id,
@@ -150,3 +185,39 @@ export function StudentDetailsViewView() {
     </ViewWrapper>
   );
 }
+
+//  <table className="table w-full">
+//    <thead>
+//      <tr>
+//        <th>קטגוריה</th>
+//        <th>תוצאה</th>
+//        <th>ציון</th>
+//      </tr>
+//    </thead>
+//    <tbody>
+//      {student.tests.map((test) => {
+//        return (
+//          <tr className="hover" key={test.id}>
+//            <th>{test.category.name}</th>
+//            <td>
+//              <NumberFormatInput
+//                debounceTime={1000}
+//                defaultValue={test.score}
+//                onChange={(e) =>
+//                  updateTests([
+//                    {
+//                      id: test.id,
+//                      score: Number(e.target.value),
+//                      gender: student.gender,
+//                      categoryId: test.categoryId,
+//                    },
+//                  ])
+//                }
+//              />
+//            </td>
+//            <td>{test.grade}</td>
+//          </tr>
+//        );
+//      })}
+//    </tbody>
+//  </table>;

@@ -104,7 +104,7 @@ export function HomeView() {
                   <FlexBox className="flex-col md:gap-1 col-span-2">
                     <Button
                       className="btn-secondary btn-sm self-start md:self-end"
-                      iconEnd={<AiOutlineArrowLeft />}
+                      iconEnd={AiOutlineArrowLeft}
                       href={
                         routesTree({
                           yearOfStudyId: currentYearOfStudy?.id,

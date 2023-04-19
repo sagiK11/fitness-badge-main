@@ -1,4 +1,5 @@
 import { Classroom } from "../classroom";
+import { GenderEnum } from "../enums";
 import { School } from "../school";
 import { Test } from "../test";
 import { YearOfStudy } from "../year-of-study";
@@ -8,6 +9,7 @@ export interface Student {
   firstName: string;
   lastName: string;
   phone?: string;
+  gender: GenderEnum;
   tests: Test[];
   school: School;
   schoolId: string;
