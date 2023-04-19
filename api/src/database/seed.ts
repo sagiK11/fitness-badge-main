@@ -34,71 +34,91 @@ async function main() {
 
   const aerobic = await prisma.testCategory.create({
     data: {
-      name: 'aerobic',
+      name: 'אירובי',
       measureUnit: 'MINUTES',
+      alias: 'aerobic',
+      algoOperator: 'gte',
     },
   });
 
   const cubes = await prisma.testCategory.create({
     data: {
-      name: 'cubes',
+      name: 'כוביות זריזות',
       measureUnit: 'SECONDS',
+      alias: 'cubes-quickness',
+      algoOperator: 'gte',
     },
   });
 
   const pull_up = await prisma.testCategory.create({
     data: {
-      name: 'pull up',
+      name: 'עליות מתח',
       measureUnit: 'AMOUNT',
+      alias: 'pull-up',
+      algoOperator: 'lte',
     },
   });
 
   const pull_up_hanging = await prisma.testCategory.create({
     data: {
-      name: 'pull up hanging',
+      name: 'תליית און',
       measureUnit: 'MINUTES',
+      alias: 'pull-up-hanging',
+      algoOperator: 'lte',
     },
   });
 
   const distance_jumping_grades = await prisma.testCategory.create({
     data: {
-      name: 'distance jumping',
+      name: 'קפיצה לרוחק',
       measureUnit: 'CENTIMETERS',
+      alias: 'distance-jumping',
+      algoOperator: 'lte',
     },
   });
 
   const abs_push_up_full = await prisma.testCategory.create({
     data: {
-      name: 'abs push up full',
+      name: 'כפיפות בטן',
       measureUnit: 'AMOUNT',
+      alias: 'abs',
+      algoOperator: 'lte',
     },
   });
 
   const push_up_full = await prisma.testCategory.create({
     data: {
-      name: 'push up full',
+      name: 'כפיפות מרפקים',
       measureUnit: 'AMOUNT',
+      alias: 'push-up',
+      algoOperator: 'lte',
     },
   });
 
   const push_up_half = await prisma.testCategory.create({
     data: {
-      name: 'push up half',
+      name: 'כפיפות מרפקים חצי',
       measureUnit: 'AMOUNT',
+      alias: 'push-up-half',
+      algoOperator: 'lte',
     },
   });
 
   const plank = await prisma.testCategory.create({
     data: {
-      name: 'push up half',
+      name: 'פלאנק',
       measureUnit: 'MINUTES',
+      alias: 'plank',
+      algoOperator: 'lte',
     },
   });
 
   const aerobic_walking = await prisma.testCategory.create({
     data: {
-      name: 'aerobic walking',
+      name: 'אירובי הליכה',
       measureUnit: 'MINUTES',
+      alias: 'aerobic-walking',
+      algoOperator: 'gte',
     },
   });
 
@@ -128,7 +148,7 @@ async function main() {
       return {
         testCategoryId: fileData.id,
         maleScore: Number(entry.maleScore),
-        maleGrade: Number(entry.maleScore),
+        maleGrade: Number(entry.maleGrade),
         femaleScore: Number(entry.femaleScore),
         femaleGrade: Number(entry.femaleGrade),
       };
@@ -309,6 +329,7 @@ async function main() {
     data: {
       firstName: 'בן',
       lastName: 'אורן',
+      gender: 'MALE',
       school: {
         connect: {
           id: school.id,
@@ -349,6 +370,7 @@ async function main() {
     data: {
       firstName: 'גליה',
       lastName: 'מרון',
+      gender: 'FEMALE',
       school: {
         connect: {
           id: school.id,
@@ -389,6 +411,7 @@ async function main() {
     data: {
       firstName: 'עידן',
       lastName: 'יובל',
+      gender: 'MALE',
       school: {
         connect: {
           id: school.id,

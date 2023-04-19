@@ -82,7 +82,11 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^csv-parse/sync": "<rootDir>/../node_modules/csv-parse/dist/cjs/sync.cjs",
+      "^@src/(.*)$": "<rootDir>/$1"
+    }
   },
   "prisma": {
     "seed": "ts-node src/database/seed.ts",

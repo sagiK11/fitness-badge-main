@@ -47,6 +47,7 @@ model Student {
   firstName    String
   lastName     String
   phone        String?
+  gender       Gender
   tests        Test[]
   school       School        @relation(fields: [schoolId], references: [id])
   schoolId     String
@@ -85,13 +86,15 @@ model Test {
 }
 
 model TestCategory {
-  id          String                @id @default(uuid())
-  name        String
-  tests       Test[]
-  scoreResult CategoryScoreResult[]
-  measureUnit MeasureUnitEnum       @default(AMOUNT)
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt
+  id           String                @id @default(uuid())
+  name         String
+  alias        String
+  tests        Test[]
+  scoreResult  CategoryScoreResult[]
+  measureUnit  MeasureUnitEnum       @default(AMOUNT)
+  algoOperator String
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
 }
 
 model YearOfStudy {

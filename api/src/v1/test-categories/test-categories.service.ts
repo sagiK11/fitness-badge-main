@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryScoreResult, TestCategory } from '@prisma/client';
+import { CategoryScoreResult, Gender, TestCategory } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
@@ -7,6 +7,8 @@ import { parse } from 'csv-parse/sync';
 
 @Injectable()
 export class TestCategoriesService {
+  private readonly LOWEST_GRADE = 30;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly resultService: ResultService<TestCategory>,
@@ -49,6 +51,49 @@ export class TestCategoriesService {
       return this.resultService.handleSuccess<void>(null);
     } catch (e) {
       return this.resultService.handleError<void>(e);
+    }
+  }
+
+  async getGrade(
+    score: number,
+    gender: Gender,
+    testCategoryId: string,
+  ): Promise<number> {
+    const isFemale = gender === Gender.FEMALE;
+    const genderScoreColumn = isFemale ? 'femaleScore' : 'maleScore';
+    const genderGradeColumn = isFemale ? 'femaleGrade' : 'maleGrade';
+    const category = await this.prisma.testCategory.findUnique({
+      where: { id: testCategoryId },
+    });
+    const operator = category.algoOperator;
+
+    const resultData = await this.prisma.categoryScoreResult.findFirst({
+      where: {
+        testCategoryId,
+        AND: {
+          [genderScoreColumn]: {
+            [operator]: score,
+          },
+        },
+      },
+    });
+    return resultData ? resultData[genderGradeColumn] : this.LOWEST_GRADE;
+  }
+
+  async findCategoryByAlias(
+    alias: string,
+  ): Promise<Result<CategoryScoreResult>> {
+    try {
+      const resultData = await this.prisma.categoryScoreResult.findFirst({
+        where: {
+          testCategory: {
+            alias,
+          },
+        },
+      });
+      return this.resultService.handleSuccess<CategoryScoreResult>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<CategoryScoreResult>(e);
     }
   }
 }
