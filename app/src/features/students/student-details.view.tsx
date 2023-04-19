@@ -13,6 +13,7 @@ import {
   Select,
 } from "@/components";
 import { useStudent, useTests, useYearOfStudy } from "@/hooks";
+import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
 import classNames from "classnames";
@@ -46,6 +47,13 @@ export function StudentDetailsViewView() {
                 <FlexBox className="flex-col md:gap-1">
                   <Typography className="text-secondary">שם</Typography>
                   <Typography bold>{formatName(student)}</Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">מגדר</Typography>
+                  <Typography bold>
+                    {student.gender === GenderEnum.female ? "נקבה" : "זכר"}
+                  </Typography>
                 </FlexBox>
 
                 <FlexBox className="flex-col md:gap-1">
@@ -92,7 +100,7 @@ export function StudentDetailsViewView() {
                 </FlexBox>
               </Grid>
 
-              <FlexBox className="overflow-x-auto  flex-col">
+              <FlexBox className="overflow-x-auto flex-col divide-y">
                 {student.tests.map((test) => {
                   const { originalArgs, isLoading } = updateTestResult;
                   const isUpdating = originalArgs?.id === test.id && isLoading;
