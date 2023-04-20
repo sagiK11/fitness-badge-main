@@ -40,7 +40,7 @@ export const yearOfStudyEndpoints = api.injectEndpoints({
         url: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}/students/${studentId}`,
         method: "PUT",
       }),
-      invalidatesTags: ["teacher-classroom"],
+      invalidatesTags: ["teacher-classroom", "classroom-available-students"],
     }),
     findStudentAvailableTests: builder.query<
       TestCategory[],

@@ -11,9 +11,9 @@ export function useClassrooms() {
     yearOfStudyEndpoints.useAddClassroomStudentMutation();
 
   // Get all school's classroom
-  const { data: allClassrooms } = classroomEndpoints.useGetAllClassroomsQuery(
-    user.schoolId
-  );
+  const { data: allClassrooms } = classroomEndpoints.useFindClassroomsQuery({
+    schoolId: user.schoolId,
+  });
 
   // Get teacher's current classrooms for this current year of study
   const { data: classrooms } =

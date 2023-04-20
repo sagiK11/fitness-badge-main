@@ -11,7 +11,8 @@ import {
   Card,
   Select,
 } from "@/components";
-import { useClassroom, useStudents } from "@/hooks";
+import { useClassroom } from "@/hooks";
+import { useAvailableClassroomStudents } from "@/hooks/use-available-classroom-students";
 import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
@@ -23,14 +24,14 @@ export function ClassroomDetailsView() {
   const router = useRouter();
   const { classroomId, yearOfStudyId } = router.query;
   const { addClassroomStudent, classroom } = useClassroom();
-  const { classAvailableStudentOptions } = useStudents();
+  const { availableStudentsOptions } = useAvailableClassroomStudents();
 
   const [studentId, setStudentId] = React.useState<string>();
 
   React.useEffect(() => {
-    if (!classAvailableStudentOptions?.[0]?.value) return;
-    setStudentId(classAvailableStudentOptions?.[0]?.value);
-  }, [classAvailableStudentOptions]);
+    if (!availableStudentsOptions?.[0]?.value) return;
+    setStudentId(availableStudentsOptions?.[0]?.value);
+  }, [availableStudentsOptions]);
 
   return (
     <ViewWrapper title="Classroom Details">
@@ -123,14 +124,14 @@ export function ClassroomDetailsView() {
             ))}
           </Card>
 
-          {classAvailableStudentOptions.length > 0 && (
+          {availableStudentsOptions.length > 0 && (
             <Card section>
               <CardTitle>הוסף תלמיד</CardTitle>
               <CardBody>
                 <Grid className="grid-cols-2 md:grid-cols-5 gap-1 md:gap-3 items-center">
                   <Select
                     onChange={(e) => setStudentId(e.target.value)}
-                    options={classAvailableStudentOptions}
+                    options={availableStudentsOptions}
                     className="select-sm md:select-md"
                   />
                   <FlexBox>

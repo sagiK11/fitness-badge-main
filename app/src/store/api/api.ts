@@ -17,6 +17,7 @@ export const api = createApi({
   tagTypes: [
     "all-classrooms",
     "all-students",
+    "classroom-available-students",
     "classroom-student",
     "student-available-tests",
     "teacher-classroom",

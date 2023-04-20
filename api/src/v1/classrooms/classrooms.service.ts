@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Classroom, Prisma } from '@prisma/client';
+import { Classroom, Prisma, Student } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
@@ -30,17 +30,6 @@ export class ClassroomsService {
         where: {
           schoolId,
         },
-      });
-      return this.resultService.handleSuccess(resultData);
-    } catch (e) {
-      return this.resultService.handleError(e);
-    }
-  }
-
-  async createClass(data: Prisma.ClassroomCreateManyInput[]) {
-    try {
-      const resultData = await this.prisma.classroom.createMany({
-        data,
       });
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
@@ -186,6 +175,34 @@ export class ClassroomsService {
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
+    }
+  }
+
+  async findAvailableStudents(data: {
+    yearOfStudyId: string;
+    schoolId: string;
+    classroomId: string;
+  }): Promise<Result<Student[]>> {
+    const { yearOfStudyId, schoolId, classroomId } = data;
+    try {
+      const resultData = await this.prisma.student.findMany({
+        where: {
+          schoolId,
+          yearsOfStudy: {
+            some: {
+              id: yearOfStudyId,
+            },
+          },
+          classrooms: {
+            none: {
+              id: classroomId,
+            },
+          },
+        },
+      });
+      return this.resultService.handleSuccess<Student[]>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<Student[]>(e);
     }
   }
 }
