@@ -57,8 +57,8 @@ export const yearOfStudyEndpoints = api.injectEndpoints({
       providesTags: ["student-available-tests"],
     }),
     addStudentTestCategory: builder.mutation<Student, TestCategoryParams>({
-      query: ({ yearOfStudyId, studentId, testCategoryId }) => ({
-        url: `/years-of-study/${yearOfStudyId}/students/${studentId}/test-category/${testCategoryId}`,
+      query: ({ yearOfStudyId, studentId, testCategoryId, classroomId }) => ({
+        url: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}/students/${studentId}/test-category/${testCategoryId}`,
         method: "PUT",
       }),
       invalidatesTags: ["classroom-student", "student-available-tests"],

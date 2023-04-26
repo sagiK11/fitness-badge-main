@@ -30,7 +30,6 @@ export function useTests() {
     },
     [_updateTest]
   );
-  console.log(updateTestResult);
 
   return {
     updateTests,

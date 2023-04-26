@@ -286,6 +286,11 @@ async function main() {
       tests: {
         create: [
           {
+            classroom: {
+              connect: {
+                id: a2Male.id,
+              },
+            },
             yearsOfStudy: {
               connect: {
                 id: _2022_2023.id,
@@ -322,6 +327,11 @@ async function main() {
       tests: {
         create: [
           {
+            classroom: {
+              connect: {
+                id: a3Female.id,
+              },
+            },
             yearsOfStudy: {
               connect: {
                 id: _2022_2023.id,
@@ -358,6 +368,11 @@ async function main() {
       tests: {
         create: [
           {
+            classroom: {
+              connect: {
+                id: a1Male.id,
+              },
+            },
             yearsOfStudy: {
               connect: {
                 id: _2022_2023.id,
@@ -373,6 +388,11 @@ async function main() {
             grade: 89,
           },
           {
+            classroom: {
+              connect: {
+                id: a1Male.id,
+              },
+            },
             yearsOfStudy: {
               connect: {
                 id: _2022_2023.id,

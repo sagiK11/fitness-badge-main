@@ -60,12 +60,12 @@ export class YearsOfStudyController {
   @ApiParam({ name: 'teacherId', required: true })
   @ApiParam({ name: 'classId', required: true })
   @ApiCreatedResponse({ type: ClassRoomDto })
-  async addTeacherClassroom(
+  async createTeacherEnrollment(
     @Param('yearId') yearOfStudyId: string,
     @Param('teacherId') teacherId: string,
     @Param('classId') classroomId: string,
   ): Promise<Teacher> {
-    const result = await this.classroomService.addTeacherClassroom({
+    const result = await this.classroomService.createTeacherEnrollment({
       yearOfStudyId,
       teacherId,
       classroomId,
@@ -166,19 +166,23 @@ export class YearsOfStudyController {
     return result.data;
   }
 
-  @Put(`/:yearId/students/:studentId/test-category/:testCategoryId`)
+  @Put(
+    `/:yearId/classrooms/:classId/students/:studentId/test-category/:testCategoryId`,
+  )
   @ApiCreatedResponse({ type: StudentDto })
   @ApiParam({ name: 'yearId', required: true })
   @ApiParam({ name: 'studentId', required: true })
   @ApiParam({ name: 'testCategoryId', required: true })
   async addStudentTest(
     @Param('yearId') yearOfStudyId: string,
+    @Param('classId') classroomId: string,
     @Param('studentId') studentId: string,
     @Param('testCategoryId') testCategoryId: string,
   ): Promise<Student> {
     const result = await this.studentService.addStudentTest({
       yearOfStudyId,
       studentId,
+      classroomId,
       testCategoryId,
     });
     if (!result.success) throw result.httpException;

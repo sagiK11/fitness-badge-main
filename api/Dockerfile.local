@@ -13,8 +13,6 @@ RUN apt-get update && apt-get install -y openssl && apt-get install -y netcat
 
 WORKDIR /usr/src/app
 
-# COPY --chown=node:node package.json ./
-
 COPY --chown=node:node . .
 
 RUN npm install

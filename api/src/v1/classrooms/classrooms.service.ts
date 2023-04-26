@@ -20,11 +20,10 @@ export class ClassroomsService {
     }
   }
 
-  async findManyBySchool({
-    schoolId,
-  }: {
+  async findManyBySchool(data: {
     schoolId: string;
   }): Promise<Result<Classroom[]>> {
+    const { schoolId } = data;
     try {
       const resultData = await this.prisma.classroom.findMany({
         where: {
@@ -63,19 +62,20 @@ export class ClassroomsService {
     }
   }
 
-  async findTeacherClassrooms({
-    yearOfStudyId,
-    teacherId,
-  }: {
+  async findTeacherClassrooms(data: {
     yearOfStudyId: string;
     teacherId: string;
   }): Promise<Result<Classroom[]>> {
+    const { yearOfStudyId, teacherId } = data;
     try {
       const resultData = await this.prisma.classroom.findMany({
         where: {
           teacherEnrollments: {
             some: { yearOfStudyId, teacherId },
           },
+        },
+        orderBy: {
+          name: 'asc',
         },
       });
 
@@ -85,15 +85,12 @@ export class ClassroomsService {
     }
   }
 
-  async findTeacherClassroom({
-    yearOfStudyId,
-    teacherId,
-    classroomId,
-  }: {
+  async findTeacherClassroom(data: {
     yearOfStudyId: string;
     teacherId: string;
     classroomId: string;
   }): Promise<Result<Classroom>> {
+    const { yearOfStudyId, teacherId, classroomId } = data;
     try {
       const resultData = await this.prisma.classroom.findFirst({
         where: {
@@ -113,6 +110,11 @@ export class ClassroomsService {
             include: {
               student: true,
             },
+            orderBy: {
+              student: {
+                firstName: 'asc',
+              },
+            },
           },
         },
       });
@@ -122,15 +124,12 @@ export class ClassroomsService {
     }
   }
 
-  async addTeacherClassroom({
-    yearOfStudyId,
-    teacherId,
-    classroomId,
-  }: {
+  async createTeacherEnrollment(data: {
     yearOfStudyId: string;
     teacherId: string;
     classroomId: string;
   }): Promise<Result<Teacher>> {
+    const { yearOfStudyId, teacherId, classroomId } = data;
     try {
       const resultData = await this.prisma.teacher.update({
         where: {

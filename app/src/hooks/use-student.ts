@@ -45,6 +45,7 @@ export function useStudent() {
         studentId,
         testCategoryId,
         yearOfStudyId,
+        classroomId,
       });
     },
     [_addStudentTest, yearOfStudyId, studentId]

@@ -22,7 +22,7 @@ export const Select = React.forwardRef(
         )}
         ref={ref}
       >
-        {options.map(({ label, value, ...rest }) => {
+        {options.map(({ label, value, selected, ...rest }) => {
           return (
             <option key={value} value={value} {...rest}>
               {label}

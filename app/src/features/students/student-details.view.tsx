@@ -12,7 +12,7 @@ import {
   NumberFormatInput,
   Select,
 } from "@/components";
-import { useStudent, useTests, useYearOfStudy } from "@/hooks";
+import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
@@ -25,6 +25,7 @@ export function StudentDetailsViewView() {
   const { student, availableTestsOptions, addStudentTest } = useStudent();
   const { updateTest, updateTestResult } = useTests();
   const { currentYearOfStudy } = useYearOfStudy();
+  const { classroom } = useClassroom();
   const router = useRouter();
 
   const [testCategoryId, setTestCategoryId] = React.useState<string>();
@@ -40,6 +41,11 @@ export function StudentDetailsViewView() {
     <ViewWrapper title="Student Details">
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
+          <FlexBox className="flex-col md:gap-1">
+            <Typography className="text-secondary">כיתה</Typography>
+            <Typography bold>{classroom?.name}</Typography>
+          </FlexBox>
+
           <Card section>
             <CardTitle>פרטי התלמיד</CardTitle>
             <CardBody>

@@ -11,10 +11,8 @@ export class StudentsService {
     private readonly resultService: ResultService<Student>,
   ) {}
 
-  async findMany(
-    findOptions: { schoolId?: string } = {},
-  ): Promise<Result<Student[]>> {
-    const { schoolId } = findOptions;
+  async findMany(data: { schoolId: string }): Promise<Result<Student[]>> {
+    const { schoolId } = data;
     try {
       const resultData = await this.prisma.student.findMany({
         where: {
@@ -44,33 +42,27 @@ export class StudentsService {
     }
   }
 
-  async findClassroomStudent({
-    yearOfStudyId,
-    classroomId,
-    studentId,
-  }: {
+  async findClassroomStudent(data: {
     yearOfStudyId: string;
     classroomId: string;
     studentId: string;
   }): Promise<Result<Student>> {
+    const { yearOfStudyId, classroomId, studentId } = data;
     try {
       const resultData = await this.prisma.student.findFirstOrThrow({
         where: {
           id: studentId,
-          AND: {
-            enrollments: {
-              some: {
-                classroomId,
-                AND: {
-                  yearOfStudyId,
-                },
-              },
+          enrollments: {
+            some: {
+              classroomId,
+              yearOfStudyId,
             },
           },
         },
         include: {
           tests: {
             where: {
+              classroomId,
               yearOfStudyId,
             },
             include: {
@@ -124,8 +116,9 @@ export class StudentsService {
     yearOfStudyId: string;
     studentId: string;
     testCategoryId: string;
+    classroomId: string;
   }): Promise<Result<Student>> {
-    const { studentId, yearOfStudyId, testCategoryId } = data;
+    const { studentId, yearOfStudyId, testCategoryId, classroomId } = data;
     try {
       const resultData = await this.prisma.student.update({
         where: {
@@ -135,6 +128,11 @@ export class StudentsService {
           tests: {
             create: [
               {
+                classroom: {
+                  connect: {
+                    id: classroomId,
+                  },
+                },
                 yearsOfStudy: {
                   connect: {
                     id: yearOfStudyId,

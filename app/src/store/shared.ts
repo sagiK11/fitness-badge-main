@@ -20,6 +20,7 @@ export interface TestCategoryParams {
   yearOfStudyId: string;
   testCategoryId: string;
   studentId: string;
+  classroomId: string;
 }
 
 export interface UpdateTestParams {
