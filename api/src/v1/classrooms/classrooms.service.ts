@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Classroom, Prisma, Student } from '@prisma/client';
+import { Classroom, Student, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
@@ -37,34 +37,26 @@ export class ClassroomsService {
     }
   }
 
-  async addClassroomStudent(data: {
+  async createStudentEnrollment(data: {
     classroomId: string;
     studentId: string;
     yearOfStudyId: string;
   }): Promise<Result<Classroom>> {
+    const { classroomId, studentId, yearOfStudyId } = data;
     try {
       const resultData = await this.prisma.classroom.update({
         where: {
-          id: data.classroomId,
+          id: classroomId,
         },
         data: {
-          students: {
-            connect: { id: data.studentId },
-            update: {
-              where: {
-                id: data.studentId,
-              },
-              data: { yearsOfStudy: { connect: { id: data.yearOfStudyId } } },
-            },
-          },
-          yearsOfStudy: {
-            connect: {
-              id: data.yearOfStudyId,
+          studentEnrollments: {
+            create: {
+              studentId,
+              yearOfStudyId,
             },
           },
         },
       });
-
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
@@ -81,20 +73,12 @@ export class ClassroomsService {
     try {
       const resultData = await this.prisma.classroom.findMany({
         where: {
-          teacher: {
-            some: {
-              id: teacherId,
-            },
-          },
-          AND: {
-            yearsOfStudy: {
-              some: {
-                id: yearOfStudyId,
-              },
-            },
+          teacherEnrollments: {
+            some: { yearOfStudyId, teacherId },
           },
         },
       });
+
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
@@ -114,27 +98,20 @@ export class ClassroomsService {
       const resultData = await this.prisma.classroom.findFirst({
         where: {
           id: classroomId,
-          AND: {
-            teacher: {
-              some: {
-                id: teacherId,
-              },
-            },
-            yearsOfStudy: {
-              some: {
-                id: yearOfStudyId,
-              },
+          teacherEnrollments: {
+            some: {
+              teacherId,
+              yearOfStudyId,
             },
           },
         },
         include: {
-          students: {
+          studentEnrollments: {
             where: {
-              yearsOfStudy: {
-                some: {
-                  id: yearOfStudyId,
-                },
-              },
+              yearOfStudyId,
+            },
+            include: {
+              student: true,
             },
           },
         },
@@ -153,21 +130,17 @@ export class ClassroomsService {
     yearOfStudyId: string;
     teacherId: string;
     classroomId: string;
-  }): Promise<Result<Classroom>> {
+  }): Promise<Result<Teacher>> {
     try {
-      const resultData = await this.prisma.classroom.update({
+      const resultData = await this.prisma.teacher.update({
         where: {
-          id: classroomId,
+          id: teacherId,
         },
         data: {
-          teacher: {
-            connect: {
-              id: teacherId,
-            },
-          },
-          yearsOfStudy: {
-            connect: {
-              id: yearOfStudyId,
+          enrollments: {
+            create: {
+              yearOfStudyId,
+              classroomId,
             },
           },
         },
@@ -185,17 +158,18 @@ export class ClassroomsService {
   }): Promise<Result<Student[]>> {
     const { yearOfStudyId, schoolId, classroomId } = data;
     try {
+      const classroom = await this.prisma.classroom.findFirst({
+        where: { id: classroomId },
+      });
+
       const resultData = await this.prisma.student.findMany({
         where: {
-          schoolId,
-          yearsOfStudy: {
-            some: {
-              id: yearOfStudyId,
-            },
-          },
-          classrooms: {
+          schoolId: classroom.schoolId,
+          gender: classroom.gender,
+          enrollments: {
             none: {
-              id: classroomId,
+              yearOfStudyId,
+              classroomId,
             },
           },
         },

@@ -30,44 +30,41 @@ model School {
 }
 
 model Teacher {
-  id           String        @id @default(uuid())
-  firstName    String
-  lastName     String
-  email        String        @unique
-  classrooms   Classroom[]
-  yearsOfStudy YearOfStudy[]
-  school       School        @relation(fields: [schoolId], references: [id])
-  schoolId     String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id          String              @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String              @unique
+  school      School              @relation(fields: [schoolId], references: [id])
+  schoolId    String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  enrollments TeacherEnrollment[]
 }
 
 model Student {
-  id           String        @id @default(uuid())
-  firstName    String
-  lastName     String
-  phone        String?
-  gender       Gender
-  tests        Test[]
-  school       School        @relation(fields: [schoolId], references: [id])
-  schoolId     String
-  classrooms   Classroom[]
-  yearsOfStudy YearOfStudy[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id          String              @id @default(uuid())
+  firstName   String
+  lastName    String
+  phone       String?
+  gender      Gender
+  tests       Test[]
+  school      School              @relation(fields: [schoolId], references: [id])
+  schoolId    String
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  enrollments StudentEnrollment[]
 }
 
 model Classroom {
-  id           String        @id @default(uuid())
-  name         String        @unique
-  gender       Gender        @default(FEMALE)
-  teacher      Teacher[]
-  students     Student[]
-  yearsOfStudy YearOfStudy[]
-  school       School        @relation(fields: [schoolId], references: [id])
-  schoolId     String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id                 String              @id @default(uuid())
+  name               String              @unique
+  gender             Gender              @default(FEMALE)
+  school             School              @relation(fields: [schoolId], references: [id])
+  schoolId           String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  studentEnrollments StudentEnrollment[]
+  teacherEnrollments TeacherEnrollment[]
 }
 
 model Test {
@@ -80,9 +77,8 @@ model Test {
   categoryId    String
   yearsOfStudy  YearOfStudy  @relation(fields: [yearOfStudyId], references: [id])
   yearOfStudyId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 model TestCategory {
@@ -98,16 +94,16 @@ model TestCategory {
 }
 
 model YearOfStudy {
-  id         String      @id @default(uuid())
-  yearName   String      @unique
-  startDate  DateTime
-  endDate    DateTime
-  teachers   Teacher[]
-  students   Student[]
-  classrooms Classroom[]
-  tests      Test[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id                 String              @id @default(uuid())
+  yearName           String              @unique
+  startDate          DateTime
+  endDate            DateTime
+  studentEnrollments StudentEnrollment[]
+  tests              Test[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  teacherId          String?
+  teacherEnrollments TeacherEnrollment[]
 }
 
 model CategoryScoreResult {
@@ -120,4 +116,28 @@ model CategoryScoreResult {
   testCategoryId String
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+}
+
+model StudentEnrollment {
+  id            String      @id @default(uuid())
+  yearOfStudyId String
+  yearOfStudy   YearOfStudy @relation(fields: [yearOfStudyId], references: [id])
+  classroomId   String
+  classroom     Classroom   @relation(fields: [classroomId], references: [id])
+  studentId     String
+  student       Student     @relation(fields: [studentId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model TeacherEnrollment {
+  id            String      @id @default(uuid())
+  yearOfStudyId String
+  yearOfStudy   YearOfStudy @relation(fields: [yearOfStudyId], references: [id])
+  classroomId   String
+  classroom     Classroom   @relation(fields: [classroomId], references: [id])
+  teacherId     String
+  teacher       Teacher     @relation(fields: [teacherId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }

@@ -1,4 +1,4 @@
-import { YearOfStudy } from "@/models/year-of-study";
+import { YearOfStudy } from "@/models";
 
 const now = new Date();
 export const getYearOfStudyByCurrentDate = (yearsOfStudy: YearOfStudy[]) => {

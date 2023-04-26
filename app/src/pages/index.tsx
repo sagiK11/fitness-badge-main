@@ -8,8 +8,8 @@ export default function View() {
 }
 
 export const getServerSideProps = getServerSidePropsWrapper(
-  async ({ store, context, user, session }) => {
-    const yearOfStudy = getYearOfStudyByCurrentDate(user.yearsOfStudy);
+  async ({ store, context, user, yearsOfStudy }) => {
+    const yearOfStudy = getYearOfStudyByCurrentDate(yearsOfStudy);
 
     return {
       redirect: {

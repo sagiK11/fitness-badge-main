@@ -28,7 +28,11 @@ export class TeachersService {
           email,
         },
         include: {
-          yearsOfStudy: true,
+          enrollments: {
+            include: {
+              yearOfStudy: true,
+            },
+          },
           school: true,
         },
       });
@@ -41,20 +45,13 @@ export class TeachersService {
   async createTeacher(
     teacher: Prisma.TeacherUncheckedCreateInput,
   ): Promise<Result<Teacher>> {
-    const yearOfStudy = await this.getCurrentYearOfStudy();
-
     try {
       const resultData = await this.prisma.teacher.create({
         data: {
           ...teacher,
-          yearsOfStudy: {
-            connect: {
-              id: yearOfStudy.id,
-            },
-          },
         },
         include: {
-          yearsOfStudy: true,
+          enrollments: true,
         },
       });
       return this.resultService.handleSuccess(resultData);

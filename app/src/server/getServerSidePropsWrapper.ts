@@ -1,6 +1,11 @@
-import { Teacher } from "@/models";
+import { Teacher, YearOfStudy } from "@/models";
 import { routesTree } from "@/routesTree";
-import { AppStore, teacherEndpoints, wrapper } from "@/store";
+import {
+  AppStore,
+  teacherEndpoints,
+  wrapper,
+  yearOfStudyEndpoints,
+} from "@/store";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
@@ -10,6 +15,7 @@ type Callback = (param: {
   context: GetServerSidePropsContext;
   user: Teacher;
   session: Session;
+  yearsOfStudy: YearOfStudy[];
 }) => Promise<GetServerSidePropsResult<any>>;
 
 export function getServerSidePropsWrapper(callback: Callback) {
@@ -28,12 +34,13 @@ export function getServerSidePropsWrapper(callback: Callback) {
 
     const defaultEndpoints = [
       teacherEndpoints.endpoints.getTeacher.initiate(authUser?.email as string),
+      yearOfStudyEndpoints.endpoints.findMany.initiate(),
       // Add here more
     ];
 
     // Fire default endpoints
-    const [user] = await Promise.all(
-      defaultEndpoints.map((action) => store.dispatch(action).unwrap())
+    const [user, yearsOfStudy] = await Promise.all(
+      defaultEndpoints.map((action: any) => store.dispatch(action).unwrap())
     );
 
     if (!user?.id) {
@@ -45,6 +52,6 @@ export function getServerSidePropsWrapper(callback: Callback) {
       };
     }
 
-    return callback({ store, context, user, session });
+    return callback({ store, context, user, session, yearsOfStudy });
   });
 }

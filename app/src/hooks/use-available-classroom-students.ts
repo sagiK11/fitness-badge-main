@@ -1,16 +1,21 @@
-import { classroomEndpoints } from "@/store";
+import { yearOfStudyEndpoints } from "@/store";
 import { formatName } from "@/utils";
 import { useRouter } from "next/router";
 import React from "react";
+import { useUser } from "./use-user";
 
 export function useAvailableClassroomStudents() {
   const router = useRouter();
+  const yearOfStudyId = router.query.yearOfStudyId as string;
   const classroomId = router.query.classroomId as string;
 
   const { data: availableStudents } =
-    classroomEndpoints.useFindAvailableStudentsQuery(classroomId, {
-      skip: !classroomId,
-    });
+    yearOfStudyEndpoints.useFindClassroomAvailableStudentsQuery(
+      { classroomId, yearOfStudyId },
+      {
+        skip: !classroomId,
+      }
+    );
 
   const availableStudentsOptions = React.useMemo(
     () =>

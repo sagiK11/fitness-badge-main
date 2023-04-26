@@ -58,18 +58,11 @@ export class StudentsService {
         where: {
           id: studentId,
           AND: {
-            yearsOfStudy: {
+            enrollments: {
               some: {
-                id: yearOfStudyId,
-              },
-            },
-            classrooms: {
-              some: {
-                id: classroomId,
-                yearsOfStudy: {
-                  some: {
-                    id: yearOfStudyId,
-                  },
+                classroomId,
+                AND: {
+                  yearOfStudyId,
                 },
               },
             },
@@ -133,7 +126,6 @@ export class StudentsService {
     testCategoryId: string;
   }): Promise<Result<Student>> {
     const { studentId, yearOfStudyId, testCategoryId } = data;
-    console.log('here', data);
     try {
       const resultData = await this.prisma.student.update({
         where: {

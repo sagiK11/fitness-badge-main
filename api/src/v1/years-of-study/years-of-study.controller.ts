@@ -1,18 +1,27 @@
-import { Controller, Get, Param, Put } from '@nestjs/common';
+import { Controller, Get, Param, Put, Query } from '@nestjs/common';
 
 import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
 import { ClassroomsService } from '../classrooms/classrooms.service';
 import { StudentsService } from '../students/students.service';
-import { Classroom, Student, TestCategory } from '@prisma/client';
+import {
+  Classroom,
+  Student,
+  Teacher,
+  TeacherEnrollment,
+  TestCategory,
+  YearOfStudy,
+} from '@prisma/client';
 import { StudentDto } from '../students/dto/student.dto';
 import { ClassRoomDto } from '../classrooms/dto/classroom.dto';
 import { TestDto } from '../tests/dto/test.dto';
+import { YearsOfStudyService } from './years-of-study.service';
 
 @ApiTags('years-of-study')
 @Controller({ path: 'years-of-study', version: '1' })
@@ -20,12 +29,20 @@ export class YearsOfStudyController {
   constructor(
     private readonly classroomService: ClassroomsService,
     private readonly studentService: StudentsService,
+    private readonly yearOfStudyService: YearsOfStudyService,
   ) {}
+
+  @Get()
+  async findMany(): Promise<YearOfStudy[]> {
+    const result = await this.yearOfStudyService.findMany();
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
 
   @Get('/:yearId/teachers/:teacherId/classrooms')
   @ApiParam({ name: 'yearId', required: true })
   @ApiParam({ name: 'teacherId', required: true })
-  @ApiOkResponse({ type: ClassRoomDto, isArray: true })
+  @ApiOkResponse({ type: ClassRoomDto, isArray: true }) //change this
   async findTeacherClassrooms(
     @Param('yearId') yearOfStudyId: string,
     @Param('teacherId') teacherId: string,
@@ -47,7 +64,7 @@ export class YearsOfStudyController {
     @Param('yearId') yearOfStudyId: string,
     @Param('teacherId') teacherId: string,
     @Param('classId') classroomId: string,
-  ): Promise<Classroom> {
+  ): Promise<Teacher> {
     const result = await this.classroomService.addTeacherClassroom({
       yearOfStudyId,
       teacherId,
@@ -95,17 +112,36 @@ export class YearsOfStudyController {
     return result.data;
   }
 
+  @Get('/:yearId/classrooms/:classId/available-students')
+  @ApiParam({ name: 'yearId', required: true })
+  @ApiParam({ name: 'classId', required: true })
+  @ApiQuery({ name: 'schoolId', required: true })
+  @ApiOkResponse({ type: StudentDto })
+  async findAvailableStudents(
+    @Param('yearId') yearOfStudyId: string,
+    @Param('classId') classroomId: string,
+    @Query('schoolId') schoolId: string,
+  ): Promise<Student[]> {
+    const result = await this.classroomService.findAvailableStudents({
+      yearOfStudyId,
+      classroomId,
+      schoolId,
+    });
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
+
   @Put('/:yearId/classrooms/:classId/students/:studentId')
   @ApiParam({ name: 'yearId', required: true })
   @ApiParam({ name: 'classId', required: true })
   @ApiParam({ name: 'studentId', required: true })
   @ApiCreatedResponse({ type: ClassRoomDto })
-  async addClassroomStudent(
+  async createStudentEnrollment(
     @Param('yearId') yearOfStudyId: string,
     @Param('classId') classroomId: string,
     @Param('studentId') studentId: string,
   ): Promise<Classroom> {
-    const result = await this.classroomService.addClassroomStudent({
+    const result = await this.classroomService.createStudentEnrollment({
       yearOfStudyId,
       classroomId,
       studentId,

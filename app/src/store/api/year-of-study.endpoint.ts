@@ -1,4 +1,4 @@
-import { Student, TestCategory } from "@/models";
+import { Student, TestCategory, YearOfStudy } from "@/models";
 import { Classroom } from "@/models/classroom";
 import { api } from "./api";
 import {
@@ -10,6 +10,11 @@ import {
 
 export const yearOfStudyEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
+    findMany: builder.query<YearOfStudy[], void>({
+      query: () => ({
+        url: `/years-of-study`,
+      }),
+    }),
     findTeacherClassrooms: builder.query<Classroom[], TeacherParams>({
       query: ({ yearOfStudyId, teacherId }) => ({
         url: `/years-of-study/${yearOfStudyId}/teachers/${teacherId}/classrooms`,
@@ -57,6 +62,15 @@ export const yearOfStudyEndpoints = api.injectEndpoints({
         method: "PUT",
       }),
       invalidatesTags: ["classroom-student", "student-available-tests"],
+    }),
+    findClassroomAvailableStudents: builder.query<
+      Student[],
+      { classroomId: string; yearOfStudyId: string }
+    >({
+      query: ({ yearOfStudyId, classroomId }) => ({
+        url: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}/available-students`,
+      }),
+      providesTags: ["classroom-available-students"],
     }),
   }),
 });

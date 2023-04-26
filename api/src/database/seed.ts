@@ -122,6 +122,56 @@ async function main() {
     },
   });
 
+  const a1Male = await prisma.classroom.create({
+    data: {
+      name: 'ט-1',
+      gender: 'MALE',
+      school: {
+        connect: { id: school.id },
+      },
+    },
+  });
+
+  const a2Male = await prisma.classroom.create({
+    data: {
+      name: 'ט-2',
+      gender: 'MALE',
+      school: {
+        connect: { id: school.id },
+      },
+    },
+  });
+
+  const a3Female = await prisma.classroom.create({
+    data: {
+      name: 'ט-3',
+      gender: 'FEMALE',
+      school: {
+        connect: { id: school.id },
+      },
+    },
+  });
+
+  const a4Female = await prisma.classroom.create({
+    data: {
+      name: 'ט-4',
+      gender: 'FEMALE',
+      school: {
+        connect: { id: school.id },
+      },
+    },
+  });
+
+  const a5Female = await prisma.classroom.create({
+    data: {
+      name: '5-ט',
+      gender: 'FEMALE',
+      school: {
+        connect: { id: school.id },
+      },
+    },
+  });
+
   const gradesData = [
     { fileName: 'abs_push_up_full_grades', id: abs_push_up_full.id },
     { fileName: 'aerobic_grades', id: aerobic.id },
@@ -166,18 +216,14 @@ async function main() {
       school: {
         connect: { id: school.id },
       },
-      yearsOfStudy: {
-        connect: [
-          {
-            id: _2022_2023.id,
-          },
-          {
-            id: _2023_2024.id,
-          },
-          {
-            id: _2024_2025.id,
-          },
-        ],
+      enrollments: {
+        createMany: {
+          data: [
+            { yearOfStudyId: _2022_2023.id, classroomId: a1Male.id },
+            { yearOfStudyId: _2023_2024.id, classroomId: a1Male.id },
+            { yearOfStudyId: _2024_2025.id, classroomId: a1Male.id },
+          ],
+        },
       },
     },
   });
@@ -190,18 +236,14 @@ async function main() {
       school: {
         connect: { id: school.id },
       },
-      yearsOfStudy: {
-        connect: [
-          {
-            id: _2022_2023.id,
-          },
-          {
-            id: _2023_2024.id,
-          },
-          {
-            id: _2024_2025.id,
-          },
-        ],
+      enrollments: {
+        createMany: {
+          data: [
+            { yearOfStudyId: _2022_2023.id, classroomId: a3Female.id },
+            { yearOfStudyId: _2023_2024.id, classroomId: a3Female.id },
+            { yearOfStudyId: _2024_2025.id, classroomId: a3Female.id },
+          ],
+        },
       },
     },
   });
@@ -214,112 +256,12 @@ async function main() {
       school: {
         connect: { id: school.id },
       },
-      yearsOfStudy: {
-        connect: [
-          {
-            id: _2022_2023.id,
-          },
-          {
-            id: _2023_2024.id,
-          },
-          {
-            id: _2024_2025.id,
-          },
-        ],
-      },
-    },
-  });
-
-  const a1 = await prisma.classroom.create({
-    data: {
-      name: 'ט-1',
-      gender: 'MALE',
-      school: {
-        connect: { id: school.id },
-      },
-      teacher: {
-        connect: [
-          {
-            id: alice.id,
-          },
-          {
-            id: sagi.id,
-          },
-        ],
-      },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-    },
-  });
-
-  const a2 = await prisma.classroom.create({
-    data: {
-      name: 'ט-2',
-      gender: 'MALE',
-      school: {
-        connect: { id: school.id },
-      },
-      teacher: {
-        connect: [
-          {
-            id: alice.id,
-          },
-          {
-            id: sagi.id,
-          },
-        ],
-      },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-    },
-  });
-
-  const a3 = await prisma.classroom.create({
-    data: {
-      name: 'ט-3',
-      gender: 'FEMALE',
-      school: {
-        connect: { id: school.id },
-      },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-    },
-  });
-
-  const a4 = await prisma.classroom.create({
-    data: {
-      name: 'ט-4',
-      gender: 'FEMALE',
-      school: {
-        connect: { id: school.id },
-      },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-    },
-  });
-
-  const a5 = await prisma.classroom.create({
-    data: {
-      name: '5-ט',
-      gender: 'FEMALE',
-      school: {
-        connect: { id: school.id },
-      },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
+      enrollments: {
+        createMany: {
+          data: [
+            { yearOfStudyId: _2022_2023.id, classroomId: a2Male.id },
+            { yearOfStudyId: _2023_2024.id, classroomId: a2Male.id },
+          ],
         },
       },
     },
@@ -330,21 +272,17 @@ async function main() {
       firstName: 'בן',
       lastName: 'אורן',
       gender: 'MALE',
+      enrollments: {
+        createMany: {
+          data: [{ classroomId: a2Male.id, yearOfStudyId: _2022_2023.id }],
+        },
+      },
       school: {
         connect: {
           id: school.id,
         },
       },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-      classrooms: {
-        connect: {
-          id: a2.id,
-        },
-      },
+
       tests: {
         create: [
           {
@@ -376,14 +314,9 @@ async function main() {
           id: school.id,
         },
       },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-      classrooms: {
-        connect: {
-          id: a2.id,
+      enrollments: {
+        createMany: {
+          data: [{ classroomId: a3Female.id, yearOfStudyId: _2022_2023.id }],
         },
       },
       tests: {
@@ -417,14 +350,9 @@ async function main() {
           id: school.id,
         },
       },
-      yearsOfStudy: {
-        connect: {
-          id: _2022_2023.id,
-        },
-      },
-      classrooms: {
-        connect: {
-          id: a1.id,
+      enrollments: {
+        createMany: {
+          data: [{ classroomId: a1Male.id, yearOfStudyId: _2022_2023.id }],
         },
       },
       tests: {
@@ -463,7 +391,7 @@ async function main() {
     },
   });
 
-  console.log({ alice, rachel });
+  console.log({ sagi, rachel });
 }
 
 main()

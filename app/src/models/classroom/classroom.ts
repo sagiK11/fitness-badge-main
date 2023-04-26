@@ -1,15 +1,13 @@
 import { GenderEnum } from "../enums";
-import { Student } from "../student/student";
-import { Teacher } from "../teacher";
-import { YearOfStudy } from "../year-of-study";
+import { StudentEnrollment } from "../student";
+import { TeacherEnrollment } from "../teacher";
 
 export interface Classroom {
   id: string;
   name: string;
   gender: GenderEnum;
-  teacher: Teacher[];
-  students: Student[];
-  yearsOfStudy: YearOfStudy[];
+  studentEnrollments: StudentEnrollment[];
+  teacherEnrollments: TeacherEnrollment[];
   createdAt: string;
   updatedAt: string;
 }

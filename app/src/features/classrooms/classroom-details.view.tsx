@@ -76,23 +76,27 @@ export function ClassroomDetailsView() {
           <Card section>
             <CardTitle>תלמידים</CardTitle>
 
-            {classroom?.students?.length === 0 && (
+            {classroom?.studentEnrollments?.length === 0 && (
               <CardBody>
                 <Typography>לכיתה זו אין תלמידים</Typography>
               </CardBody>
             )}
 
-            {classroom?.students?.map((student) => (
-              <CardBody key={student.id} hover>
+            {classroom?.studentEnrollments?.map((enrollment) => (
+              <CardBody key={enrollment.id} hover>
                 <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
                   <FlexBox className="flex-col md:gap-1">
                     <Typography className="text-secondary">שם</Typography>
-                    <Typography bold>{formatName(student)}</Typography>
+                    <Typography bold>
+                      {formatName(enrollment.student)}
+                    </Typography>
                   </FlexBox>
 
                   <FlexBox className="flex-col md:gap-1">
                     <Typography className="text-secondary">טלפון</Typography>
-                    <Typography bold>{student.phone ?? "-"}</Typography>
+                    <Typography bold>
+                      {enrollment.student.phone ?? "-"}
+                    </Typography>
                   </FlexBox>
 
                   <FlexBox className="flex-col md:gap-1">
@@ -100,7 +104,7 @@ export function ClassroomDetailsView() {
                       תאריך עדכון אחרון
                     </Typography>
                     <Typography bold>
-                      {formatDate(student.updatedAt)}
+                      {formatDate(enrollment.student.updatedAt)}
                     </Typography>
                   </FlexBox>
 
@@ -112,7 +116,7 @@ export function ClassroomDetailsView() {
                         routesTree({
                           yearOfStudyId: yearOfStudyId as string,
                           classroomId: classroomId as string,
-                          studentId: student.id,
+                          studentId: enrollment.student.id,
                         }).studentDetails
                       }
                     >
