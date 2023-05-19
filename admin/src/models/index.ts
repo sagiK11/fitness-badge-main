@@ -1,3 +1,4 @@
+export * from "./admin";
 export * from "./classroom";
 export * from "./enums";
 export * from "./school";

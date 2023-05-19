@@ -13,7 +13,7 @@ export const teacherEndpoints = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["teachers"],
+      invalidatesTags: ["school-teachers"],
     }),
     updateTeacher: builder.mutation<Teacher, Partial<Teacher>>({
       query: (body) => ({
@@ -21,7 +21,7 @@ export const teacherEndpoints = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["teachers"],
+      invalidatesTags: ["school-teachers"],
     }),
   }),
 });

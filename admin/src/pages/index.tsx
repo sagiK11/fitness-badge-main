@@ -1,21 +1,12 @@
-import {
-  Container,
-  SchoolsCard,
-  UploadCsvCard,
-  ViewWrapper,
-} from "@/components";
-import { RootLayout } from "@/components/layout";
-import React from "react";
+import { HomeView } from "@/features";
+import { getServerSidePropsWrapper } from "@/server";
 
-export default function Home() {
-  return (
-    <ViewWrapper>
-      <RootLayout>
-        <Container className="gap-4">
-          <UploadCsvCard />
-          <SchoolsCard />
-        </Container>
-      </RootLayout>
-    </ViewWrapper>
-  );
-}
+export default HomeView;
+
+export const getServerSideProps = getServerSidePropsWrapper(
+  async ({ store, context, user, session }) => {
+    return {
+      props: { session },
+    };
+  }
+);

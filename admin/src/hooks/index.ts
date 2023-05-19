@@ -1,3 +1,4 @@
+export * from "./use-admin";
 export * from "./use-auth";
 export * from "./use-create-teacher";
 export * from "./use-school";

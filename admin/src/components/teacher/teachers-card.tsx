@@ -13,7 +13,7 @@ type TeachersCardProps = {
 };
 
 export function TeachersCard({ schoolId }: TeachersCardProps) {
-  const { teachers } = useTeachers();
+  const { teachers } = useTeachers(schoolId);
 
   return (
     <Card section>

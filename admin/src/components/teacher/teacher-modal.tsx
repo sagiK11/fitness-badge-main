@@ -43,6 +43,7 @@ export function TeacherModal({ schoolId }: TeacherModalProps) {
         <Form methods={methods} onSubmit={methods.handleSubmit(create)}>
           <FlexBox className="flex-col gap-2">
             <FormInput
+              type="email"
               name="email"
               placeholder="Email"
               className="input-bordered"

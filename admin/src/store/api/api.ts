@@ -14,6 +14,6 @@ export const api = createApi({
       return action.payload[reducerPath];
     }
   },
-  tagTypes: ["schools", "teachers", "school"],
+  tagTypes: ["schools", "teachers", "school", "admin", "school-teachers"],
   endpoints: (builder) => ({}),
 });

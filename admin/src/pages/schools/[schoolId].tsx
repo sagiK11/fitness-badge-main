@@ -1,32 +1,25 @@
-import {
-  Container,
-  FlexBox,
-  TeachersCard,
-  Typography,
-  ViewWrapper,
-} from "@/components";
-import { RootLayout } from "@/components/layout";
-import { useSchool } from "@/hooks";
-import { useRouter } from "next/router";
-import React from "react";
+import { SchoolDetailsView } from "@/features";
+import { getServerSidePropsWrapper } from "@/server";
+import { schoolEndpoints } from "@/store";
 
-export default function SchoolDetailsView() {
-  const router = useRouter();
-  const { school } = useSchool(router.query.schoolId as string);
+export default SchoolDetailsView;
 
-  return (
-    <ViewWrapper title="School Details">
-      <RootLayout>
-        <Container className="gap-4">
-          <FlexBox className="flex-col gap-1">
-            <Typography className="text-2xl font-bold ">School name</Typography>
-            <Typography className="text-secondary font-bold">
-              {school?.name}
-            </Typography>
-          </FlexBox>
-          <TeachersCard schoolId={school?.id as string} />
-        </Container>
-      </RootLayout>
-    </ViewWrapper>
-  );
-}
+export const getServerSideProps = getServerSidePropsWrapper(
+  async ({ store, context, user, session }) => {
+    // Get teacher's classrooms
+    store.dispatch(
+      schoolEndpoints.endpoints.getTeachers.initiate(
+        context.query.schoolId as string
+      )
+    );
+
+    //Wait for queries to finish
+    await Promise.all(
+      store.dispatch(schoolEndpoints.util.getRunningQueriesThunk())
+    );
+
+    return {
+      props: { session },
+    };
+  }
+);

@@ -1,5 +1,5 @@
 import { api } from "./api";
-import { School } from "@/models";
+import { School, Teacher } from "@/models";
 
 export const schoolEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,6 +10,10 @@ export const schoolEndpoints = api.injectEndpoints({
     getSchool: builder.query<School, string>({
       query: (schoolId) => `/schools/${schoolId}`,
       providesTags: ["school"],
+    }),
+    getTeachers: builder.query<Teacher[], string>({
+      query: (schoolId) => `/schools/${schoolId}/teachers`,
+      providesTags: ["school-teachers"],
     }),
   }),
 });

@@ -1,6 +1,6 @@
-import { teacherEndpoints } from "@/store";
+import { schoolEndpoints } from "@/store";
 
-export function useTeachers() {
-  const { data: teachers } = teacherEndpoints.useGetAllTeachersQuery();
+export function useTeachers(schoolId: string) {
+  const { data: teachers } = schoolEndpoints.useGetTeachersQuery(schoolId);
   return { teachers };
 }
