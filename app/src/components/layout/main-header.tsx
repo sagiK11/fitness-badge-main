@@ -34,7 +34,7 @@ export function MainHeader() {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
           >
             <li>
-              <button onClick={signOut}>Log out</button>
+              <button onClick={signOut}>התנתק</button>
             </li>
           </ul>
         </div>

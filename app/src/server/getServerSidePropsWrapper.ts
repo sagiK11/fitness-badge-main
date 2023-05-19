@@ -40,18 +40,24 @@ export function getServerSidePropsWrapper(callback: Callback) {
 
     // Fire default endpoints
     const [user, yearsOfStudy] = await Promise.all(
-      defaultEndpoints.map((action: any) => store.dispatch(action).unwrap())
+      defaultEndpoints.map((action: any) => store.dispatch(action))
     );
 
-    if (!user?.id) {
+    if (!user?.data?.id) {
       return {
         redirect: {
-          destination: routesTree().auth,
+          destination: routesTree().unauthorized,
           permanent: false,
         },
       };
     }
 
-    return callback({ store, context, user, session, yearsOfStudy });
+    return callback({
+      store,
+      context,
+      user: user.data,
+      session,
+      yearsOfStudy: yearsOfStudy.data,
+    });
   });
 }

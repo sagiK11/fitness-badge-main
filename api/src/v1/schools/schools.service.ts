@@ -21,7 +21,7 @@ export class SchoolsService {
 
   async findOne(id: string) {
     try {
-      const resultData = await this.prisma.school.findUnique({
+      const resultData = await this.prisma.school.findUniqueOrThrow({
         where: {
           id,
         },
