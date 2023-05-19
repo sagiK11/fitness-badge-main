@@ -7,5 +7,9 @@ export const schoolEndpoints = api.injectEndpoints({
       query: () => `/schools`,
       providesTags: ["schools"],
     }),
+    getSchool: builder.query<School, string>({
+      query: (schoolId) => `/schools/${schoolId}`,
+      providesTags: ["school"],
+    }),
   }),
 });

@@ -18,4 +18,16 @@ export class SchoolsService {
       return this.resultService.handleError<School[]>(e);
     }
   }
+  async findOne(id: string) {
+    try {
+      const resultData = await this.prisma.school.findUnique({
+        where: {
+          id,
+        },
+      });
+      return this.resultService.handleSuccess<School>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<School>(e);
+    }
+  }
 }

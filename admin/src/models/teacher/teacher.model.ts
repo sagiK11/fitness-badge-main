@@ -4,8 +4,8 @@ import { YearOfStudy } from "../year-of-study";
 
 export interface Teacher {
   id: string;
-  firstName: String;
-  lastName: String;
+  firstName: string;
+  lastName: string;
   email: string;
   classrooms: Classroom[];
   yearsOfStudy: YearOfStudy[];

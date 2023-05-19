@@ -1,5 +1,4 @@
 import { apiConfig } from "@/config";
-import { School } from "@/models";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
 const { baseUrl, publicBaseUrl } = apiConfig;
@@ -15,6 +14,6 @@ export const api = createApi({
       return action.payload[reducerPath];
     }
   },
-  tagTypes: ["schools"],
+  tagTypes: ["schools", "teachers", "school"],
   endpoints: (builder) => ({}),
 });

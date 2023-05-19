@@ -1,9 +1,12 @@
-interface DynamicValues {}
+interface DynamicValues {
+  schoolId?: string;
+}
 
-export function routesTree({}: DynamicValues = {}) {
+export function routesTree({ schoolId }: DynamicValues = {}) {
   const tree = {
     auth: "/auth",
     home: `/`,
+    schoolDetails: `/schools/${schoolId}`,
   };
   return tree;
 }
