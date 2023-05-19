@@ -8,8 +8,9 @@ import { TestsModule } from './tests/tests.module';
 import { SchoolsModule } from './schools/schools.module';
 import { SystemConfigModule } from './system-config/system-config.module';
 import { TestCategoriesModule } from './test-categories/test-categories.module';
+import { AdminsModule } from './admins/admins.module';
 
 @Module({
-  imports: [TeachersModule, YearsOfStudyModule, ResultModule, ClassroomsModule, StudentsModule, TestsModule, SchoolsModule, SystemConfigModule, TestCategoriesModule],
+  imports: [TeachersModule, YearsOfStudyModule, ResultModule, ClassroomsModule, StudentsModule, TestsModule, SchoolsModule, SystemConfigModule, TestCategoriesModule, AdminsModule],
 })
 export class V1Module {}

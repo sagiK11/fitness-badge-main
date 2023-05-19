@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { School } from '@prisma/client';
+import { School, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 
@@ -18,6 +18,7 @@ export class SchoolsService {
       return this.resultService.handleError<School[]>(e);
     }
   }
+
   async findOne(id: string) {
     try {
       const resultData = await this.prisma.school.findUnique({
@@ -28,6 +29,19 @@ export class SchoolsService {
       return this.resultService.handleSuccess<School>(resultData);
     } catch (e) {
       return this.resultService.handleError<School>(e);
+    }
+  }
+
+  async getSchoolTeachers(id: string) {
+    try {
+      const resultData = await this.prisma.teacher.findMany({
+        where: {
+          schoolId: id,
+        },
+      });
+      return this.resultService.handleSuccess<Teacher[]>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<Teacher[]>(e);
     }
   }
 }

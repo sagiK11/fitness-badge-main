@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export interface IResultOptions<T> {
+export interface ResultOptions<T> {
   data: T;
   success: boolean;
   message?: string;
@@ -15,7 +15,7 @@ export class Result<T> {
   statusCode?: HttpStatus;
   httpException?: HttpException;
 
-  constructor(options?: IResultOptions<T>) {
+  constructor(options?: ResultOptions<T>) {
     this.data = options.data;
     this.success = options.success;
     this.message = options?.message;
