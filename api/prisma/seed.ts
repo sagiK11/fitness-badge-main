@@ -196,7 +196,7 @@ async function main() {
   const fs = await import('fs');
   for (const fileData of gradesData) {
     const file = await fs.promises.readFile(
-      `/usr/src/app/src/database/grades/${fileData.fileName}.csv`,
+      `/usr/src/app/prisma/grades/${fileData.fileName}.csv`,
     );
     const records = parse(file, {
       columns: true,
