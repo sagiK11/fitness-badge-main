@@ -3,6 +3,14 @@ import { parse } from 'csv-parse/sync';
 const prisma = new PrismaClient();
 
 async function main() {
+  const admin = await prisma.admin.create({
+    data: {
+      firstName: 'Sagi',
+      lastName: 'Korzack',
+      email: 'sagi1193@gmail.com',
+    },
+  });
+
   const school = await prisma.school.create({
     data: {
       name: 'תיכון מקיף בית ירח',
@@ -208,64 +216,64 @@ async function main() {
     });
   }
 
-  const alice = await prisma.teacher.create({
-    data: {
-      email: 'alice@prisma.io',
-      firstName: 'אליס',
-      lastName: 'אורן',
-      school: {
-        connect: { id: school.id },
-      },
-      enrollments: {
-        createMany: {
-          data: [
-            { yearOfStudyId: _2022_2023.id, classroomId: a1Male.id },
-            { yearOfStudyId: _2023_2024.id, classroomId: a1Male.id },
-            { yearOfStudyId: _2024_2025.id, classroomId: a1Male.id },
-          ],
-        },
-      },
-    },
-  });
+  // const alice = await prisma.teacher.create({
+  //   data: {
+  //     email: 'alice@prisma.io',
+  //     firstName: 'אליס',
+  //     lastName: 'אורן',
+  //     school: {
+  //       connect: { id: school.id },
+  //     },
+  //     enrollments: {
+  //       createMany: {
+  //         data: [
+  //           { yearOfStudyId: _2022_2023.id, classroomId: a1Male.id },
+  //           { yearOfStudyId: _2023_2024.id, classroomId: a1Male.id },
+  //           { yearOfStudyId: _2024_2025.id, classroomId: a1Male.id },
+  //         ],
+  //       },
+  //     },
+  //   },
+  // });
 
-  const rachel = await prisma.teacher.create({
-    data: {
-      email: 'rachel@prisma.io',
-      firstName: 'רחלי',
-      lastName: 'כהן',
-      school: {
-        connect: { id: school.id },
-      },
-      enrollments: {
-        createMany: {
-          data: [
-            { yearOfStudyId: _2022_2023.id, classroomId: a3Female.id },
-            { yearOfStudyId: _2023_2024.id, classroomId: a3Female.id },
-            { yearOfStudyId: _2024_2025.id, classroomId: a3Female.id },
-          ],
-        },
-      },
-    },
-  });
+  // const rachel = await prisma.teacher.create({
+  //   data: {
+  //     email: 'rachel@prisma.io',
+  //     firstName: 'רחלי',
+  //     lastName: 'כהן',
+  //     school: {
+  //       connect: { id: school.id },
+  //     },
+  //     enrollments: {
+  //       createMany: {
+  //         data: [
+  //           { yearOfStudyId: _2022_2023.id, classroomId: a3Female.id },
+  //           { yearOfStudyId: _2023_2024.id, classroomId: a3Female.id },
+  //           { yearOfStudyId: _2024_2025.id, classroomId: a3Female.id },
+  //         ],
+  //       },
+  //     },
+  //   },
+  // });
 
-  const sagi = await prisma.teacher.create({
-    data: {
-      email: 'sagi@collectiveliquidity.com',
-      firstName: 'שגיא',
-      lastName: 'קל',
-      school: {
-        connect: { id: school.id },
-      },
-      enrollments: {
-        createMany: {
-          data: [
-            { yearOfStudyId: _2022_2023.id, classroomId: a2Male.id },
-            { yearOfStudyId: _2023_2024.id, classroomId: a2Male.id },
-          ],
-        },
-      },
-    },
-  });
+  // const sagi = await prisma.teacher.create({
+  //   data: {
+  //     email: 'sagi@collectiveliquidity.com',
+  //     firstName: 'שגיא',
+  //     lastName: 'קל',
+  //     school: {
+  //       connect: { id: school.id },
+  //     },
+  //     enrollments: {
+  //       createMany: {
+  //         data: [
+  //           { yearOfStudyId: _2022_2023.id, classroomId: a2Male.id },
+  //           { yearOfStudyId: _2023_2024.id, classroomId: a2Male.id },
+  //         ],
+  //       },
+  //     },
+  //   },
+  // });
 
   const ben = await prisma.student.create({
     data: {
@@ -411,7 +419,7 @@ async function main() {
     },
   });
 
-  console.log({ sagi, rachel });
+  // console.log({ sagi, rachel });
 }
 
 main()
