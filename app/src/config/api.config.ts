@@ -1,4 +1,8 @@
+import getConfig from "next/config";
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+
 export const apiConfig = {
-  baseUrl: process.env.API_ENDPOINT,
-  publicBaseUrl: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  baseUrl: serverRuntimeConfig.API_ENDPOINT,
+  publicBaseUrl: publicRuntimeConfig.NEXT_PUBLIC_API_ENDPOINT,
 };
