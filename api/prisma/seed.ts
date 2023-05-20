@@ -195,14 +195,16 @@ async function main() {
 
   const fs = await import('fs');
   for (const fileData of gradesData) {
-    const file = await fs.promises.readFile(
-      `/usr/src/app/prisma/grades/${fileData.fileName}.csv`,
-    );
+    let path = `/prisma/grades/`;
+    if (process.env.NODE_ENV === 'development') {
+      path = `/usr/src/app${path}`;
+    }
+    const file = await fs.promises.readFile(`${path}${fileData.fileName}.csv`);
     const records = parse(file, {
       columns: true,
       skip_empty_lines: true,
     });
-    const cleaned = records?.map((entry) => {
+    const cleaned = records?.map((entry: any) => {
       return {
         testCategoryId: fileData.id,
         maleScore: Number(entry.maleScore),
