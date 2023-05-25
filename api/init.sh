@@ -9,12 +9,13 @@ while ! nc -z $DB 5432; do
 done
 
 if [ "$ENV" = "prod" ]; then
-  echo "Running in production mode"
-  npx prisma migrate deploy
+  npm run prisma:migrate:prod
+  npm run prisma:seed
+  npm run start:prod
 else
-  echo "Running in dev mode"
   npm run prisma:migrate:dev
+  npm run prisma:seed
+  npm run start:dev
 fi
 
-echo "Seeding database..."
-npm run prisma:seed
+exec "$@"

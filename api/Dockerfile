@@ -62,4 +62,4 @@ COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 COPY --chown=node:node --from=build /usr/src/app/init.sh ./init.sh
 COPY --chown=node:node --from=build /usr/src/app/package.json ./package.json
-
+ENTRYPOINT ["./init.sh", "prod"]
