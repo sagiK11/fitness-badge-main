@@ -32,10 +32,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
-    env_file: # used in the host machine
+    env_file:
       - ./api/.env.local.prod
-    environment: # used inside the container
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
     ports:
       - 3000:3000
       - 5555:5555 # prisma studio
