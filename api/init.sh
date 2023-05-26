@@ -1,19 +1,15 @@
 #!/bin/sh
 set -e
 
-ENV=$1
+ENV="${1:-dev}"
 
 echo "Waiting for postgres..."
 while ! nc -z $DB 5432; do
     sleep 0.1
 done
 
-if [ "$ENV" = "prod" ]; then
-  npm run prisma:migrate:prod
-  npm run start:prod
-else
-  npm run prisma:migrate:dev
-  npm run start:dev
-fi
+npm run prisma:migrate:$ENV
+npm run prisma:seed
+npm run start:$ENV
 
 exec "$@"
