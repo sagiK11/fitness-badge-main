@@ -29,3 +29,10 @@ export interface UpdateTestParams {
   gender: GenderEnum;
   categoryId: string;
 }
+
+export interface UploadStudentsPayload {
+  schoolId: string;
+  classroomId: string;
+  yearOfStudyId: string;
+  data: FormData;
+}

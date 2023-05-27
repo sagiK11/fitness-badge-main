@@ -3,6 +3,7 @@ import React from "react";
 import { useUser } from "./use-user";
 import { useYearOfStudy } from "./use-year-of-study";
 import { yearOfStudyEndpoints } from "@/store";
+import { Classroom, GenderEnum } from "@/models";
 
 export function useClassrooms() {
   const user = useUser();
@@ -40,22 +41,38 @@ export function useClassrooms() {
     [_addTeacherClassroom, user, currentYearOfStudy]
   );
 
-  const schoolAvailableClassOptions = React.useMemo(
-    () =>
-      allClassrooms
-        ?.map((classroom) => ({
-          label: classroom.name,
-          value: classroom.id,
-        }))
-        ?.filter((cs1) => !classrooms?.find((cs2) => cs2.id === cs1.value)) ??
-      [],
-    [allClassrooms, classrooms]
-  );
+  const { availableMaleClassOptions, availableFemaleClassOptions } =
+    React.useMemo(() => {
+      const onlyAvailable = (cs1: Classroom) =>
+        !classrooms?.find((cs2) => cs2.id === cs1.id);
+
+      const availableClassrooms = allClassrooms?.filter(onlyAvailable);
+
+      const onlyFemale = (classroom: Classroom) =>
+        classroom.gender === GenderEnum.female;
+
+      const onlyMale = (classroom: Classroom) =>
+        classroom.gender === GenderEnum.male;
+
+      const toSelect = (classroom: Classroom) => ({
+        label: classroom.name,
+        value: classroom.id,
+      });
+
+      const availableFemaleClassOptions =
+        availableClassrooms?.filter(onlyFemale)?.map(toSelect) ?? [];
+
+      const availableMaleClassOptions =
+        availableClassrooms?.filter(onlyMale)?.map(toSelect) ?? [];
+
+      return { availableFemaleClassOptions, availableMaleClassOptions };
+    }, [allClassrooms, classrooms]);
 
   return {
     addTeacherClassroom,
     allClassrooms,
-    schoolAvailableClassOptions,
+    availableFemaleClassOptions,
+    availableMaleClassOptions,
     classrooms,
   };
 }

@@ -3,6 +3,7 @@ import { Classroom, Student, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
+import { bufferToCsv, parseCsv } from '@src/utils';
 
 @Injectable()
 export class ClassroomsService {
@@ -176,6 +177,46 @@ export class ClassroomsService {
       return this.resultService.handleSuccess<Student[]>(resultData);
     } catch (e) {
       return this.resultService.handleError<Student[]>(e);
+    }
+  }
+
+  async uploadStudents(
+    params: { classroomId: string; yearOfStudyId: string; schoolId: string },
+    file: Express.Multer.File,
+  ): Promise<Result<void>> {
+    try {
+      const csvData = bufferToCsv(file.buffer);
+      const records: Student[] = parseCsv(csvData);
+
+      const { classroomId, yearOfStudyId, schoolId } = params;
+      const classroom = await this.prisma.classroom.findFirstOrThrow({
+        where: { id: classroomId },
+      });
+
+      // cant use createMany with relation -.^
+      const promises = [];
+      for (const record of records) {
+        const promise = this.prisma.student.create({
+          data: {
+            firstName: record.firstName,
+            lastName: record.lastName,
+            phone: record.phone,
+            gender: classroom.gender,
+            schoolId,
+            enrollments: {
+              create: {
+                classroomId,
+                yearOfStudyId,
+              },
+            },
+          },
+        });
+        promises.push(promise);
+      }
+      await Promise.all(promises);
+      return this.resultService.handleSuccess<void>(null);
+    } catch (e) {
+      return this.resultService.handleError<void>(e);
     }
   }
 }

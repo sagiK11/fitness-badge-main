@@ -1,6 +1,10 @@
 import React from "react";
 import { useYearOfStudy } from "./use-year-of-study";
-import { yearOfStudyEndpoints } from "@/store";
+import {
+  UploadStudentsPayload,
+  classroomEndpoints,
+  yearOfStudyEndpoints,
+} from "@/store";
 import { useUser } from "./use-user";
 import { useRouter } from "next/router";
 
@@ -11,6 +15,8 @@ export function useClassroom() {
   const { currentYearOfStudy } = useYearOfStudy();
   const [_addClassroomStudent] =
     yearOfStudyEndpoints.useAddClassroomStudentMutation();
+  const [_uploadStudents, uploadResult] =
+    classroomEndpoints.useUploadStudentsFromXlsxMutation();
 
   const { data: classroom } = yearOfStudyEndpoints.useFindTeacherClassroomQuery(
     {
@@ -41,8 +47,21 @@ export function useClassroom() {
     [_addClassroomStudent, currentYearOfStudy]
   );
 
+  const uploadStudents = React.useCallback(
+    async (payload: UploadStudentsPayload) => {
+      try {
+        await _uploadStudents(payload).unwrap();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [_uploadStudents]
+  );
+
   return {
     classroom,
     addClassroomStudent,
+    uploadStudents,
+    isUploading: uploadResult.isLoading,
   };
 }

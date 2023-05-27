@@ -11,6 +11,7 @@ import {
   Button,
   NumberFormatInput,
   Select,
+  Breadcrumbs,
 } from "@/components";
 import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { GenderEnum } from "@/models";
@@ -35,12 +36,24 @@ export function StudentDetailsViewView() {
     setTestCategoryId(availableTestsOptions?.[0]?.value);
   }, [availableTestsOptions]);
 
+  const backUrl = routesTree({
+    yearOfStudyId: currentYearOfStudy.id,
+    classroomId: router.query.classroomId as string,
+  }).classroomDetails;
+
   if (!student) return null;
 
   return (
     <ViewWrapper title="Student Details">
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
+          <Breadcrumbs
+            items={[
+              { label: "בית", href: routesTree().home },
+              { label: classroom?.name as string, href: backUrl },
+              { label: formatName(student) },
+            ]}
+          />
           <FlexBox className="flex-col md:gap-1">
             <Typography className="text-secondary">כיתה</Typography>
             <Typography bold>{classroom?.name}</Typography>
@@ -184,12 +197,7 @@ export function StudentDetailsViewView() {
             <Button
               className="btn-outline btn-primary btn-sm lg:btn-md"
               iconStart={AiOutlineArrowRight}
-              href={
-                routesTree({
-                  yearOfStudyId: currentYearOfStudy.id,
-                  classroomId: router.query.classroomId as string,
-                }).classroomDetails
-              }
+              href={backUrl}
             >
               חזרה
             </Button>
@@ -199,39 +207,3 @@ export function StudentDetailsViewView() {
     </ViewWrapper>
   );
 }
-
-//  <table className="table w-full">
-//    <thead>
-//      <tr>
-//        <th>קטגוריה</th>
-//        <th>תוצאה</th>
-//        <th>ציון</th>
-//      </tr>
-//    </thead>
-//    <tbody>
-//      {student.tests.map((test) => {
-//        return (
-//          <tr className="hover" key={test.id}>
-//            <th>{test.category.name}</th>
-//            <td>
-//              <NumberFormatInput
-//                debounceTime={1000}
-//                defaultValue={test.score}
-//                onChange={(e) =>
-//                  updateTests([
-//                    {
-//                      id: test.id,
-//                      score: Number(e.target.value),
-//                      gender: student.gender,
-//                      categoryId: test.categoryId,
-//                    },
-//                  ])
-//                }
-//              />
-//            </td>
-//            <td>{test.grade}</td>
-//          </tr>
-//        );
-//      })}
-//    </tbody>
-//  </table>;

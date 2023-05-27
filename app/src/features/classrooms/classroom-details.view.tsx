@@ -10,8 +10,10 @@ import {
   ViewWrapper,
   Card,
   Select,
+  Breadcrumbs,
+  FileInput,
 } from "@/components";
-import { useClassroom } from "@/hooks";
+import { useClassroom, useUser } from "@/hooks";
 import { useAvailableClassroomStudents } from "@/hooks/use-available-classroom-students";
 import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
@@ -22,8 +24,11 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 
 export function ClassroomDetailsView() {
   const router = useRouter();
-  const { classroomId, yearOfStudyId } = router.query;
-  const { addClassroomStudent, classroom } = useClassroom();
+  const user = useUser();
+  const classroomId = router.query.classroomId as string;
+  const yearOfStudyId = router.query.yearOfStudyId as string;
+  const { addClassroomStudent, classroom, uploadStudents, isUploading } =
+    useClassroom();
   const { availableStudentsOptions } = useAvailableClassroomStudents();
 
   const [studentId, setStudentId] = React.useState<string>();
@@ -37,6 +42,12 @@ export function ClassroomDetailsView() {
     <ViewWrapper title="Classroom Details">
       <RootLayout>
         <Container className="gap-4 lg:gap-6">
+          <Breadcrumbs
+            items={[
+              { label: "בית", href: routesTree().home },
+              { label: classroom?.name as string },
+            ]}
+          />
           <Card section>
             <CardTitle>פרטי הכיתה</CardTitle>
             <CardBody>
@@ -79,6 +90,23 @@ export function ClassroomDetailsView() {
             {classroom?.studentEnrollments?.length === 0 && (
               <CardBody>
                 <Typography>לכיתה זו אין תלמידים</Typography>
+                <FlexBox className="gap-2">
+                  <FileInput
+                    label="העלה מקובץ אקסל"
+                    className="file-input-secondary"
+                    disabled={isUploading}
+                    onChange={(e) => {
+                      const data = new FormData();
+                      data.append("file", e.target.files?.[0] as File);
+                      uploadStudents({
+                        classroomId,
+                        yearOfStudyId,
+                        schoolId: user.schoolId,
+                        data,
+                      });
+                    }}
+                  />
+                </FlexBox>
               </CardBody>
             )}
 
