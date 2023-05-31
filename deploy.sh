@@ -3,11 +3,12 @@
 USERNAME=sagik11
 REPO=fitness-badge-main
 IDENTIFIER=$USERNAME/$REPO
-TAG=$(echo "${{ github.sha }}" | cut -c1-7)
+TAG=${{ github.sha:0:7 }}
 # SERVICES=("postgres" "api" "pgadmin" "admin" "app")
-SERVICES=("postgres"  "app")
+SERVICES=("postgres")
 
 
+echo "Tag: $TAG"
 for service in "${SERVICES[@]}"
 do
     cd "$service"
