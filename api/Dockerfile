@@ -53,7 +53,7 @@ USER node
 # PRODUCTION
 ###################
 
-FROM node:18-alpine AS production
+FROM node:18-alpine3.16 AS production
 RUN apk --no-cache add netcat-openbsd
 
 # Copy the bundled code from the build stage to the production image
