@@ -36,17 +36,4 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          USERNAME=sagik11
-          REPO=fitness-badge-main
-          IDENTIFIER=$USERNAME/$REPO
-          TAG=$(echo "${{ github.sha }}" | cut -c1-7)
-          SERVICES=("postgres" "api" "pgadmin" "admin" "app")
-
-          bash ./init.sh prod
-
-          for service in "${SERVICES[@]}"
-          do
-              echo "tagging and pushing $service..."
-              docker tag $REPO-$service $IDENTIFIER:$service-$TAG
-              docker push $IDENTIFIER:$service-$TAG 
-          done
+          bash ./deploy.sh
