@@ -4,13 +4,13 @@ RUN apt-get update && apt-get install -y netcat
 
 COPY . .
 
-RUN --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_USER \
-  --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_PASSWORD \
-  --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_DB \
-  --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_PORT \
-   export POSTGRES_USER=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_USER) && \
-   export POSTGRES_PASSWORD=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_PASSWORD) && \
-   export POSTGRES_DB=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_DB) && \
-   export POSTGRES_PORT=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_PORT)
+# RUN --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_USER \
+#   --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_PASSWORD \
+#   --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_DB \
+#   --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_PORT \
+#    export POSTGRES_USER=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_USER) && \
+#    export POSTGRES_PASSWORD=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_PASSWORD) && \
+#    export POSTGRES_DB=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_DB) && \
+#    export POSTGRES_PORT=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_PORT)
 
 USER postgres
