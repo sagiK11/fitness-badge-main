@@ -5,8 +5,8 @@ RUN apt-get update && apt-get install -y netcat
 COPY . .
 
 RUN --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_USER \
-   export POSTGRES_USER=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_USER) && \
-   echo $POSTGRES_USER
+   export POSTGRES_SERVICE__POSTGRES_USER=$(cat /run/secrets/POSTGRES_SERVICE__POSTGRES_USER) && \
+   echo $POSTGRES_SERVICE__POSTGRES_USER
 
 # RUN --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_USER \
 #   --mount=type=secret,id=POSTGRES_SERVICE__POSTGRES_PASSWORD \
