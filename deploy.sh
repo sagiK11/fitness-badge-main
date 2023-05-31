@@ -13,7 +13,6 @@ do
     cd "$service"
     echo "building, tagging and pushing $service..."
     docker build -t $IDENTIFIER:$service-$TAG .
-    docker tag $REPO-$service $IDENTIFIER:$service-$TAG
     docker push $IDENTIFIER:$service-$TAG 
     cd ..
 done
