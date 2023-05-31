@@ -27,7 +27,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          "POSTGRES_SERVICE__POSTGRES_USER=${{ secrets.POSTGRES_SERVICE__POSTGRES_USER }}"
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -36,5 +35,8 @@ jobs:
           images: my-docker-hub-namespace/my-docker-hub-repository
 
       - name: Build and push Docker images
+        with:
+        secrets: |
+          "POSTGRES_SERVICE__POSTGRES_USER=${{ secrets.POSTGRES_SERVICE__POSTGRES_USER }}"
         run: |
           bash ./deploy.sh
