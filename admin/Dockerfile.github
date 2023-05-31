@@ -46,4 +46,6 @@ RUN --mount=type=secret,id=ADMIN_SERVICE__NEXTAUTH_URL \
    export API_ENDPOINT=$(cat /run/secrets/ADMIN_SERVICE__API_ENDPOINT) && \
    export GOOGLE_CLIENT_SECRET=$(cat /run/secrets/ADMIN_SERVICE__GOOGLE_CLIENT_SECRET)
 
+RUN echo "env test: $(cat /run/secrets/ADMIN_SERVICE__NEXTAUTH_URL)"
+
 CMD ["npm", "start"]
