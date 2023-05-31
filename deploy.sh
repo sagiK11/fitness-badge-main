@@ -10,9 +10,9 @@ SERVICES=("postgres" "api" "pgadmin" "admin" "app")
 docker-compose down -v --remove-orphans
 docker-compose -f $DC_FILE build --parallel
 
-# for service in "${SERVICES[@]}"
-# do
-#     echo "tagging and pushing $service..."
-#     docker tag $REPO-$service $IDENTIFIER:$service-$TAG
-#     docker push $IDENTIFIER:$service-$TAG 
-# done
+for service in "${SERVICES[@]}"
+do
+    echo "tagging and pushing $service..."
+    docker tag $REPO-$service $IDENTIFIER:$service-$TAG
+    docker push $IDENTIFIER:$service-$TAG 
+done
