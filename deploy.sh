@@ -1,9 +1,9 @@
 #!/bin/bash
 
+TAG=$1
 USERNAME=sagik11
 REPO=fitness-badge-main
 IDENTIFIER=$USERNAME/$REPO
-TAG=${{ github.sha:0:7 }}
 # SERVICES=("postgres" "api" "pgadmin" "admin" "app")
 SERVICES=("postgres")
 

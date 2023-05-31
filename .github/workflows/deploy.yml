@@ -36,4 +36,4 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          bash ./deploy.sh
+          bash ./deploy.sh ${{ github.sha }}
