@@ -59,4 +59,4 @@ jobs:
 
       - name: Deploy to Linode Kubernetes
         run: |
-          cd ./cluster && tree .
+          bash ./cluster/deploy.sh dev
