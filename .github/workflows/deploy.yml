@@ -36,9 +36,8 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          bash ./deploy.sh $(echo "${{ github.sha }}" | cut -c1-7)
-
-          name: Deploy to Linode Kubernetes
+          SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          bash ./push.sh latest
 
   deploy:
     name: Deploy Cluster
@@ -59,4 +58,5 @@ jobs:
           version: "1.21.0"
 
       - name: Deploy to Linode Kubernetes
-        run: kubectl apply -f cluster/kubernetes.yaml
+        run: |
+          bash ./k8s/deploy.sh dev
