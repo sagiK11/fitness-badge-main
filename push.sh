@@ -5,7 +5,7 @@ USERNAME=sagik11
 REPO=fitness-badge-main
 IDENTIFIER=$USERNAME/$REPO
 # SERVICES=("postgres" "api" "pgadmin" "admin" "app")
-SERVICES=("postgres" "api" "admin")
+SERVICES=("postgres")
 
 
 for service in "${SERVICES[@]}"
