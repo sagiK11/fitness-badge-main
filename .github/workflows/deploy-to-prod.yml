@@ -1,0 +1,64 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: Build, Test and Deploy to Production
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "env/production"
+
+jobs:
+  build_and_push:
+    name: Push images to Docker Hub
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: sagik11/fitness-badge-main
+
+      - name: Build and push Docker images
+        run: |
+          bash ./push.sh latest
+
+  deploy:
+    name: Deploy Cluster to Production
+    needs: build_and_push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Clone cluster repository
+        run: git clone https://${{ secrets.FITNESS_BADGE_MAIN_CLUSTER_TOKEN }}@github.com/sagik11/fitness-badge-main-cluster.git cluster
+
+      - name: Set up Kubernetes
+        uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG_PROD }}
+          version: "1.26.0"
+
+      - name: Deploy to Linode Kubernetes
+        run: |
+          cd cluster && bash ./deploy.sh prod

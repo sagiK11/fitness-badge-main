@@ -7,16 +7,19 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Deploy
+name: Build, Test and Deploy to Develop
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
-      - main
+      - "main"
 
 jobs:
-  push_to_registry:
+  build_and_push:
     name: Push images to Docker Hub
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -40,7 +43,7 @@ jobs:
 
   deploy:
     name: Deploy Cluster
-    needs: push_to_registry
+    needs: build_and_push
     runs-on: ubuntu-latest
 
     steps:
