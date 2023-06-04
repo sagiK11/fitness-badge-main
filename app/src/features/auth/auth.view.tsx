@@ -4,7 +4,6 @@ import {
   CardTitle,
   Container,
   RootLayout,
-  Typography,
   ViewWrapper,
 } from "@/components";
 import { Card } from "@/components/card";
