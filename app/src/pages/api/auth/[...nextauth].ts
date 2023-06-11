@@ -8,8 +8,8 @@ export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-      clientId: serverRuntimeConfig.GOOGLE_CLIENT_ID || "",
-      clientSecret: serverRuntimeConfig.GOOGLE_CLIENT_SECRET || "",
+      clientId: serverRuntimeConfig.GOOGLE_CLIENT_ID,
+      clientSecret: serverRuntimeConfig.GOOGLE_CLIENT_SECRET,
     }),
     // ...add more providers here
   ],

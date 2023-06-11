@@ -1,12 +1,15 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import getConfig from "next/config";
+
+const { serverRuntimeConfig } = getConfig();
 
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: serverRuntimeConfig.GOOGLE_CLIENT_ID,
+      clientSecret: serverRuntimeConfig.GOOGLE_CLIENT_SECRET,
     }),
     // ...add more providers here
   ],
@@ -27,7 +30,7 @@ export const authOptions: AuthOptions = {
     },
   },
   // debug: process.env.NODE_ENV === "development",
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: serverRuntimeConfig.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth",
   },
