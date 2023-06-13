@@ -1,16 +1,15 @@
-FROM node:18 AS development
+FROM node:18
 
 
 # add `/usr/src/app/node_modules/.bin` to $PATH
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # Required for Prisma Client to work in the container
-RUN apt-get update && apt-get install -y openssl && apt-get install -y netcat
+RUN apt-get update && apt-get install -y openssl && apt-get install -y netcat-openbsd
 
 WORKDIR /usr/src/app
 
 COPY --chown=node:node . .
-RUN rm -rf node_modules
 
 RUN npm install
 

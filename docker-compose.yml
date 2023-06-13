@@ -30,7 +30,6 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile.local
-      target: development
     depends_on:
       - postgres
     env_file:
