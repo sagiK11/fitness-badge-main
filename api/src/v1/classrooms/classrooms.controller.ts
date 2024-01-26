@@ -67,7 +67,7 @@ export class ClassroomsController {
     @Query('classroomId') classroomId: string,
     @Query('yearOfStudyId') yearOfStudyId: string,
     @Query('schoolId') schoolId: string,
-  ): Promise<void> {
+  ): Promise<Student[]> {
     const result = await this.classroomsService.uploadStudents(
       { classroomId, schoolId, yearOfStudyId },
       file,

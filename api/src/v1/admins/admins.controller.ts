@@ -16,4 +16,12 @@ export class AdminsController {
     if (!result.success) throw result.httpException;
     return result.data;
   }
+
+  @Get()
+  @ApiOkResponse({ type: AdminDto, isArray: true })
+  async findAll(): Promise<Admin[]> {
+    const result = await this.adminService.findAll();
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
 }

@@ -12,7 +12,7 @@ export interface SelectProps
   className?: string;
 }
 export const Select = React.forwardRef(
-  ({ options, className, ...rest }: SelectProps, ref: any) => {
+  ({ options, className, defaultValue, ...rest }: SelectProps, ref: any) => {
     return (
       <select
         {...rest}
@@ -24,7 +24,12 @@ export const Select = React.forwardRef(
       >
         {options.map(({ label, value, selected, ...rest }) => {
           return (
-            <option key={value} value={value} {...rest}>
+            <option
+              key={value}
+              value={value}
+              {...rest}
+              selected={defaultValue === value}
+            >
               {label}
             </option>
           );

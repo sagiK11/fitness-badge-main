@@ -22,4 +22,13 @@ export class AdminsService {
       return this.resultService.handleError<Admin>(e);
     }
   }
+
+  async findAll() {
+    try {
+      const resultData = await this.prisma.admin.findMany();
+      return this.resultService.handleSuccess<Admin[]>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<Admin[]>(e);
+    }
+  }
 }

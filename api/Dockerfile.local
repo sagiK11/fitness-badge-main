@@ -1,11 +1,12 @@
-FROM node:18
+FROM node:20-alpine3.19
 
 
 # add `/usr/src/app/node_modules/.bin` to $PATH
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # Required for Prisma Client to work in the container
-RUN apt-get update && apt-get install -y openssl && apt-get install -y netcat-openbsd
+RUN apk update && apk add --no-cache openssl netcat-openbsd
+
 
 WORKDIR /usr/src/app
 

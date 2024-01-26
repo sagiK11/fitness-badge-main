@@ -183,8 +183,12 @@ export class ClassroomsService {
   async uploadStudents(
     params: { classroomId: string; yearOfStudyId: string; schoolId: string },
     file: Express.Multer.File,
-  ): Promise<Result<void>> {
+  ): Promise<Result<Student[]>> {
     try {
+      if (file.mimetype !== 'text/csv') {
+        throw new Error('Invalid file format');
+      }
+
       const csvData = bufferToCsv(file.buffer);
       const records: Student[] = parseCsv(csvData);
 
@@ -194,9 +198,9 @@ export class ClassroomsService {
       });
 
       // cant use createMany with relation -.^
-      const promises = [];
+      const students: Student[] = [];
       for (const record of records) {
-        const promise = this.prisma.student.create({
+        const student = await this.prisma.student.create({
           data: {
             firstName: record.firstName,
             lastName: record.lastName,
@@ -211,12 +215,11 @@ export class ClassroomsService {
             },
           },
         });
-        promises.push(promise);
+        students.push(student);
       }
-      await Promise.all(promises);
-      return this.resultService.handleSuccess<void>(null);
+      return this.resultService.handleSuccess<Student[]>(students);
     } catch (e) {
-      return this.resultService.handleError<void>(e);
+      return this.resultService.handleError<Student[]>(e);
     }
   }
 }

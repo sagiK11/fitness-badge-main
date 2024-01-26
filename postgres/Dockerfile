@@ -1,6 +1,7 @@
-FROM postgres:13.5
+FROM postgres:13.13-alpine3.18
 
-RUN apt-get update && apt-get install -y netcat
+
+RUN apk update && apk add --no-cache netcat-openbsd
 
 COPY . .
 

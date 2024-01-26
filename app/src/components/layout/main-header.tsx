@@ -49,6 +49,7 @@ export function MainHeader() {
       </div>
       <div className="navbar-end">
         <Select
+          defaultValue={yearOfStudyOptions?.find((y) => y.selected)?.value}
           options={yearOfStudyOptions}
           className="select-ghost max-w-[150px] px-1 lg:px-3"
           onChange={(e) =>

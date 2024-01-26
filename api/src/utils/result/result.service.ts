@@ -7,7 +7,7 @@ export class ResultService<Model> {
   constructor(private readonly exceptionService: ExceptionService<Model>) {}
 
   async handleSuccess<Model>(
-    data: Model,
+    data: Model = null,
     options?: Partial<Result<Model>>,
   ): Promise<Result<Model>> {
     return new Result<Model>({ data, success: true, ...options });
