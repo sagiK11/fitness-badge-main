@@ -14,7 +14,7 @@ export function SeoMetadata({
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
     </Head>
   );
 }
