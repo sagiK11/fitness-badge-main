@@ -47,9 +47,7 @@ export class TeachersService {
   ): Promise<Result<Teacher>> {
     try {
       const resultData = await this.prisma.teacher.create({
-        data: {
-          ...teacher,
-        },
+        data: teacher,
         include: {
           enrollments: true,
         },

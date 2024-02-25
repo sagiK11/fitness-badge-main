@@ -4,7 +4,7 @@ import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
 import { bufferToCsv, parseCsv } from '@src/utils';
-
+import xlsx from 'node-xlsx';
 @Injectable()
 export class ClassroomsService {
   constructor(
@@ -185,26 +185,22 @@ export class ClassroomsService {
     file: Express.Multer.File,
   ): Promise<Result<Student[]>> {
     try {
-      if (file.mimetype !== 'text/csv') {
-        throw new Error('Invalid file format');
-      }
-
-      const csvData = bufferToCsv(file.buffer);
-      const records: Student[] = parseCsv(csvData);
+      const workSheetsFromFile = xlsx.parse<string>(file.buffer);
 
       const { classroomId, yearOfStudyId, schoolId } = params;
       const classroom = await this.prisma.classroom.findFirstOrThrow({
         where: { id: classroomId },
       });
 
-      // cant use createMany with relation -.^
       const students: Student[] = [];
+      const records = workSheetsFromFile[0].data;
       for (const record of records) {
+        const [firstName, lastName, phone] = record;
         const student = await this.prisma.student.create({
           data: {
-            firstName: record.firstName,
-            lastName: record.lastName,
-            phone: record.phone,
+            firstName,
+            lastName,
+            phone: String(phone),
             gender: classroom.gender,
             schoolId,
             enrollments: {

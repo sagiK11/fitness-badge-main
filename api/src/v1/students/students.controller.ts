@@ -11,18 +11,16 @@ export class StudentsController {
 
   @Get()
   @ApiCreatedResponse({ type: StudentDto, isArray: true })
-  async getAllStudents(
-    @Query('schoolId') schoolId: string,
-  ): Promise<Student[]> {
+  async findMany(@Query('schoolId') schoolId: string): Promise<Student[]> {
     const result = await this.studentService.findMany({ schoolId });
     if (!result.success) throw result.httpException;
     return result.data;
   }
 
-  @Put('/students/:studentId')
+  @Put('/:studentId')
   @ApiCreatedResponse({ type: StudentDto })
   @ApiParam({ name: 'studentId', required: true })
-  async updateStudent(
+  async update(
     @Param('studentId') studentId: string,
     @Body() payload: StudentDto,
   ): Promise<Student> {
