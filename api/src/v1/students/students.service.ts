@@ -3,11 +3,13 @@ import { Prisma, Student, TestCategory } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
+import { TestCategoriesService } from '../test-categories/test-categories.service';
 
 @Injectable()
 export class StudentsService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly testCategoriesService: TestCategoriesService,
     private readonly resultService: ResultService<Student>,
   ) {}
 
@@ -154,5 +156,23 @@ export class StudentsService {
     } catch (e) {
       return this.resultService.handleError<Student>(e);
     }
+  }
+
+  public async addStudentTestByAlias(
+    testCategoryAlias: string,
+    data: {
+      yearOfStudyId: string;
+      studentId: string;
+      classroomId: string;
+    },
+  ) {
+    const category = await this.testCategoriesService.findByAlias(
+      testCategoryAlias,
+    );
+
+    return await this.addStudentTest({
+      ...data,
+      testCategoryId: category.data.id,
+    });
   }
 }

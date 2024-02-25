@@ -3,13 +3,15 @@ import { Classroom, Student, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
 import { Result } from '@src/utils/result/result';
-import { bufferToCsv, parseCsv } from '@src/utils';
 import xlsx from 'node-xlsx';
+import { StudentsService } from '../students/students.service';
+import { TestCategoryAlias } from '@src/common';
 @Injectable()
 export class ClassroomsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly resultService: ResultService<Classroom>,
+    private readonly studentsService: StudentsService,
   ) {}
 
   async findMany(): Promise<Result<Classroom[]>> {
@@ -211,11 +213,33 @@ export class ClassroomsService {
             },
           },
         });
+        await this.addDefaultTests(student, { yearOfStudyId, classroomId });
         students.push(student);
       }
       return this.resultService.handleSuccess<Student[]>(students);
     } catch (e) {
       return this.resultService.handleError<Student[]>(e);
+    }
+  }
+
+  private async addDefaultTests(
+    student: Student,
+    params: { yearOfStudyId: string; classroomId: string },
+  ) {
+    const defaultTests = [
+      TestCategoryAlias.Aerobic,
+      TestCategoryAlias.ABS,
+      TestCategoryAlias.Cubes,
+      TestCategoryAlias.DistanceJumping,
+      TestCategoryAlias.PullUpHanging,
+    ];
+
+    for (const alias of defaultTests) {
+      await this.studentsService.addStudentTestByAlias(alias, {
+        yearOfStudyId: params.yearOfStudyId,
+        studentId: student.id,
+        classroomId: params.classroomId,
+      });
     }
   }
 }

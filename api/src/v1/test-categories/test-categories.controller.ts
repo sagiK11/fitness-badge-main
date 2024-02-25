@@ -31,11 +31,11 @@ export class TestCategoriesController {
     @Query('gender') gender: Gender,
     @Query('score') score: string,
   ): Promise<number> {
-    const result = await this.testCategoryService.findCategoryByAlias(alias);
+    const result = await this.testCategoryService.findByAlias(alias);
     return await this.testCategoryService.getGrade(
       parseFloat(score),
       gender,
-      result.data.testCategoryId,
+      result.data.id,
     );
   }
 

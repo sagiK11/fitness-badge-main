@@ -80,7 +80,7 @@ export class TestCategoriesService {
     return resultData ? resultData[genderGradeColumn] : this.LOWEST_GRADE;
   }
 
-  async findCategoryByAlias(
+  async findCategoryScoreResultByAlias(
     alias: string,
   ): Promise<Result<CategoryScoreResult>> {
     try {
@@ -94,6 +94,19 @@ export class TestCategoriesService {
       return this.resultService.handleSuccess<CategoryScoreResult>(resultData);
     } catch (e) {
       return this.resultService.handleError<CategoryScoreResult>(e);
+    }
+  }
+
+  async findByAlias(alias: string): Promise<Result<TestCategory>> {
+    try {
+      const resultData = await this.prisma.testCategory.findFirst({
+        where: {
+          alias,
+        },
+      });
+      return this.resultService.handleSuccess<TestCategory>(resultData);
+    } catch (e) {
+      return this.resultService.handleError<TestCategory>(e);
     }
   }
 }
