@@ -37,14 +37,14 @@ const schools: SchoolSeed[] = [
   {
     name: 'תיכון מקיף בית שמש',
     classrooms: [
-      { name: 'ט', gender: 'MALE', count: 7 },
-      { name: 'ט', gender: 'FEMALE', count: 7 },
-      { name: 'י', gender: 'MALE', count: 7 },
-      { name: 'י', gender: 'FEMALE', count: 7 },
-      { name: 'יא', gender: 'MALE', count: 7 },
-      { name: 'יא', gender: 'FEMALE', count: 7 },
-      { name: 'יב', gender: 'MALE', count: 7 },
-      { name: 'יב', gender: 'FEMALE', count: 7 },
+      { name: 'ט', gender: 'MALE', count: 2 },
+      { name: 'ט', gender: 'FEMALE', count: 2 },
+      { name: 'י', gender: 'MALE', count: 2 },
+      { name: 'י', gender: 'FEMALE', count: 2 },
+      { name: 'יא', gender: 'MALE', count: 2 },
+      { name: 'יא', gender: 'FEMALE', count: 2 },
+      { name: 'יב', gender: 'MALE', count: 2 },
+      { name: 'יב', gender: 'FEMALE', count: 2 },
     ],
   },
 ];
@@ -55,11 +55,6 @@ type YearOfStudiesSeed = {
   endDate: YearOfStudy['endDate'];
 };
 const yearsOfStudy: YearOfStudiesSeed[] = [
-  {
-    yearName: '2022-2023',
-    startDate: new Date('2022-09-01'),
-    endDate: new Date('2023-06-20'),
-  },
   {
     yearName: '2023-2024',
     startDate: new Date('2023-09-01'),
@@ -79,6 +74,36 @@ const yearsOfStudy: YearOfStudiesSeed[] = [
     yearName: '2026-2027',
     startDate: new Date('2026-09-01'),
     endDate: new Date('2027-06-20'),
+  },
+  {
+    yearName: '2027-2028',
+    startDate: new Date('2027-09-01'),
+    endDate: new Date('2028-06-20'),
+  },
+  {
+    yearName: '2028-2029',
+    startDate: new Date('2028-09-01'),
+    endDate: new Date('2029-06-20'),
+  },
+  {
+    yearName: '2029-2030',
+    startDate: new Date('2029-09-01'),
+    endDate: new Date('2030-06-20'),
+  },
+  {
+    yearName: '2030-2031',
+    startDate: new Date('2030-09-01'),
+    endDate: new Date('2031-06-20'),
+  },
+  {
+    yearName: '2031-2032',
+    startDate: new Date('2031-09-01'),
+    endDate: new Date('2032-06-20'),
+  },
+  {
+    yearName: '2032-2033',
+    startDate: new Date('2032-09-01'),
+    endDate: new Date('2033-06-20'),
   },
 ];
 

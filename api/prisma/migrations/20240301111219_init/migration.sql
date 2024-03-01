@@ -44,7 +44,9 @@ CREATE TABLE "Student" (
     "id" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "israelId" TEXT NOT NULL,
     "phone" TEXT,
+    "email" TEXT,
     "gender" "Gender" NOT NULL,
     "schoolId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -152,6 +154,15 @@ CREATE UNIQUE INDEX "School_name_key" ON "School"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Teacher_email_key" ON "Teacher"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Student_israelId_key" ON "Student"("israelId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Student_phone_key" ON "Student"("phone");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Classroom_schoolId_name_gender_key" ON "Classroom"("schoolId", "name", "gender");

@@ -55,7 +55,9 @@ model Student {
   id          String              @id @default(uuid())
   firstName   String
   lastName    String
-  phone       String?
+  israelId    String              @unique
+  phone       String?             @unique
+  email       String?             @unique
   gender      Gender
   tests       Test[]
   school      School              @relation(fields: [schoolId], references: [id])

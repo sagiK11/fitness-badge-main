@@ -1,8 +1,7 @@
 import { yearOfStudyEndpoints } from "@/store";
-import { formatName } from "@/utils";
+import { formatNameWithIsraelId } from "@/utils";
 import { useRouter } from "next/router";
 import React from "react";
-import { useUser } from "./use-user";
 
 export function useAvailableClassroomStudents() {
   const router = useRouter();
@@ -20,7 +19,7 @@ export function useAvailableClassroomStudents() {
   const availableStudentsOptions = React.useMemo(
     () =>
       availableStudents?.map((student) => ({
-        label: formatName(student),
+        label: formatNameWithIsraelId(student),
         value: student.id,
       })) ?? [],
     [availableStudents]

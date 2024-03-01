@@ -15,7 +15,7 @@ import {
 } from "@/components";
 import { useClassroom, useUser } from "@/hooks";
 import { useAvailableClassroomStudents } from "@/hooks/use-available-classroom-students";
-import { GenderEnum } from "@/models";
+import { GenderEnum, Student } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
 import { useRouter } from "next/router";
@@ -32,11 +32,6 @@ export function ClassroomDetailsView() {
   const { availableStudentsOptions } = useAvailableClassroomStudents();
 
   const [studentId, setStudentId] = React.useState<string>();
-
-  React.useEffect(() => {
-    if (!availableStudentsOptions?.[0]?.value) return;
-    setStudentId(availableStudentsOptions?.[0]?.value);
-  }, [availableStudentsOptions]);
 
   return (
     <ViewWrapper title="Classroom Details">
@@ -107,6 +102,7 @@ export function ClassroomDetailsView() {
                     }}
                   />
                 </FlexBox>
+                <StudentsExcelExample />
               </CardBody>
             )}
 
@@ -124,6 +120,13 @@ export function ClassroomDetailsView() {
                     <Typography className="text-secondary">טלפון</Typography>
                     <Typography bold>
                       {enrollment.student.phone ?? "-"}
+                    </Typography>
+                  </FlexBox>
+
+                  <FlexBox className="flex-col md:gap-1">
+                    <Typography className="text-secondary">אימייל</Typography>
+                    <Typography bold>
+                      {enrollment.student.email ?? "-"}
                     </Typography>
                   </FlexBox>
 
@@ -165,6 +168,7 @@ export function ClassroomDetailsView() {
                     onChange={(e) => setStudentId(e.target.value)}
                     options={availableStudentsOptions}
                     className="select-sm md:select-md"
+                    placeholder="בחר תלמיד"
                   />
                   <FlexBox>
                     <Button
@@ -175,7 +179,7 @@ export function ClassroomDetailsView() {
                           studentId,
                         })
                       }
-                      disabled={!classroomId}
+                      disabled={!classroomId || !studentId}
                     >
                       הוסף
                     </Button>
@@ -202,3 +206,67 @@ export function ClassroomDetailsView() {
     </ViewWrapper>
   );
 }
+
+const StudentsExcelExample = () => {
+  const mock: Partial<Student>[] = [
+    {
+      israelId: "123456781",
+      firstName: "ישראל",
+      lastName: "ישראלי",
+      phone: "0501234561",
+      email: "israel@gmail.com",
+    },
+    {
+      israelId: "123456782",
+      firstName: "דנה",
+      lastName: "כהן",
+      phone: "0501234562",
+      email: "dana@gmail.com",
+    },
+    {
+      israelId: "123456783",
+      firstName: "שני",
+      lastName: "גרינברג",
+      phone: "0501234563",
+      email: "shani@gmail.com",
+    },
+    {
+      israelId: "123456784",
+      firstName: "רונה",
+      lastName: "לוי",
+      phone: "0501234564",
+      email: "rona@gmail.com",
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-1 overflow-x-auto">
+      <Typography className="font-bold">דוגמה לקובץ אקסל:</Typography>
+      <table className="max-w-sm ">
+        <tbody className="bg-gray-100">
+          {mock.map((student) => {
+            return (
+              <tr key={student.israelId}>
+                <td className="border text-center border-gray-400 px-2 py-1">
+                  {student.israelId}
+                </td>
+                <td className="border text-center border-gray-400 px-2 py-1">
+                  {student.firstName}
+                </td>
+                <td className="border text-center border-gray-400 px-2 py-1">
+                  {student.lastName}
+                </td>
+                <td className="text-center border border-gray-400 border-y px-2 py-1">
+                  {student.phone}
+                </td>
+                <td className="text-center border border-gray-400 border-y px-2 py-1">
+                  {student.email}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};

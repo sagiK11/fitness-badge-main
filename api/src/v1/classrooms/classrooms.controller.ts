@@ -22,19 +22,11 @@ export class ClassroomsController {
 
   @Get()
   @ApiOkResponse({ type: ClassRoomDto, isArray: true })
-  async findMany(): Promise<Classroom[]> {
-    const result = await this.classroomsService.findMany();
-    if (!result.success) throw result.httpException;
-    return result.data;
-  }
-
-  @Get()
-  @ApiOkResponse({ type: ClassRoomDto, isArray: true })
   @ApiQuery({ name: 'schoolId', required: true })
   async findManyBySchool(
     @Query('schoolId') schoolId: string,
   ): Promise<Classroom[]> {
-    const result = await this.classroomsService.findManyBySchool({ schoolId });
+    const result = await this.classroomsService.findMany({ schoolId });
     if (!result.success) throw result.httpException;
     return result.data;
   }

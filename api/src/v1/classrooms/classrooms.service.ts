@@ -14,25 +14,9 @@ export class ClassroomsService {
     private readonly studentsService: StudentsService,
   ) {}
 
-  async findMany(): Promise<Result<Classroom[]>> {
+  async findMany(where: { schoolId: string }): Promise<Result<Classroom[]>> {
     try {
-      const resultData = await this.prisma.classroom.findMany();
-      return this.resultService.handleSuccess(resultData);
-    } catch (e) {
-      return this.resultService.handleError(e);
-    }
-  }
-
-  async findManyBySchool(data: {
-    schoolId: string;
-  }): Promise<Result<Classroom[]>> {
-    const { schoolId } = data;
-    try {
-      const resultData = await this.prisma.classroom.findMany({
-        where: {
-          schoolId,
-        },
-      });
+      const resultData = await this.prisma.classroom.findMany({ where });
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
@@ -59,6 +43,10 @@ export class ClassroomsService {
           },
         },
       });
+      const student = await this.prisma.student.findUnique({
+        where: { id: studentId },
+      });
+      await this.addDefaultTests(student, { yearOfStudyId, classroomId });
       return this.resultService.handleSuccess(resultData);
     } catch (e) {
       return this.resultService.handleError(e);
@@ -197,13 +185,15 @@ export class ClassroomsService {
       const students: Student[] = [];
       const records = workSheetsFromFile[0].data;
       for (const record of records) {
-        const [firstName, lastName, phone] = record;
+        const [israelId, firstName, lastName, phone, email] = record;
         const student = await this.prisma.student.create({
           data: {
             firstName,
             lastName,
+            israelId: String(israelId),
             phone: String(phone),
             gender: classroom.gender,
+            email,
             schoolId,
             enrollments: {
               create: {

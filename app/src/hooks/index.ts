@@ -1,3 +1,4 @@
+export * from "./use-async";
 export * from "./use-auth";
 export * from "./use-classroom";
 export * from "./use-classrooms";

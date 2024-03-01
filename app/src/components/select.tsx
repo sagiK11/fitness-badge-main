@@ -4,15 +4,18 @@ export interface Option {
   label: string;
   value: any;
   disable?: boolean;
-  selected?: boolean;
 }
+
 export interface SelectProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {
   options: Option[];
   className?: string;
 }
 export const Select = React.forwardRef(
-  ({ options, className, defaultValue, ...rest }: SelectProps, ref: any) => {
+  (
+    { options, className, defaultValue, placeholder, ...rest }: SelectProps,
+    ref: any
+  ) => {
     return (
       <select
         {...rest}
@@ -20,16 +23,17 @@ export const Select = React.forwardRef(
           "select select-bordered w-full bg-none",
           className
         )}
+        defaultValue={placeholder}
         ref={ref}
       >
-        {options.map(({ label, value, selected, ...rest }) => {
+        {placeholder && (
+          <option disabled value={placeholder}>
+            {placeholder}
+          </option>
+        )}
+        {options.map(({ label, value }) => {
           return (
-            <option
-              key={value}
-              value={value}
-              {...rest}
-              selected={defaultValue === value}
-            >
+            <option key={value} value={value}>
               {label}
             </option>
           );

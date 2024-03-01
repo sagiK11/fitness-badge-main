@@ -31,11 +31,6 @@ export function StudentDetailsViewView() {
 
   const [testCategoryId, setTestCategoryId] = React.useState<string>();
 
-  React.useEffect(() => {
-    if (!availableTestsOptions?.[0]?.value) return;
-    setTestCategoryId(availableTestsOptions?.[0]?.value);
-  }, [availableTestsOptions]);
-
   const backUrl = routesTree({
     yearOfStudyId: currentYearOfStudy.id,
     classroomId: router.query.classroomId as string,
@@ -62,7 +57,12 @@ export function StudentDetailsViewView() {
           <Card section>
             <CardTitle>פרטי התלמיד</CardTitle>
             <CardBody>
-              <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
+              <Grid className="grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 lg:gap-3 md:items-center">
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">ת.ז.</Typography>
+                  <Typography bold>{student.israelId}</Typography>
+                </FlexBox>
+
                 <FlexBox className="flex-col md:gap-1">
                   <Typography className="text-secondary">שם</Typography>
                   <Typography bold>{formatName(student)}</Typography>
@@ -78,6 +78,11 @@ export function StudentDetailsViewView() {
                 <FlexBox className="flex-col md:gap-1">
                   <Typography className="text-secondary">טלפון</Typography>
                   <Typography bold>{student.phone ?? "-"}</Typography>
+                </FlexBox>
+
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography className="text-secondary">אימייל</Typography>
+                  <Typography bold>{student.email ?? "-"}</Typography>
                 </FlexBox>
 
                 <FlexBox className="flex-col md:gap-1">
@@ -178,6 +183,7 @@ export function StudentDetailsViewView() {
                     onChange={(e) => setTestCategoryId(e.target.value)}
                     options={availableTestsOptions}
                     className="select-sm md:select-md"
+                    placeholder="בחר מבחן"
                   />
                   <FlexBox>
                     <Button

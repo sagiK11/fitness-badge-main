@@ -82,11 +82,6 @@ function MyClassroomCard({ gender }: { gender: GenderEnum }) {
     ? availableFemaleClassOptions
     : availableMaleClassOptions;
 
-  React.useEffect(() => {
-    if (!options?.[0]?.value) return;
-    setClassroomId(options?.[0]?.value);
-  }, [options]);
-
   const title = isFemale ? "כיתות הבנות שלי" : "כיתות הבנים שלי";
 
   const items = React.useMemo(() => {
@@ -105,6 +100,7 @@ function MyClassroomCard({ gender }: { gender: GenderEnum }) {
           <Select
             onChange={(e) => setClassroomId(e.target.value)}
             options={options}
+            placeholder="בחר כיתה"
             className="select-sm md:select-md"
           />
           <Button
