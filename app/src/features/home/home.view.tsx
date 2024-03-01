@@ -11,6 +11,7 @@ import {
   Card,
   Select,
   Breadcrumbs,
+  NameValueGroup,
 } from "@/components";
 import { useClassrooms, useUser, useYearOfStudy } from "@/hooks";
 import { GenderEnum } from "@/models";
@@ -35,20 +36,18 @@ export function HomeView() {
             <CardBody>
               <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
                 <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">שם</Typography>
+                  <Typography className="text-accent">שם</Typography>
                   <Typography bold>{user.school?.name}</Typography>
                 </FlexBox>
 
                 <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">
-                    תאריך יצירה
-                  </Typography>
+                  <Typography className="text-accent">תאריך יצירה</Typography>
                   <Typography bold>
                     {formatDate(user.school?.createdAt)}
                   </Typography>
                 </FlexBox>
                 <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">
+                  <Typography className="text-accent">
                     תאריך עדכון אחרון
                   </Typography>
                   <Typography bold>
@@ -116,29 +115,22 @@ function MyClassroomCard({ gender }: { gender: GenderEnum }) {
       {items?.map((classroom) => (
         <CardBody key={classroom.id} hover>
           <Grid className="grid-cols-1 md:grid-cols-6  gap-2 lg:gap-3 md:items-center">
-            <FlexBox className="flex-col md:gap-1">
-              <Typography className="text-secondary">שם</Typography>
-              <Typography bold>{classroom.name}</Typography>
-            </FlexBox>
+            <NameValueGroup name="שם" value={classroom.name} />
 
-            <FlexBox className="flex-col md:gap-1">
-              <Typography className="text-secondary">מגדר</Typography>
-              <Typography bold>
-                {classroom.gender === GenderEnum.male ? "בנים" : "בנות"}
-              </Typography>
-            </FlexBox>
+            <NameValueGroup
+              name="מגדר"
+              value={classroom.gender === GenderEnum.male ? "בנים" : "בנות"}
+            />
 
-            <FlexBox className="flex-col md:gap-1">
-              <Typography className="text-secondary">תאריך יצירה</Typography>
-              <Typography bold>{formatDate(classroom.createdAt)}</Typography>
-            </FlexBox>
+            <NameValueGroup
+              name="תאריך יצירה"
+              value={formatDate(classroom.createdAt)}
+            />
 
-            <FlexBox className="flex-col md:gap-1">
-              <Typography className="text-secondary">
-                תאריך עדכון אחרון
-              </Typography>
-              <Typography bold>{formatDate(classroom.updatedAt)}</Typography>
-            </FlexBox>
+            <NameValueGroup
+              name="תאריך עדכון אחרון"
+              value={formatDate(classroom.updatedAt)}
+            />
 
             <FlexBox className="flex-col md:gap-1 col-span-2">
               <Button

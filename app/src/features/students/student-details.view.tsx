@@ -12,6 +12,7 @@ import {
   NumberFormatInput,
   Select,
   Breadcrumbs,
+  NameValueGroup,
 } from "@/components";
 import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { GenderEnum } from "@/models";
@@ -50,7 +51,7 @@ export function StudentDetailsViewView() {
             ]}
           />
           <FlexBox className="flex-col md:gap-1">
-            <Typography className="text-secondary">כיתה</Typography>
+            <Typography className="text-accent">כיתה</Typography>
             <Typography bold>{classroom?.name}</Typography>
           </FlexBox>
 
@@ -58,45 +59,28 @@ export function StudentDetailsViewView() {
             <CardTitle>פרטי התלמיד</CardTitle>
             <CardBody>
               <Grid className="grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 lg:gap-3 md:items-center">
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">ת.ז.</Typography>
-                  <Typography bold>{student.israelId}</Typography>
-                </FlexBox>
+                <NameValueGroup name="ת.ז." value={student.israelId} />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">שם</Typography>
-                  <Typography bold>{formatName(student)}</Typography>
-                </FlexBox>
+                <NameValueGroup name="שם" value={formatName(student)} />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">מגדר</Typography>
-                  <Typography bold>
-                    {student.gender === GenderEnum.female ? "נקבה" : "זכר"}
-                  </Typography>
-                </FlexBox>
+                <NameValueGroup
+                  name="מגדר"
+                  value={student.gender === GenderEnum.female ? "נקבה" : "זכר"}
+                />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">טלפון</Typography>
-                  <Typography bold>{student.phone ?? "-"}</Typography>
-                </FlexBox>
+                <NameValueGroup name="טלפון" value={student.phone ?? "-"} />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">אימייל</Typography>
-                  <Typography bold>{student.email ?? "-"}</Typography>
-                </FlexBox>
+                <NameValueGroup name="אימייל" value={student.email ?? "-"} />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">
-                    תאריך יצירה
-                  </Typography>
-                  <Typography bold>{formatDate(student.createdAt)}</Typography>
-                </FlexBox>
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">
-                    תאריך עדכון אחרון
-                  </Typography>
-                  <Typography bold>{formatDate(student.updatedAt)}</Typography>
-                </FlexBox>
+                <NameValueGroup
+                  name="תאריך יצירה"
+                  value={formatDate(student.createdAt)}
+                />
+
+                <NameValueGroup
+                  name="תאריך עדכון אחרון"
+                  value={formatDate(student.updatedAt)}
+                />
               </Grid>
             </CardBody>
           </Card>

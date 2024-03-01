@@ -12,6 +12,8 @@ import {
   Select,
   Breadcrumbs,
   FileInput,
+  NameValueGroup,
+  StudentsExcelExample,
 } from "@/components";
 import { useClassroom, useUser } from "@/hooks";
 import { useAvailableClassroomStudents } from "@/hooks/use-available-classroom-students";
@@ -47,34 +49,24 @@ export function ClassroomDetailsView() {
             <CardTitle>פרטי הכיתה</CardTitle>
             <CardBody>
               <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">שם</Typography>
-                  <Typography bold>{classroom?.name}</Typography>
-                </FlexBox>
+                <NameValueGroup name="שם" value={classroom?.name} />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">מגדר</Typography>
-                  <Typography bold>
-                    {classroom?.gender === GenderEnum.male ? "בנים" : "בנות"}
-                  </Typography>
-                </FlexBox>
+                <NameValueGroup
+                  name="מגדר"
+                  value={
+                    classroom?.gender === GenderEnum.male ? "בנים" : "בנות"
+                  }
+                />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">
-                    תאריך יצירה
-                  </Typography>
-                  <Typography bold>
-                    {formatDate(classroom?.createdAt)}
-                  </Typography>
-                </FlexBox>
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-secondary">
-                    תאריך עדכון אחרון
-                  </Typography>
-                  <Typography bold>
-                    {formatDate(classroom?.updatedAt)}
-                  </Typography>
-                </FlexBox>
+                <NameValueGroup
+                  name="תאריך יצירה"
+                  value={formatDate(classroom?.createdAt)}
+                />
+
+                <NameValueGroup
+                  name="תאריך עדכון אחרון"
+                  value={formatDate(classroom?.updatedAt)}
+                />
               </Grid>
             </CardBody>
           </Card>
@@ -109,35 +101,25 @@ export function ClassroomDetailsView() {
             {classroom?.studentEnrollments?.map((enrollment) => (
               <CardBody key={enrollment.id} hover>
                 <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
-                  <FlexBox className="flex-col md:gap-1">
-                    <Typography className="text-secondary">שם</Typography>
-                    <Typography bold>
-                      {formatName(enrollment.student)}
-                    </Typography>
-                  </FlexBox>
+                  <NameValueGroup
+                    name="שם"
+                    value={formatName(enrollment.student)}
+                  />
 
-                  <FlexBox className="flex-col md:gap-1">
-                    <Typography className="text-secondary">טלפון</Typography>
-                    <Typography bold>
-                      {enrollment.student.phone ?? "-"}
-                    </Typography>
-                  </FlexBox>
+                  <NameValueGroup
+                    name="טלפון"
+                    value={enrollment.student.phone ?? "-"}
+                  />
 
-                  <FlexBox className="flex-col md:gap-1">
-                    <Typography className="text-secondary">אימייל</Typography>
-                    <Typography bold>
-                      {enrollment.student.email ?? "-"}
-                    </Typography>
-                  </FlexBox>
+                  <NameValueGroup
+                    name="אימייל"
+                    value={enrollment.student.email ?? "-"}
+                  />
 
-                  <FlexBox className="flex-col md:gap-1">
-                    <Typography className="text-secondary">
-                      תאריך עדכון אחרון
-                    </Typography>
-                    <Typography bold>
-                      {formatDate(enrollment.student.updatedAt)}
-                    </Typography>
-                  </FlexBox>
+                  <NameValueGroup
+                    name="תאריך עדכון אחרון"
+                    value={formatDate(enrollment.student.updatedAt)}
+                  />
 
                   <FlexBox className="flex-col md:gap-1">
                     <Button
@@ -206,67 +188,3 @@ export function ClassroomDetailsView() {
     </ViewWrapper>
   );
 }
-
-const StudentsExcelExample = () => {
-  const mock: Partial<Student>[] = [
-    {
-      israelId: "123456781",
-      firstName: "ישראל",
-      lastName: "ישראלי",
-      phone: "0501234561",
-      email: "israel@gmail.com",
-    },
-    {
-      israelId: "123456782",
-      firstName: "דנה",
-      lastName: "כהן",
-      phone: "0501234562",
-      email: "dana@gmail.com",
-    },
-    {
-      israelId: "123456783",
-      firstName: "שני",
-      lastName: "גרינברג",
-      phone: "0501234563",
-      email: "shani@gmail.com",
-    },
-    {
-      israelId: "123456784",
-      firstName: "רונה",
-      lastName: "לוי",
-      phone: "0501234564",
-      email: "rona@gmail.com",
-    },
-  ];
-
-  return (
-    <div className="flex flex-col gap-1 overflow-x-auto">
-      <Typography className="font-bold">דוגמה לקובץ אקסל:</Typography>
-      <table className="max-w-sm ">
-        <tbody className="bg-gray-100">
-          {mock.map((student) => {
-            return (
-              <tr key={student.israelId}>
-                <td className="border text-center border-gray-400 px-2 py-1">
-                  {student.israelId}
-                </td>
-                <td className="border text-center border-gray-400 px-2 py-1">
-                  {student.firstName}
-                </td>
-                <td className="border text-center border-gray-400 px-2 py-1">
-                  {student.lastName}
-                </td>
-                <td className="text-center border border-gray-400 border-y px-2 py-1">
-                  {student.phone}
-                </td>
-                <td className="text-center border border-gray-400 border-y px-2 py-1">
-                  {student.email}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-};

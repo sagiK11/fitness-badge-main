@@ -9,22 +9,21 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
 
-  plugins: [require("daisyui"), require("tailwindcss-rtl")],
+  plugins: [require("daisyui")],
   daisyui: {
-    rtl: true,
     themes: [
       {
-        custom: {
-          primary: "#570df8",
-          "primary-focus": "#4506cb",
+        light: {
+          primary: "#8e0df8",
+          "primary-focus": "#ff0088",
           "primary-content": "#ffffff",
 
-          secondary: "#f000b8",
-          "secondary-focus": "#bd0091",
+          secondary: "#000000",
+          "secondary-focus": "#ff0088",
           "secondary-content": "#ffffff",
 
-          accent: "#37cdbe",
-          "accent-focus": "#2ba69a",
+          accent: "#b08ad6",
+          "accent-focus": "#a879b9",
           "accent-content": "#ffffff",
 
           neutral: "#3b424e",
@@ -36,20 +35,20 @@ module.exports = {
           "base-300": "#ced3d9",
           "base-content": "#1e2734",
 
-          info: "#9ed3ff",
+          info: "#1c92f2",
           success: "#009485",
           warning: "#ff9900",
           error: "#ff5724",
 
-          "--rounded-box": "0.25rem",
-          "--rounded-btn": "0.5rem",
+          "--rounded-box": "1rem",
+          "--rounded-btn": ".5rem",
           "--rounded-badge": "1.9rem",
 
-          "--animation-btn": "0.25s",
-          "--animation-input": "0.2s",
+          "--animation-btn": ".25s",
+          "--animation-input": ".2s",
 
           "--btn-text-case": "uppercase",
-          "--navbar-padding": "0.5rem",
+          "--navbar-padding": ".5rem",
           "--border-btn": "1px",
         },
       },
