@@ -1,0 +1,47 @@
+{
+  "short_name": "אות הכושר",
+  "name": "אות הכושר",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ],
+  "id": "/",
+  "start_url": "/",
+  "background_color": "#f9fafb",
+  "display": "standalone",
+  "scope": "/",
+  "description": "חישוב ומעקב אחר תוצאות וציונים של תלמידים במבחני חינוך גופני",
+  "theme_color": "#f9fafb",
+  "lang": "he",
+  "dir": "rtl",
+  "screenshots": [
+    {
+      "src": "/images/home1.png",
+      "type": "image/png",
+      "sizes": "1848x936",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/home2.png",
+      "type": "image/png",
+      "sizes": "374x673",
+      "form_factor": "narrow"
+    }
+  ]
+}
