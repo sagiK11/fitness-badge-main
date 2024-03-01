@@ -1,35 +1,24 @@
-import React from "react";
-
 import { testEndpoints } from "@/store/api/test.endpoint";
 
 import { UpdateTestParams } from "@/store";
+import { useAsync } from "./use-async";
 
 export function useTests() {
   const [_updateTests, updateTestsResult] =
     testEndpoints.useUpdateTestsMutation();
   const [_updateTest, updateTestResult] = testEndpoints.useUpdateTestMutation();
 
-  const updateTests = React.useCallback(
-    async (tests: UpdateTestParams[]) => {
-      try {
-        await _updateTests(tests).unwrap();
-      } catch (error) {
-        console.log(error);
-      }
+  const [updateTests] = useAsync({
+    func: async (tests: UpdateTestParams[]) => {
+      _updateTests(tests).unwrap();
     },
-    [_updateTests]
-  );
+  });
 
-  const updateTest = React.useCallback(
-    async (test: UpdateTestParams) => {
-      try {
-        await _updateTest(test).unwrap();
-      } catch (error) {
-        console.log(error);
-      }
+  const [updateTest] = useAsync({
+    func: async (test: UpdateTestParams) => {
+      _updateTest(test).unwrap();
     },
-    [_updateTest]
-  );
+  });
 
   return {
     updateTests,

@@ -1,4 +1,3 @@
-import React from "react";
 import { useYearOfStudy } from "./use-year-of-study";
 import {
   UploadStudentsPayload,
@@ -7,6 +6,7 @@ import {
 } from "@/store";
 import { useUser } from "./use-user";
 import { useRouter } from "next/router";
+import { useAsync } from "./use-async";
 
 export function useClassroom() {
   const user = useUser();
@@ -15,7 +15,7 @@ export function useClassroom() {
   const { currentYearOfStudy } = useYearOfStudy();
   const [_addClassroomStudent] =
     yearOfStudyEndpoints.useAddClassroomStudentMutation();
-  const [_uploadStudents, uploadResult] =
+  const [_uploadStudents] =
     classroomEndpoints.useUploadStudentsFromXlsxMutation();
 
   const { data: classroom } = yearOfStudyEndpoints.useFindTeacherClassroomQuery(
@@ -29,8 +29,8 @@ export function useClassroom() {
     }
   );
 
-  const addClassroomStudent = React.useCallback(
-    async ({
+  const [addClassroomStudent] = useAsync({
+    func: async ({
       classroomId,
       studentId,
     }: {
@@ -44,24 +44,18 @@ export function useClassroom() {
         studentId,
       });
     },
-    [_addClassroomStudent, currentYearOfStudy]
-  );
+  });
 
-  const uploadStudents = React.useCallback(
-    async (payload: UploadStudentsPayload) => {
-      try {
-        await _uploadStudents(payload).unwrap();
-      } catch (error) {
-        console.log(error);
-      }
+  const [uploadStudents, { isLoading }] = useAsync({
+    func: async (payload: UploadStudentsPayload) => {
+      await _uploadStudents(payload).unwrap();
     },
-    [_uploadStudents]
-  );
+  });
 
   return {
     classroom,
     addClassroomStudent,
     uploadStudents,
-    isUploading: uploadResult.isLoading,
+    isUploading: isLoading,
   };
 }

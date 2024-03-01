@@ -4,6 +4,7 @@ import { useUser } from "./use-user";
 import { useYearOfStudy } from "./use-year-of-study";
 import { yearOfStudyEndpoints } from "@/store";
 import { Classroom, GenderEnum } from "@/models";
+import { useAsync } from "./use-async";
 
 export function useClassrooms() {
   const user = useUser();
@@ -29,8 +30,8 @@ export function useClassrooms() {
   const [_addTeacherClassroom] =
     yearOfStudyEndpoints.useAddTeacherClassroomMutation();
 
-  const addTeacherClassroom = React.useCallback(
-    async (classroomId?: string) => {
+  const [addTeacherClassroom, { isLoading }] = useAsync({
+    func: async (classroomId?: string) => {
       if (!classroomId) return;
       await _addTeacherClassroom({
         teacherId: user.id,
@@ -38,8 +39,7 @@ export function useClassrooms() {
         yearOfStudyId: currentYearOfStudy.id,
       });
     },
-    [_addTeacherClassroom, user, currentYearOfStudy]
-  );
+  });
 
   const { availableMaleClassOptions, availableFemaleClassOptions } =
     React.useMemo(() => {
