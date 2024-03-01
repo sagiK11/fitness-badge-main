@@ -9,7 +9,7 @@ interface IProps {
 
 export function NameValueGroup({ name, value }: IProps) {
   return (
-    <FlexBox className="flex-col md:gap-1">
+    <FlexBox className="flex-col">
       <Typography className="text-accent">{name}</Typography>
       <Typography bold>{value}</Typography>
     </FlexBox>

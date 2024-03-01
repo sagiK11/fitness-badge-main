@@ -51,7 +51,7 @@ export function StudentDetailsViewView() {
             ]}
           />
           <FlexBox className="flex-col md:gap-1">
-            <Typography className="text-accent">כיתה</Typography>
+            <Typography className="text-primary font-semibold">כיתה</Typography>
             <Typography bold>{classroom?.name}</Typography>
           </FlexBox>
 
