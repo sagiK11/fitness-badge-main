@@ -17,7 +17,7 @@ export function TeachersCard({ schoolId }: TeachersCardProps) {
 
   return (
     <Card section>
-      <FlexBox className="w-full justify-between">
+      <FlexBox className="w-full justify-between items-center pe-3">
         <CardTitle>Teachers</CardTitle>
         <TeacherModal schoolId={schoolId} />
       </FlexBox>

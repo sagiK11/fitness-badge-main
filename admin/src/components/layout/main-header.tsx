@@ -7,7 +7,7 @@ export function MainHeader() {
   const { admin, initials } = useAdmin();
 
   return (
-    <header className="navbar shadow-sm bg-primary text-white fixed top-0 z-10">
+    <header className="navbar bg-base-300 text-white fixed top-0 z-10">
       <div className="navbar-start">
         {admin && (
           <div className="dropdown">
@@ -30,7 +30,7 @@ export function MainHeader() {
 
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
+              className="menu menu-compact dropdown-content mt-1 p-2 shadow bg-base-300 rounded-box w-52 text-primary"
             >
               <li>
                 <button onClick={signOut}>Log out</button>

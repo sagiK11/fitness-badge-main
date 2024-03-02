@@ -19,12 +19,12 @@ export function SchoolDetailsView() {
       <RootLayout>
         <Container className="gap-4">
           <FlexBox className="flex-col gap-1">
-            <Typography className="text-2xl font-bold ">School name</Typography>
-            <Typography className="text-secondary font-bold">
+            <Typography className="text-primary font-bold text-2xl">
               {school?.name}
             </Typography>
           </FlexBox>
-          <TeachersCard schoolId={school?.id as string} />
+
+          {school?.id && <TeachersCard schoolId={school.id} />}
         </Container>
       </RootLayout>
     </ViewWrapper>

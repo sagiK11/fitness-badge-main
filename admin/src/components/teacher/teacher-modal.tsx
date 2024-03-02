@@ -28,19 +28,18 @@ export function TeacherModal({ schoolId }: TeacherModalProps) {
     },
   });
 
-  React.useEffect(() => {
-    if (!schoolId) return;
-    methods.setValue("schoolId", schoolId);
-  }, [schoolId]);
-
   return (
     <>
-      <Button as="label" htmlFor={id}>
+      <Button as="label" className="btn-secondary btn-sm" htmlFor={id}>
         Add Teacher
       </Button>
 
       <Modal header="Add Teacher" id={id}>
-        <Form methods={methods} onSubmit={methods.handleSubmit(create)}>
+        <Form
+          id="add-teacher-form"
+          methods={methods}
+          onSubmit={methods.handleSubmit(create)}
+        >
           <FlexBox className="flex-col gap-2">
             <FormInput
               type="email"
@@ -61,7 +60,13 @@ export function TeacherModal({ schoolId }: TeacherModalProps) {
           </FlexBox>
 
           <ModalAction>
-            <Button type="submit">Submit</Button>
+            <Button
+              className="btn-primary"
+              form="add-teacher-form"
+              type="submit"
+            >
+              Submit
+            </Button>
           </ModalAction>
         </Form>
       </Modal>

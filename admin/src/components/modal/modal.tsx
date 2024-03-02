@@ -19,7 +19,7 @@ export function Modal({ children, header, id }: ModalProps) {
             ✕
           </label>
 
-          {header && <h3 className="font-bold text-lg border-b">{header}</h3>}
+          {header && <h3 className="font-bold text-lg">{header}</h3>}
           <div className="py-3">{children}</div>
         </div>
       </div>

@@ -19,8 +19,8 @@ export function Card({
   return (
     <Component
       className={classNames(
-        "card shadow-md",
-        { "divide-y ": section },
+        "card shadow-md border border-gray-700 bg-base-300",
+        { "divide-y divide-gray-600": section },
         className
       )}
       {...rest}
