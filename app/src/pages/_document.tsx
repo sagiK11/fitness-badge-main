@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="heb" data-theme="winter" dir="rtl">
       <Head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
