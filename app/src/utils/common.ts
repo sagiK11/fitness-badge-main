@@ -1,4 +1,6 @@
 import { YearOfStudy } from "@/models";
+import { twMerge } from "tailwind-merge";
+import baseClassNames from "classnames";
 
 const now = new Date();
 export const getYearOfStudyByCurrentDate = (yearsOfStudy: YearOfStudy[]) => {
@@ -9,3 +11,10 @@ export const getYearOfStudyByCurrentDate = (yearsOfStudy: YearOfStudy[]) => {
   }
   throw new Error("could not find year of study");
 };
+
+/**
+ * Encapsulation of classnames with tailwind-merge
+ *  */
+export function cls(...inputs: Parameters<typeof baseClassNames>) {
+  return twMerge(baseClassNames(inputs));
+}

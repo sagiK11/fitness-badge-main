@@ -29,31 +29,26 @@ export function HomeView() {
         <Container className="gap-4 lg:gap-6">
           <Breadcrumbs items={[{ label: "בית", href: routesTree().home }]} />
 
-          <Typography className="text-3xl">שלום {user.firstName} </Typography>
+          <Typography className="text-2xl md:text-3xl px-3 md:px-0 pt-3">
+            שלום {user.firstName}{" "}
+          </Typography>
 
           <Card section>
             <CardTitle>פרטי בית ספר</CardTitle>
             <CardBody>
               <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-accent">שם</Typography>
-                  <Typography bold>{user.school?.name}</Typography>
-                </FlexBox>
+                <NameValueGroup name="שם" value={user.school?.name} />
 
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-accent">תאריך יצירה</Typography>
-                  <Typography bold>
-                    {formatDate(user.school?.createdAt)}
-                  </Typography>
-                </FlexBox>
-                <FlexBox className="flex-col md:gap-1">
-                  <Typography className="text-accent">
-                    תאריך עדכון אחרון
-                  </Typography>
-                  <Typography bold>
-                    {formatDate(user.school?.updatedAt)}
-                  </Typography>
-                </FlexBox>
+                <NameValueGroup
+                  name="תאריך יצירה"
+                  value={formatDate(user.school?.createdAt)}
+                  classNames={{ holder: "hidden md:flex" }}
+                />
+
+                <NameValueGroup
+                  name="תאריך עדכון אחרון"
+                  value={formatDate(user.school?.updatedAt)}
+                />
               </Grid>
             </CardBody>
           </Card>

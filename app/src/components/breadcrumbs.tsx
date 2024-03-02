@@ -11,8 +11,9 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+  if (!Array.isArray(items) || items.length < 2) return null;
   return (
-    <div className={classNames("breadcrumbs", className)}>
+    <div className={classNames("breadcrumbs py-0 px-3 md:px-0", className)}>
       <ul className={classNames("flex gap-1", className)}>
         {items.map((item, index, list) => {
           const isLast = index === list.length - 1;
