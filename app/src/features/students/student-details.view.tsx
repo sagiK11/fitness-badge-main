@@ -17,11 +17,11 @@ import {
 import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
-import { formatName, formatDate } from "@/utils";
+import { formatName, formatDate, formatMeasureUnit } from "@/utils";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import React from "react";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineMail } from "react-icons/ai";
 
 export function StudentDetailsViewView() {
   const { student, availableTestsOptions, addStudentTest } = useStudent();
@@ -29,6 +29,7 @@ export function StudentDetailsViewView() {
   const { currentYearOfStudy } = useYearOfStudy();
   const { classroom } = useClassroom();
   const router = useRouter();
+  const MINIMUM_GRADE = 30;
 
   const [testCategoryId, setTestCategoryId] = React.useState<string>();
 
@@ -38,6 +39,24 @@ export function StudentDetailsViewView() {
   }).classroomDetails;
 
   if (!student) return null;
+
+  const emailUrl = () => {
+    const escape = (str: string) => str.replaceAll("\n", "%0D%0A");
+
+    const subject = `ציוני אות הכושר`;
+    let body = `שלום ${formatName(student)} ציוני אות הכושר שלך הם:\n`;
+
+    student.tests.forEach((test, i) => {
+      const { category, score, grade } = test;
+      if (grade < MINIMUM_GRADE) return;
+
+      const measureUnit = formatMeasureUnit(category.measureUnit);
+      body += `${i + 1}. ${category.name}:\n`;
+      body += `תוצאה: ${score} (${measureUnit}), ציון: ${grade}\n`;
+    });
+
+    return escape(`mailto:${student.email}?subject=${subject}&body=${body}`);
+  };
 
   return (
     <ViewWrapper title="Student Details">
@@ -50,10 +69,6 @@ export function StudentDetailsViewView() {
               { label: formatName(student) },
             ]}
           />
-          <FlexBox className="flex-col md:gap-1">
-            <Typography className="text-primary font-semibold">כיתה</Typography>
-            <Typography bold>{classroom?.name}</Typography>
-          </FlexBox>
 
           <Card section>
             <CardTitle>פרטי התלמיד</CardTitle>
@@ -183,7 +198,7 @@ export function StudentDetailsViewView() {
             </Card>
           )}
 
-          <FlexBox className="px-3 lg:px-0">
+          <FlexBox className="px-3 lg:px-0 justify-between">
             <Button
               className="btn-outline btn-primary btn-sm lg:btn-md"
               iconStart={AiOutlineArrowRight}
@@ -191,6 +206,16 @@ export function StudentDetailsViewView() {
             >
               חזרה
             </Button>
+
+            {student.email && (
+              <Button
+                className="btn btn-success btn-outline btn-sm lg:btn-md"
+                iconEnd={AiOutlineMail}
+                href={emailUrl()}
+              >
+                שלח תוצאות באימייל
+              </Button>
+            )}
           </FlexBox>
         </Container>
       </RootLayout>
