@@ -40,7 +40,6 @@ services:
       - 9230:9230 # debug port
     volumes:
       - ./api/:/usr/src/app/
-      - /usr/src/app/node_modules
 
   app:
     build:

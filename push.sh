@@ -1,17 +1,17 @@
 #!/bin/bash
 
-TAG=$1
+TAG="${1:-latest}"
 USERNAME=sagik11
 REPO=fitness-badge-main
 IDENTIFIER=$USERNAME/$REPO
-SERVICES=("postgres" "api" "pgadmin" "admin" "app")
+SERVICES=("api" "app" "admin")
 
 
 for service in "${SERVICES[@]}"
 do
     cd "$service"
     echo "building, tagging and pushing $service..."
-    docker build -t $IDENTIFIER:$service-$TAG -f Dockerfile.cloud
+    docker build --platform=linux/amd64 -t $IDENTIFIER:$service-$TAG .
     docker push $IDENTIFIER:$service-$TAG 
     cd ..
 done
