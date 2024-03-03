@@ -17,7 +17,7 @@ export function AuthView() {
       <RootLayout>
         <Container maxWidth="512px" className="justify-center mt-[50px] ">
           <Card>
-            <CardTitle className="justify-center">Log in with:</CardTitle>
+            <CardTitle className="justify-center">התחבר עם</CardTitle>
             <CardBody className="items-center text-center">
               <Button className="btn-ghost" onClick={() => signIn()}>
                 <FcGoogle size={30} />

@@ -1,5 +1,5 @@
 import { WrapperProps } from "@/types";
-import classNames from "classnames";
+import { cls } from "@/utils";
 
 interface CardProps
   extends WrapperProps,
@@ -18,11 +18,7 @@ export function Card({
   const Component = as;
   return (
     <Component
-      className={classNames(
-        "card shadow-md",
-        { "divide-y ": section },
-        className
-      )}
+      className={cls("card shadow-md", { "divide-y ": section }, className)}
       {...rest}
     >
       {children}

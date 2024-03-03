@@ -19,7 +19,7 @@ export function Alert({ variant = "info", children }: AlertProps) {
         "alert-info": variant === "info",
       })}
     >
-      <div>
+      <div className="flex gap-4 items-center">
         <AlertIcon variant={variant} />
         <span>{children}</span>
       </div>

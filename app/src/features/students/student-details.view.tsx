@@ -32,11 +32,20 @@ export function StudentDetailsViewView() {
   const MINIMUM_GRADE = 30;
 
   const [testCategoryId, setTestCategoryId] = React.useState<string>();
+  const [highlighted, setHighlighted] = React.useState<string | null>(null);
 
   const backUrl = routesTree({
     yearOfStudyId: currentYearOfStudy.id,
     classroomId: router.query.classroomId as string,
   }).classroomDetails;
+
+  React.useEffect(() => {
+    if (updateTestResult.isSuccess) {
+      setHighlighted(updateTestResult.data.id);
+      const timeoutId = setTimeout(() => setHighlighted(null), 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [updateTestResult]);
 
   if (!student) return null;
 
@@ -127,6 +136,7 @@ export function StudentDetailsViewView() {
                 {student.tests.map((test) => {
                   const { originalArgs, isLoading } = updateTestResult;
                   const isUpdating = originalArgs?.id === test.id && isLoading;
+                  const hasScore = test.createdAt !== test.updatedAt;
                   return (
                     <CardBody
                       key={test.id}
@@ -142,7 +152,7 @@ export function StudentDetailsViewView() {
                         <FlexBox className="flex-col md:gap-1">
                           <NumberFormatInput
                             debounceTime={1000}
-                            defaultValue={test.score}
+                            defaultValue={hasScore ? test.score : ""}
                             className="input-bordered input-sm md:input-md"
                             onChange={(e) =>
                               updateTest({
@@ -152,17 +162,20 @@ export function StudentDetailsViewView() {
                                 categoryId: test.categoryId,
                               })
                             }
-                            disabled={isUpdating}
                           />
                         </FlexBox>
 
                         <FlexBox className="flex-col md:gap-1">
                           <Typography
-                            className={classNames("text-info-content", {
-                              "opacity-60": isUpdating,
-                            })}
+                            className={classNames(
+                              "text-info-content transition-all duration-200",
+                              {
+                                "opacity-60": isUpdating,
+                                "text-green-500": highlighted === test.id,
+                              }
+                            )}
                           >
-                            {test.grade}
+                            {hasScore ? test.grade : "-"}
                           </Typography>
                         </FlexBox>
                       </Grid>
