@@ -18,16 +18,14 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
         {items.map((item, index, list) => {
           const isLast = index === list.length - 1;
           return (
-            <li key={item.label} className="flex items-center gap-1">
+            <li key={index} className="flex items-center gap-1">
               {!isLast && item.href ? (
-                <>
-                  <Link
-                    href={item.href}
-                    className={classNames("btn btn-link px-0 hover:opacity-60")}
-                  >
-                    {item.label}
-                  </Link>
-                </>
+                <Link
+                  href={item.href}
+                  className={classNames("btn btn-link px-0 hover:opacity-60")}
+                >
+                  {item.label}
+                </Link>
               ) : (
                 <span className="font-semibold">{item.label}</span>
               )}

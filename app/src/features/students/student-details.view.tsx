@@ -15,10 +15,9 @@ import {
   NameValueGroup,
 } from "@/components";
 import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
-import { GenderEnum } from "@/models";
+import { GenderEnum, Test } from "@/models";
 import { routesTree } from "@/routesTree";
-import { formatName, formatDate, formatMeasureUnit } from "@/utils";
-import classNames from "classnames";
+import { formatName, formatDate, formatMeasureUnit, cls } from "@/utils";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineArrowRight, AiOutlineMail } from "react-icons/ai";
@@ -33,6 +32,10 @@ export function StudentDetailsViewView() {
 
   const [testCategoryId, setTestCategoryId] = React.useState<string>();
   const [highlighted, setHighlighted] = React.useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<{
+    id: string;
+    msg: string;
+  } | null>(null);
 
   const backUrl = routesTree({
     yearOfStudyId: currentYearOfStudy.id,
@@ -65,6 +68,25 @@ export function StudentDetailsViewView() {
     });
 
     return escape(`mailto:${student.email}?subject=${subject}&body=${body}`);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, test: Test) => {
+    const score = parseFloat(e.target.value);
+    if (typeof score !== "number" || isNaN(score)) {
+      setErrorMessage({
+        id: test.id,
+        msg: "אנא הכנס נתון תקין",
+      });
+      return;
+    }
+
+    setErrorMessage(null);
+    updateTest({
+      id: test.id,
+      score,
+      gender: student.gender,
+      categoryId: test.categoryId,
+    });
   };
 
   return (
@@ -154,20 +176,19 @@ export function StudentDetailsViewView() {
                             debounceTime={1000}
                             defaultValue={hasScore ? test.score : ""}
                             className="input-bordered input-sm md:input-md"
-                            onChange={(e) =>
-                              updateTest({
-                                id: test.id,
-                                score: parseFloat(e.target.value),
-                                gender: student.gender,
-                                categoryId: test.categoryId,
-                              })
-                            }
+                            onChange={(e) => handleChange(e, test)}
                           />
+
+                          {errorMessage?.id === test.id && (
+                            <span className="text-red-500 text-xs">
+                              אנא הכנס נתון תקין
+                            </span>
+                          )}
                         </FlexBox>
 
                         <FlexBox className="flex-col md:gap-1">
                           <Typography
-                            className={classNames(
+                            className={cls(
                               "text-info-content transition-all duration-200",
                               {
                                 "opacity-60": isUpdating,

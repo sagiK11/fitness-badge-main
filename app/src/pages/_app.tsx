@@ -17,10 +17,13 @@ export default function App({
       <Provider store={store}>
         <Component {...props} />
         <ToastContainer
+          position="top-center"
           hideProgressBar
           newestOnTop
           closeButton={false}
           transition={Slide}
+          toastClassName="!bg-transparent !shadow-none !relative !mb-3 !p-0"
+          bodyClassName="!p-0"
           rtl
         />
       </Provider>
