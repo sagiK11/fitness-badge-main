@@ -17,7 +17,7 @@ export function getServerSidePropsWrapper(callback: Callback) {
   return wrapper.getServerSideProps((store) => async (context) => {
     const session = await getSession(context);
     // Extra safety check, the auth is handled in middleware.ts
-    if (!session) {
+    if (!session || session.error === "RefreshAccessTokenError") {
       return {
         redirect: {
           destination: routesTree().auth,

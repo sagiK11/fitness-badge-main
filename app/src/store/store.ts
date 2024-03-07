@@ -1,18 +1,22 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { api } from "./api";
-import { createWrapper } from "next-redux-wrapper";
+import { Context, createWrapper } from "next-redux-wrapper";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
 });
 
-export const store = () =>
+export const store = (ctx: Context) =>
   configureStore({
     reducer: rootReducer,
     // Adding the api middleware enables caching, invalidation, polling,
     // and other useful features of `rtk-query`.
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+      getDefaultMiddleware({
+        thunk: {
+          extraArgument: ctx,
+        },
+      }).concat(api.middleware),
   });
 
 export type RootState = ReturnType<typeof rootReducer>;
