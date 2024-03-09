@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Put, Query } from '@nestjs/common';
+import { Controller, Get, Param, Put, Query, UseGuards } from '@nestjs/common';
 
 import {
   ApiCreatedResponse,
@@ -14,7 +14,6 @@ import {
   Classroom,
   Student,
   Teacher,
-  TeacherEnrollment,
   TestCategory,
   YearOfStudy,
 } from '@prisma/client';
@@ -22,9 +21,11 @@ import { StudentDto } from '../students/dto/student.dto';
 import { ClassRoomDto } from '../classrooms/dto/classroom.dto';
 import { TestDto } from '../tests/dto/test.dto';
 import { YearsOfStudyService } from './years-of-study.service';
+import { AuthGuard } from '@src/guards/auth.guard';
 
 @ApiTags('years-of-study')
 @Controller({ path: 'years-of-study', version: '1' })
+@UseGuards(AuthGuard)
 export class YearsOfStudyController {
   constructor(
     private readonly classroomService: ClassroomsService,

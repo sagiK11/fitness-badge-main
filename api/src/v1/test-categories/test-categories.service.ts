@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { CategoryScoreResult, Gender, TestCategory } from '@prisma/client';
+import { AuthGuard } from '@src/guards/auth.guard';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { Result } from '@src/utils/result/result';
 import { ResultService } from '@src/utils/result/result.service';
 import { parse } from 'csv-parse/sync';
 
 @Injectable()
+@UseGuards(AuthGuard)
 export class TestCategoriesService {
   private readonly LOWEST_GRADE = 30;
 

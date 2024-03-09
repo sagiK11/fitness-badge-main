@@ -1,12 +1,14 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { SchoolsService } from './schools.service';
 import { School, Teacher } from '@prisma/client';
 import { SchoolDto } from './dto/school.dto';
 import { TeacherDto } from '../teachers/dto/teacher.dto';
+import { AuthGuard } from '@src/guards/auth.guard';
 
 @ApiTags('schools')
 @Controller({ path: 'schools', version: '1' })
+@UseGuards(AuthGuard)
 export class SchoolsController {
   constructor(private readonly schoolService: SchoolsService) {}
 

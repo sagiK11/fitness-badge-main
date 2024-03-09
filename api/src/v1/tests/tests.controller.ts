@@ -1,11 +1,13 @@
-import { Body, Controller, Put } from '@nestjs/common';
+import { Body, Controller, Put, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Test } from '@prisma/client';
 import { TestsService } from './tests.service';
 import { UpdateTestDto } from './dto/test.dto';
+import { AuthGuard } from '@src/guards/auth.guard';
 
 @ApiTags('tests')
 @Controller({ path: 'tests', version: '1' })
+@UseGuards(AuthGuard)
 export class TestsController {
   constructor(private readonly testService: TestsService) {}
 

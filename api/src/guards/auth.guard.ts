@@ -1,34 +1,35 @@
 import {
+  CanActivate,
+  ExecutionContext,
   Injectable,
-  NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
-import hkdf from '@panva/hkdf';
 import { Admin, Student, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { Role, roles } from '@src/utils';
-import { Request, Response, NextFunction } from 'express';
-import { jwtDecrypt } from 'jose';
+import { Request } from 'express';
 import { JwtPayload as BaseJwtPayload, jwtDecode } from 'jwt-decode';
 
 type JwtPayload = BaseJwtPayload & { email: string };
+type User = Admin | Teacher | Student;
 
 @Injectable()
-export class UserMiddleware implements NestMiddleware {
+export class AuthGuard implements CanActivate {
   constructor(private readonly prisma: PrismaService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const req = context.switchToHttp().getRequest();
     const role = this.assertRole(req) as Role;
 
-    const assert: Record<Role, () => Promise<Admin | Teacher | Student>> = {
+    const assert: Record<Role, () => Promise<User>> = {
       admin: () => this.assertAdmin(req),
       teacher: () => this.assertTeacher(req),
       student: () => this.assertStudent(req),
     };
 
-    await assert[role]();
+    const result = await assert[role]();
 
-    next();
+    return Boolean(result?.id);
   }
 
   private async assertAdmin(req: Request) {
@@ -63,7 +64,10 @@ export class UserMiddleware implements NestMiddleware {
     return token;
   }
 
-  private async assertUser<T>(role: string, email: string): Promise<T> {
+  private async assertUser<T extends User>(
+    role: string,
+    email: string,
+  ): Promise<T> {
     const user = await this.getUser<T>(role, email);
     if (!user) {
       throw new UnauthorizedException('Invalid user');
@@ -96,11 +100,6 @@ export class UserMiddleware implements NestMiddleware {
     let payload: { email: string } & JwtPayload = null;
     if (req.headers.authorization) {
       payload = this.decode(req.headers.authorization.slice(7));
-    } else if (req.headers.cookie) {
-      const role = this.getRole(req) as Role;
-      const sessionToken = this.getSessionToken(req.headers.cookie);
-      const token = await this.decryptNextAuthToken(role, sessionToken);
-      payload = this.decode(token);
     }
 
     if (!payload?.email) {
@@ -109,7 +108,10 @@ export class UserMiddleware implements NestMiddleware {
     return payload;
   }
 
-  private async getUser<T>(role: string, email: string): Promise<T> {
+  private async getUser<T extends User>(
+    role: string,
+    email: string,
+  ): Promise<T> {
     const user = await this.prisma[role].findUnique({
       where: {
         email,
@@ -122,44 +124,7 @@ export class UserMiddleware implements NestMiddleware {
     return user;
   }
 
-  private async decryptNextAuthToken(role: Role, encryptedToken: string) {
-    const secret =
-      role === 'admin'
-        ? process.env.ADMIN_NEXTAUTH_SECRET
-        : process.env.APP_NEXTAUTH_SECRET;
-
-    const encryptionSecret = await hkdf(
-      'sha256',
-      secret,
-      '',
-      'NextAuth.js Generated Encryption Key',
-      32,
-    );
-
-    const { payload } = await jwtDecrypt(encryptedToken, encryptionSecret, {
-      clockTolerance: 15,
-    });
-
-    return payload.id_token as string;
-  }
-
   private decode(token: string) {
     return jwtDecode<JwtPayload>(token);
-  }
-
-  private getSessionToken(cookies: string) {
-    return this.parseCookie(cookies)['next-auth.session-token'];
-  }
-
-  private parseCookie(rawCookies: string) {
-    const cookies: Record<string, string> = {};
-    const cookieParts = rawCookies.split(';');
-
-    for (const cookie of cookieParts) {
-      const [key, value] = cookie.trim().split('=');
-      cookies[key] = value;
-    }
-
-    return cookies;
   }
 }

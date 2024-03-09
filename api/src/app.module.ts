@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { V1Module } from './v1/v1.module';
 import { StudentsModule } from './v1/students/students.module';
-import { UserMiddleware } from './middleware/user.middleware';
+import { RequestLogsMiddleware } from './middleware/request-logs.middleware';
 
 @Module({
   imports: [PrismaModule, V1Module, StudentsModule],
@@ -13,6 +13,6 @@ import { UserMiddleware } from './middleware/user.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserMiddleware).forRoutes('*');
+    consumer.apply(RequestLogsMiddleware).forRoutes('*');
   }
 }

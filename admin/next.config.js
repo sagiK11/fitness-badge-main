@@ -11,7 +11,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     NEXT_PUBLIC_API_ENDPOINT: process.env.NEXT_PUBLIC_API_ENDPOINT,
-    X_API_KEY: process.env.X_API_KEY,
+    NEXT_PUBLIC_X_API_KEY: process.env.NEXT_PUBLIC_X_API_KEY,
   },
 };
 module.exports = nextConfig;

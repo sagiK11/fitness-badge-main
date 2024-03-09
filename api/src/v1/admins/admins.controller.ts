@@ -1,11 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AdminDto } from './dto/admin.dto';
 import { Admin } from '@prisma/client';
 import { AdminsService } from './admins.service';
+import { AuthGuard } from '@src/guards/auth.guard';
 
 @ApiTags('admins')
 @Controller({ path: 'admins', version: '1' })
+@UseGuards(AuthGuard)
 export class AdminsController {
   constructor(private readonly adminService: AdminsService) {}
 

@@ -5,6 +5,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 
@@ -14,9 +15,11 @@ import { Classroom, Student } from '@prisma/client';
 import { ClassRoomDto } from './dto/classroom.dto';
 import { StudentDto } from '../students/dto/student.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@src/guards/auth.guard';
 
 @ApiTags('classrooms')
 @Controller({ path: 'classrooms', version: '1' })
+@UseGuards(AuthGuard)
 export class ClassroomsController {
   constructor(private readonly classroomsService: ClassroomsService) {}
 

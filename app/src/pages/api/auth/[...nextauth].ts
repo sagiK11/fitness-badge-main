@@ -65,7 +65,7 @@ export const authOptions: AuthOptions = {
       }
     },
     async session({ session, token }: any) {
-      session.access_token = token.access_token;
+      session.id_token = token.id_token;
       session.user = token.user;
       session.error = token.error;
       return session;
