@@ -1,2 +1,2 @@
+export * from "./create-teacher-modal";
 export * from "./teachers-card";
-export * from "./teacher-modal";

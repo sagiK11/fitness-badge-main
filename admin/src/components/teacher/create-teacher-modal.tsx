@@ -12,8 +12,8 @@ type TeacherModalProps = {
   schoolId: string;
 };
 
-export function TeacherModal({ schoolId }: TeacherModalProps) {
-  const id = "teacher-modal";
+export function CreateTeacherModal({ schoolId }: TeacherModalProps) {
+  const id = "create-teacher-modal";
   const { create } = useCreateTeacher({
     onSuccess: () => document.getElementById(id)?.click(),
   });
@@ -30,7 +30,7 @@ export function TeacherModal({ schoolId }: TeacherModalProps) {
 
   return (
     <>
-      <Button as="label" className="btn-secondary btn-sm" htmlFor={id}>
+      <Button as="label" className="btn-primary btn-sm" htmlFor={id}>
         Add Teacher
       </Button>
 
