@@ -7,13 +7,21 @@ import {
 } from '@prisma/client';
 import { parse } from 'csv-parse/sync';
 
-type AdminsSeed = {
+type AdminSeed = {
   email: Admin['email'];
   firstName: Admin['firstName'];
   lastName: Admin['lastName'];
 };
-const admins: AdminsSeed[] = [
+const admins: AdminSeed[] = [
   { email: 'sagi1193@gmail.com', firstName: 'Sagi', lastName: 'Korzack' },
+];
+type TeacherSeed = {
+  email: Admin['email'];
+  firstName: Admin['firstName'];
+  lastName: Admin['lastName'];
+};
+const teachers: TeacherSeed[] = [
+  { email: 'sagi1193@gmail.com', firstName: 'שגיא', lastName: 'קורזק' },
 ];
 
 type SchoolSeed = {
@@ -123,7 +131,7 @@ const categories: CategoriesSeed[] = [
     fileName: 'aerobic_grades',
   },
   {
-    name: 'כוביות זריזות',
+    name: 'קוביות זריזות',
     measureUnit: 'SECONDS',
     alias: 'cubes-quickness',
     algoOperator: 'gte',
@@ -261,6 +269,21 @@ async function main() {
 
     await prisma.categoryScoreResult.createMany({
       data: cleaned,
+    });
+  }
+
+  const school = await prisma.school.findUnique({
+    where: { name: schools[0].name },
+  });
+
+  for (const teacher of teachers) {
+    await prisma.teacher.create({
+      data: {
+        email: teacher.email,
+        firstName: teacher.firstName,
+        lastName: teacher.lastName,
+        schoolId: school.id,
+      },
     });
   }
 }
