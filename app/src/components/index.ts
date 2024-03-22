@@ -1,4 +1,4 @@
-export * from "./students-excel-file-example";
+export * from "./dialog";
 export * from "./alert";
 export * from "./breadcrumbs";
 export * from "./button";
@@ -18,6 +18,7 @@ export * from "./name-value-group";
 export * from "./number-format-input";
 export * from "./select";
 export * from "./seo-metadata";
+export * from "./students-excel-file-example";
 export * from "./tab";
 export * from "./tabs";
 export * from "./typography";

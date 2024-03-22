@@ -1,16 +1,15 @@
 import { useAuth, useYearOfStudy } from "@/hooks";
 import { routesTree } from "@/routesTree";
-import { useRouter } from "next/router";
 import { Button } from "../button";
-import { Select } from "../select";
+import { Typography } from "../typography";
+import { FlexBox } from "../flexbox";
 
 export function MainHeader() {
   const { signOut, user } = useAuth();
-  const { yearOfStudyOptions } = useYearOfStudy();
-  const router = useRouter();
+  const { yearOfStudyOptions, currentYearOfStudy } = useYearOfStudy();
 
   return (
-    <header className="navbar shadow-sm bg-primary text-white fixed top-0 z-10">
+    <header className="navbar shadow-sm bg-primary text-white sticky top-0 z-10">
       <div className="navbar-start">
         {user?.email && (
           <div className="dropdown">
@@ -50,16 +49,44 @@ export function MainHeader() {
         </Button>
       </div>
       <div className="navbar-end">
-        <Select
-          options={yearOfStudyOptions}
-          className="select-ghost max-w-[250px] px-1 lg:px-3"
-          placeholder="שנת לימוד (ברירת מחדל הנוכחית)"
-          onChange={(e) =>
-            router.push(
-              routesTree({ yearOfStudyId: e.target.value }).yearOfStudy
-            )
-          }
-        />
+        <FlexBox className="items-center shrink-0">
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-sm md:btn-md">
+              <Typography className="font-bold">
+                {currentYearOfStudy.yearName}
+              </Typography>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
+            >
+              {yearOfStudyOptions.map((yearOfStudy) => {
+                return (
+                  <li key={yearOfStudy.value}>
+                    <Button
+                      href={
+                        routesTree({ yearOfStudyId: yearOfStudy.value })
+                          .yearOfStudy
+                      }
+                      onClick={() => {
+                        const el = document.activeElement;
+                        if (
+                          el &&
+                          "blur" in el &&
+                          typeof el.blur === "function"
+                        ) {
+                          el.blur();
+                        }
+                      }}
+                    >
+                      {yearOfStudy.label}
+                    </Button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </FlexBox>
       </div>
     </header>
   );

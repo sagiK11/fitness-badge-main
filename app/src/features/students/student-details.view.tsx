@@ -13,6 +13,8 @@ import {
   Select,
   Breadcrumbs,
   NameValueGroup,
+  Dialog,
+  showModal,
 } from "@/components";
 import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
 import { GenderEnum, Student, Test } from "@/models";
@@ -221,12 +223,32 @@ export function StudentDetailsViewView() {
                         <FlexBox>
                           <Button
                             className="btn-error btn-sm btn-outline"
-                            onClick={() => removeTest(test.id)}
+                            onClick={() => showModal(test.id)}
                           >
                             מחק
                           </Button>
                         </FlexBox>
                       </Grid>
+                      <Dialog id={test.id}>
+                        <Typography as="h2" className="font-bold text-lg">
+                          מחיקת מבחן
+                        </Typography>
+                        <Typography className="py-4" as="p">
+                          האם אתה בטוח שברצונך למחוק מבחן זה?
+                        </Typography>
+                        <div className="modal-action justify-between">
+                          <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <Button>התחרטתי, סגור</Button>
+                          </form>
+                          <Button
+                            className="btn-error"
+                            onClick={() => removeTest(test.id)}
+                          >
+                            מחק
+                          </Button>
+                        </div>
+                      </Dialog>
                     </CardBody>
                   );
                 })}

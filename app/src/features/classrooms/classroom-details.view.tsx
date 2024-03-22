@@ -17,7 +17,7 @@ import {
 } from "@/components";
 import { useClassroom, useUser } from "@/hooks";
 import { useAvailableClassroomStudents } from "@/hooks/use-available-classroom-students";
-import { GenderEnum, Student } from "@/models";
+import { GenderEnum } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate } from "@/utils";
 import { useRouter } from "next/router";
@@ -99,7 +99,17 @@ export function ClassroomDetailsView() {
             )}
 
             {classroom?.studentEnrollments?.map((enrollment) => (
-              <CardBody key={enrollment.id} hover>
+              <CardBody
+                key={enrollment.id}
+                hover
+                href={
+                  routesTree({
+                    yearOfStudyId: yearOfStudyId as string,
+                    classroomId: classroomId as string,
+                    studentId: enrollment.student.id,
+                  }).studentDetails
+                }
+              >
                 <Grid className="grid-cols-2 md:grid-cols-5  gap-2 lg:gap-3 md:items-center">
                   <NameValueGroup
                     name="שם"
@@ -123,15 +133,8 @@ export function ClassroomDetailsView() {
 
                   <FlexBox className="flex-col md:gap-1">
                     <Button
-                      className="btn-secondary btn-sm self-start"
+                      className="btn-secondary btn-sm self-start hidden md:inline-flex"
                       iconEnd={AiOutlineArrowLeft}
-                      href={
-                        routesTree({
-                          yearOfStudyId: yearOfStudyId as string,
-                          classroomId: classroomId as string,
-                          studentId: enrollment.student.id,
-                        }).studentDetails
-                      }
                     >
                       ערוך
                     </Button>

@@ -108,7 +108,16 @@ function MyClassroomCard({ gender }: { gender: GenderEnum }) {
       </CardTitle>
 
       {items?.map((classroom) => (
-        <CardBody key={classroom.id} hover>
+        <CardBody
+          key={classroom.id}
+          hover
+          href={
+            routesTree({
+              yearOfStudyId: currentYearOfStudy?.id,
+              classroomId: classroom.id,
+            }).classroomDetails
+          }
+        >
           <Grid className="grid-cols-1 md:grid-cols-6  gap-2 lg:gap-3 md:items-center">
             <NameValueGroup name="שם" value={classroom.name} />
 
@@ -129,14 +138,8 @@ function MyClassroomCard({ gender }: { gender: GenderEnum }) {
 
             <FlexBox className="flex-col md:gap-1 col-span-2">
               <Button
-                className="btn-secondary btn-sm self-start md:self-end"
+                className="btn-secondary btn-sm self-end hidden md:inline-flex"
                 iconEnd={AiOutlineArrowLeft}
-                href={
-                  routesTree({
-                    yearOfStudyId: currentYearOfStudy?.id,
-                    classroomId: classroom.id,
-                  }).classroomDetails
-                }
               >
                 פרטים נוספים
               </Button>

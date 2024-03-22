@@ -8,11 +8,9 @@ interface RootLayoutProps {
 
 export function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="min-h-screen bg-base-100 flex flex-col justify-between">
+    <div className="min-h-screen bg-base-100 flex flex-col">
       <MainHeader />
-      <main className="h-full mt-[62px] lg:mt-[92px] mb-4 lg:mb-8">
-        {children}
-      </main>
+      <main className="h-full mt-4 mb-8 lg:mb-16 flex-1">{children}</main>
     </div>
   );
 }
