@@ -13,7 +13,7 @@ describe('TestCategoriesService', () => {
       findUnique: () =>
         Promise.resolve({
           id: '09ea4e2f-d2ed-481e-8f6b-ef01103ad4cf',
-          name: 'כוביות זריזות',
+          name: 'קוביות זריזות',
           alias: 'cubes-quickness',
         }),
     },

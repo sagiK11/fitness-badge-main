@@ -87,8 +87,9 @@ export class StudentsService {
   async findStudentAvailableTests(data: {
     yearOfStudyId: string;
     studentId: string;
+    classroomId: string;
   }): Promise<Result<TestCategory[]>> {
-    const { studentId, yearOfStudyId } = data;
+    const { studentId, yearOfStudyId, classroomId } = data;
     try {
       const tests = await this.prisma.test.findMany({
         where: {
@@ -98,6 +99,12 @@ export class StudentsService {
           yearOfStudyId: {
             equals: yearOfStudyId,
           },
+          classroomId: {
+            equals: classroomId,
+          },
+        },
+        include: {
+          category: true,
         },
       });
 

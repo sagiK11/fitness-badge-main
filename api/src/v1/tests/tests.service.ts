@@ -51,4 +51,17 @@ export class TestsService {
       return this.resultService.handleError(e);
     }
   }
+
+  async removeTest(testId: string): Promise<Result<Test>> {
+    try {
+      const resultData = await this.prisma.test.delete({
+        where: {
+          id: testId,
+        },
+      });
+      return this.resultService.handleSuccess(resultData);
+    } catch (e) {
+      return this.resultService.handleError(e);
+    }
+  }
 }

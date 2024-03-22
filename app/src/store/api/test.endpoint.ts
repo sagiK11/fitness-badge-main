@@ -20,5 +20,12 @@ export const testEndpoints = api.injectEndpoints({
       }),
       invalidatesTags: ["classroom-student"],
     }),
+    removeTest: builder.mutation<Test, string>({
+      query: (testId) => ({
+        url: `/tests/${testId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["classroom-student", "student-available-tests"],
+    }),
   }),
 });

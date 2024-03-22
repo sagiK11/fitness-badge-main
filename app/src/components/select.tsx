@@ -27,7 +27,7 @@ export const Select = React.forwardRef(
         ref={ref}
       >
         {placeholder && (
-          <option disabled value={placeholder}>
+          <option hidden value={placeholder}>
             {placeholder}
           </option>
         )}

@@ -47,12 +47,9 @@ export const yearOfStudyEndpoints = api.injectEndpoints({
       }),
       invalidatesTags: ["teacher-classroom", "classroom-available-students"],
     }),
-    findStudentAvailableTests: builder.query<
-      TestCategory[],
-      Omit<StudentParams, "classroomId">
-    >({
-      query: ({ yearOfStudyId, studentId }) => ({
-        url: `/years-of-study/${yearOfStudyId}/students/${studentId}/available-tests`,
+    findStudentAvailableTests: builder.query<TestCategory[], StudentParams>({
+      query: ({ yearOfStudyId, studentId, classroomId }) => ({
+        url: `/years-of-study/${yearOfStudyId}/classrooms/${classroomId}/students/${studentId}/available-tests`,
       }),
       providesTags: ["student-available-tests"],
     }),

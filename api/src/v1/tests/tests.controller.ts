@@ -1,8 +1,20 @@
-import { Body, Controller, Put, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Test } from '@prisma/client';
 import { TestsService } from './tests.service';
-import { UpdateTestDto } from './dto/test.dto';
+import { TestDto, UpdateTestDto } from './dto/test.dto';
 import { AuthGuard } from '@src/guards/auth.guard';
 
 @ApiTags('tests')
@@ -24,6 +36,15 @@ export class TestsController {
   @ApiParam({ name: 'testId', required: true })
   async updateTest(@Body() payload: UpdateTestDto): Promise<Test> {
     const result = await this.testService.updateTest(payload);
+    if (!result.success) throw result.httpException;
+    return result.data;
+  }
+
+  @Delete('/:testId')
+  @ApiResponse({ type: TestDto })
+  @ApiParam({ name: 'testId', required: true })
+  async removeTest(@Param('testId') testId: string): Promise<Test> {
+    const result = await this.testService.removeTest(testId);
     if (!result.success) throw result.httpException;
     return result.data;
   }

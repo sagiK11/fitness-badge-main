@@ -23,6 +23,7 @@ export function useStudent() {
     yearOfStudyEndpoints.useFindStudentAvailableTestsQuery({
       studentId,
       yearOfStudyId,
+      classroomId,
     });
 
   const availableTestsOptions: Option[] = React.useMemo(() => {

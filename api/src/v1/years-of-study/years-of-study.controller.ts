@@ -151,17 +151,19 @@ export class YearsOfStudyController {
     return result.data;
   }
 
-  @Get('/:yearId/students/:studentId/available-tests')
+  @Get('/:yearId/classrooms/:classId/students/:studentId/available-tests')
   @ApiOkResponse({ type: TestDto })
   @ApiParam({ name: 'yearId', required: true })
   @ApiParam({ name: 'studentId', required: true })
   async findStudentAvailableTests(
     @Param('yearId') yearOfStudyId: string,
     @Param('studentId') studentId: string,
+    @Param('classId') classroomId: string,
   ): Promise<TestCategory[]> {
     const result = await this.studentService.findStudentAvailableTests({
       yearOfStudyId,
       studentId,
+      classroomId,
     });
     if (!result.success) throw result.httpException;
     return result.data;
@@ -172,6 +174,7 @@ export class YearsOfStudyController {
   )
   @ApiCreatedResponse({ type: StudentDto })
   @ApiParam({ name: 'yearId', required: true })
+  @ApiParam({ name: 'classId', required: true })
   @ApiParam({ name: 'studentId', required: true })
   @ApiParam({ name: 'testCategoryId', required: true })
   async addStudentTest(

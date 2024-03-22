@@ -15,7 +15,7 @@ import {
   NameValueGroup,
 } from "@/components";
 import { useClassroom, useStudent, useTests, useYearOfStudy } from "@/hooks";
-import { GenderEnum, Test } from "@/models";
+import { GenderEnum, Student, Test } from "@/models";
 import { routesTree } from "@/routesTree";
 import { formatName, formatDate, formatMeasureUnit, cls } from "@/utils";
 import { useRouter } from "next/router";
@@ -24,7 +24,7 @@ import { AiOutlineArrowRight, AiOutlineMail } from "react-icons/ai";
 
 export function StudentDetailsViewView() {
   const { student, availableTestsOptions, addStudentTest } = useStudent();
-  const { updateTest, updateTestResult } = useTests();
+  const { updateTest, updateTestResult, removeTest } = useTests();
   const { currentYearOfStudy } = useYearOfStudy();
   const { classroom } = useClassroom();
   const router = useRouter();
@@ -66,6 +66,8 @@ export function StudentDetailsViewView() {
       body += `${i + 1}. ${category.name}:\n`;
       body += `תוצאה: ${score} (${measureUnit}), ציון: ${grade}\n`;
     });
+    body += "\n";
+    body += `ציון סופי: ${getAverage()}`;
 
     return escape(`mailto:${student.email}?subject=${subject}&body=${body}`);
   };
@@ -87,6 +89,12 @@ export function StudentDetailsViewView() {
       gender: student.gender,
       categoryId: test.categoryId,
     });
+  };
+
+  const getAverage = () => {
+    const testsWithGrades = student.tests.filter((test) => test.grade >= 30);
+    const sum = testsWithGrades.reduce((acc, test) => acc + test.grade, 0);
+    return Math.round(sum / (testsWithGrades.length || 1));
   };
 
   return (
@@ -116,7 +124,11 @@ export function StudentDetailsViewView() {
 
                 <NameValueGroup name="טלפון" value={student.phone ?? "-"} />
 
-                <NameValueGroup name="אימייל" value={student.email ?? "-"} />
+                <NameValueGroup
+                  classNames={{ holder: "col-span-2 md:col-span-1" }}
+                  name="אימייל"
+                  value={student.email ?? "-"}
+                />
 
                 <NameValueGroup
                   name="תאריך יצירה"
@@ -134,14 +146,14 @@ export function StudentDetailsViewView() {
           <Card section>
             <CardTitle>מבחנים וציונים</CardTitle>
             <CardBody size="none">
-              <Grid className="grid-cols-3 md:grid-cols-5  gap-2 lg:gap-3 md:items-center bg-gray-200 p-4">
-                <FlexBox className="flex-col md:gap-1">
+              <Grid className="grid-cols-9 md:grid-cols-5  gap-2 lg:gap-3 md:items-center bg-gray-200 p-4">
+                <FlexBox className="flex-col md:gap-1 col-span-3 md:col-span-1">
                   <Typography bold className="text-base-content">
                     קטגוריה
                   </Typography>
                 </FlexBox>
 
-                <FlexBox className="flex-col md:gap-1">
+                <FlexBox className="flex-col md:gap-1 col-span-3 md:col-span-1">
                   <Typography bold className="text-base-content">
                     תוצאה
                   </Typography>
@@ -150,6 +162,11 @@ export function StudentDetailsViewView() {
                 <FlexBox className="flex-col md:gap-1">
                   <Typography bold className="text-base-content">
                     ציון
+                  </Typography>
+                </FlexBox>
+                <FlexBox className="flex-col md:gap-1">
+                  <Typography bold className="text-base-content">
+                    פעולות
                   </Typography>
                 </FlexBox>
               </Grid>
@@ -164,14 +181,15 @@ export function StudentDetailsViewView() {
                       key={test.id}
                       className="hover:bg-gray-100 transition-all duration-200"
                     >
-                      <Grid className="grid-cols-3 md:grid-cols-5  gap-4 lg:gap-8 md:items-center ">
-                        <FlexBox className="flex-col md:gap-1">
+                      <Grid className="grid-cols-9 md:grid-cols-5 gap-2 lg:gap-8 md:items-center ">
+                        <FlexBox className="flex-col md:gap-1 col-span-3 md:col-span-1">
                           <Typography className="text-secondary">
-                            {test.category.name}
+                            {test.category.name} (
+                            {formatMeasureUnit(test.category.measureUnit)})
                           </Typography>
                         </FlexBox>
 
-                        <FlexBox className="flex-col md:gap-1">
+                        <FlexBox className="flex-col md:gap-1 col-span-3 md:col-span-1">
                           <NumberFormatInput
                             debounceTime={1000}
                             defaultValue={hasScore ? test.score : ""}
@@ -199,12 +217,28 @@ export function StudentDetailsViewView() {
                             {hasScore ? test.grade : "-"}
                           </Typography>
                         </FlexBox>
+
+                        <FlexBox>
+                          <Button
+                            className="btn-error btn-sm btn-outline"
+                            onClick={() => removeTest(test.id)}
+                          >
+                            מחק
+                          </Button>
+                        </FlexBox>
                       </Grid>
                     </CardBody>
                   );
                 })}
               </FlexBox>
             </CardBody>
+          </Card>
+
+          <Card section className="bg-indigo-100">
+            <CardTitle className="font-normal justify-center">
+              ציון סופי (ממוצע)
+              <Typography className="font-bold ">{getAverage()}</Typography>
+            </CardTitle>
           </Card>
 
           {availableTestsOptions.length > 0 && (
@@ -221,7 +255,10 @@ export function StudentDetailsViewView() {
                   <FlexBox>
                     <Button
                       className="btn-primary btn-outline btn-sm md:btn-md"
-                      onClick={() => addStudentTest(testCategoryId as string)}
+                      onClick={() => {
+                        addStudentTest(testCategoryId as string);
+                        setTestCategoryId(undefined);
+                      }}
                       disabled={!testCategoryId}
                     >
                       הוסף

@@ -7,6 +7,7 @@ export function useTests() {
   const [_updateTests, updateTestsResult] =
     testEndpoints.useUpdateTestsMutation();
   const [_updateTest, updateTestResult] = testEndpoints.useUpdateTestMutation();
+  const [_removeTest, removeTestResult] = testEndpoints.useRemoveTestMutation();
 
   const [updateTests] = useAsync({
     func: async (tests: UpdateTestParams[]) => {
@@ -20,10 +21,18 @@ export function useTests() {
     },
   });
 
+  const [removeTest] = useAsync({
+    func: async (testId: string) => {
+      await _removeTest(testId).unwrap();
+    },
+  });
+
   return {
-    updateTests,
+    removeTest,
+    removeTestResult,
     updateTest,
-    updateTestsResult,
     updateTestResult,
+    updateTests,
+    updateTestsResult,
   };
 }
