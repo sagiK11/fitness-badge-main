@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Classroom, Student, Teacher } from '@prisma/client';
 import { PrismaService } from '@src/prisma/prisma.service';
 import { ResultService } from '@src/utils/result/result.service';
@@ -6,8 +6,11 @@ import { Result } from '@src/utils/result/result';
 import xlsx from 'node-xlsx';
 import { StudentsService } from '../students/students.service';
 import { TestCategoryAlias } from '@src/common';
+
 @Injectable()
 export class ClassroomsService {
+  private readonly logger = new Logger(ClassroomsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly resultService: ResultService<Classroom>,
@@ -175,37 +178,9 @@ export class ClassroomsService {
     file: Express.Multer.File,
   ): Promise<Result<Student[]>> {
     try {
-      const workSheetsFromFile = xlsx.parse<string>(file.buffer);
-
-      const { classroomId, yearOfStudyId, schoolId } = params;
-      const classroom = await this.prisma.classroom.findFirstOrThrow({
-        where: { id: classroomId },
-      });
-
-      const students: Student[] = [];
+      const workSheetsFromFile = xlsx.parse<string[]>(file.buffer);
       const records = workSheetsFromFile[0].data;
-      for (const record of records) {
-        const [israelId, firstName, lastName, phone, email] = record;
-        const student = await this.prisma.student.create({
-          data: {
-            firstName,
-            lastName,
-            israelId: String(israelId),
-            phone: String(phone),
-            gender: classroom.gender,
-            email,
-            schoolId,
-            enrollments: {
-              create: {
-                classroomId,
-                yearOfStudyId,
-              },
-            },
-          },
-        });
-        await this.addDefaultTests(student, { yearOfStudyId, classroomId });
-        students.push(student);
-      }
+      const students = await this.createOrUpdateStudents(records, params);
       return this.resultService.handleSuccess<Student[]>(students);
     } catch (e) {
       return this.resultService.handleError<Student[]>(e);
@@ -218,10 +193,9 @@ export class ClassroomsService {
   ) {
     const defaultTests = [
       TestCategoryAlias.Aerobic,
-      TestCategoryAlias.ABS,
+      TestCategoryAlias.Plank,
       TestCategoryAlias.Cubes,
-      TestCategoryAlias.DistanceJumping,
-      TestCategoryAlias.PullUpHanging,
+      TestCategoryAlias.PushUpHalf,
     ];
 
     for (const alias of defaultTests) {
@@ -231,5 +205,74 @@ export class ClassroomsService {
         classroomId: params.classroomId,
       });
     }
+  }
+  private async createOrUpdateStudents(
+    records: string[][],
+    params: { classroomId: string; yearOfStudyId: string; schoolId: string },
+  ) {
+    const { classroomId, schoolId, yearOfStudyId } = params;
+    const classroom = await this.prisma.classroom.findFirstOrThrow({
+      where: { id: classroomId },
+    });
+
+    const students: Student[] = [];
+
+    await this.prisma.$transaction(async (prisma) => {
+      for (const record of records) {
+        const [israelId, firstName, lastName, phone, email] = record;
+        if (!israelId || !firstName || !lastName || !phone || !email) {
+          this.logger.warn(
+            'Missing values in student record',
+            JSON.stringify(record),
+          );
+          continue;
+        }
+
+        let student = await this.prisma.student.findUnique({
+          where: { israelId: String(israelId) },
+        });
+
+        if (!student) {
+          student = await prisma.student.create({
+            data: {
+              firstName,
+              lastName,
+              israelId: String(israelId),
+              phone: String(phone),
+              gender: classroom.gender,
+              email,
+              schoolId,
+              enrollments: {
+                create: {
+                  classroomId,
+                  yearOfStudyId,
+                },
+              },
+            },
+          });
+        } else {
+          student = await prisma.student.update({
+            where: {
+              id: student.id,
+            },
+            data: {
+              enrollments: {
+                create: {
+                  classroomId,
+                  yearOfStudyId,
+                },
+              },
+            },
+          });
+        }
+        students.push(student);
+      }
+    });
+
+    for (const student of students) {
+      await this.addDefaultTests(student, { yearOfStudyId, classroomId });
+    }
+
+    return students;
   }
 }
