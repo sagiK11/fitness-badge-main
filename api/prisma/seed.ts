@@ -273,18 +273,20 @@ async function main() {
   }
 
   const school = await prisma.school.findUnique({
-    where: { name: schools[0].name },
+    where: { name: schools?.[0].name },
   });
 
-  for (const teacher of teachers) {
-    await prisma.teacher.create({
-      data: {
-        email: teacher.email,
-        firstName: teacher.firstName,
-        lastName: teacher.lastName,
-        schoolId: school.id,
-      },
-    });
+  if (school) {
+    for (const teacher of teachers) {
+      await prisma.teacher.create({
+        data: {
+          email: teacher.email,
+          firstName: teacher.firstName,
+          lastName: teacher.lastName,
+          schoolId: school.id,
+        },
+      });
+    }
   }
 }
 
