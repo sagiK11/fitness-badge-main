@@ -1,0 +1,10 @@
+export { AdminsModule } from './admins/admins.module';
+export { ClassroomsModule } from './classrooms/classrooms.module';
+export { HelloModule } from './hello/hello.module';
+export { SchoolsModule } from './schools/schools.module';
+export { StudentsModule } from './students/students.module';
+export { SystemConfigModule } from './system-config/system-config.module';
+export { TeachersModule } from './teachers/teachers.module';
+export { TestCategoriesModule } from './test-categories/test-categories.module';
+export { TestsModule } from './tests/tests.module';
+export { YearsOfStudyModule } from './years-of-study/years-of-study.module';

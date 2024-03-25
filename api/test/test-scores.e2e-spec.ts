@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { TestCategoriesModule } from '@src/v1/test-categories/test-categories.module';
-import { TestCategoriesService } from '@src/v1/test-categories/test-categories.service';
-import { ResultService } from '@src/utils/result/result.service';
-import { ExceptionService } from '@src/utils/result/exception.service';
-import { PrismaService } from '@src/prisma/prisma.service';
+import { ResultService } from '@src/libs/infrastructure/result/result.service';
+import { ExceptionService } from '@src/libs/infrastructure/result/exception.service';
+import { PrismaService } from '@src/libs/infrastructure/prisma/prisma.service';
+import { TestCategoriesModule } from '@src/modules';
+import { TestCategoriesService } from '@src/modules/test-categories/test-categories.service';
 
 interface TestParams {
   alias: string;
